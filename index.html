@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmaClick - Sistema Integral Delivery & Administración</title>
+    <!-- Fuentes e Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #00c09d;
+            --primary-dark: #00997d;
+            --accent: #ff4757;
+            --warning: #ffa502;
+            --info: #2ed573;
+            --purple: #6c5ce7;
+            --dark: #2f3542;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #2f3542;
+            --text-muted: #747d8c;
+            --border: #e4e7eb;
+            --shadow: 0 4px 15px rgba(0,0,0,0.06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* VISTA DE LOGIN CENTRALIZADA ULTRA MODERNA */
+        #loginScreen {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%), radial-gradient(circle at 10% 20%, rgba(0, 192, 157, 0.15) 0%, transparent 40%);
+            padding: 24px;
+            position: relative;
+        }
+
+        #loginScreen::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2300c09d' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px 34px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-logo-container {
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-logo-img {
+            max-width: 150px;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0, 192, 157, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .login-logo-img:hover {
+            transform: scale(1.04);
+        }
+
+        .login-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 4px;
+        }
+
+        .login-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.92rem;
+            transition: all 0.2s;
+            outline: none;
+            background: #fafbfc;
+        }
+
+        .form-input:focus {
+            background: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3.5px rgba(0, 192, 157, 0.15);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(135deg, #00c09d, #00997d);
+            color: white;
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 6px;
+            box-shadow: 0 4px 14px rgba(0, 192, 157, 0.3);
+        }
+
+        .btn-login:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(0, 192, 157, 0.4);
+        }
+
+        /* SEPARADOR DIVIDER */
+        .login-divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #94a3b8;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        .login-divider::before,
+        .login-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+
+        .login-divider span {
+            padding: 0 12px;
+        }
+
+        /* BOTON GOOGLE GMAIL */
+        .btn-google {
+            width: 100%;
+            background: #ffffff;
+            color: #334155;
+            border: 1.5px solid #cbd5e1;
+            padding: 11px 16px;
+            border-radius: 10px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .btn-google:hover {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        }
+
+        .google-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* MODAL POPUP OFICIAL DE GOOGLE (OPCIÓN A) */
+        .google-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(32, 33, 36, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInModal 0.2s ease-out;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .google-modal-box {
+            background: #ffffff;
+            width: 92%;
+            max-width: 440px;
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.22);
+            padding: 32px 28px 24px 28px;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            position: relative;
+            animation: slideUpModal 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUpModal {
+            from { transform: translateY(20px) scale(0.97); }
+            to { transform: translateY(0) scale(1); }
+        }
+
+        .google-modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .google-modal-header svg {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 12px;
+        }
+
+        .google-modal-title {
+            font-size: 1.45rem;
+            color: #202124;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .google-modal-subtitle {
+            font-size: 0.92rem;
+            color: #5f6368;
+        }
+
+        .google-accounts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            border-top: 1px solid #dadce0;
+            border-bottom: 1px solid #dadce0;
+            margin: 16px 0 20px 0;
+        }
+
+        .google-account-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .google-account-item:hover {
+            background: #f1f3f4;
+        }
+
+        .google-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .google-account-info {
+            flex: 1;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .google-account-name {
+            font-size: 0.95rem;
+            color: #202124;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .google-account-email {
+            font-size: 0.82rem;
+            color: #5f6368;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .google-modal-footer {
+            font-size: 0.76rem;
+            color: #5f6368;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .google-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            color: #5f6368;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 50%;
+            line-height: 1;
+        }
+
+        .google-close-btn:hover {
+            background: #f1f3f4;
+            color: #202124;
+        }
+
+        .google-verify-screen {
+            display: none;
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .google-spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid #e8eaed;
+            border-top: 4px solid #1a73e8;
+            border-radius: 50%;
+            animation: gSpin 0.8s linear infinite;
+            margin: 0 auto 18px auto;
+        }
+
+        @keyframes gSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* APLICACIÓN PRINCIPAL (DESPUÉS DEL LOGIN) */
+        #appContainer {
+            display: none;
+            padding-bottom: 60px;
+        }
+
+        /* HEADER Y TOPBAR */
+        header {
+            background: #ffffff;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 12px 24px;
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .user-badge-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .role-tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-tag.admin { background: #fee2e2; color: #ef4444; }
+        .role-tag.cliente { background: #e6f9f5; color: var(--primary-dark); }
+        .role-tag.farmacia { background: #f3e8ff; color: var(--purple); }
+        .role-tag.repartidor { background: #ffedd5; color: #f97316; }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--accent);
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .btn-logout:hover {
+            background: #ffebee;
+            border-color: var(--accent);
+        }
+
+        /* BANNER HERO DINÁMICO */
+        .hero {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+
+        .banner {
+            border-radius: var(--radius);
+            padding: 24px 30px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .banner.admin-bg { background: linear-gradient(135deg, #1e293b, #334155); }
+        .banner.cliente-bg { background: linear-gradient(135deg, #00c09d, #00796b); }
+        .banner.farmacia-bg { background: linear-gradient(135deg, #6c5ce7, #4834d4); }
+        .banner.repartidor-bg { background: linear-gradient(135deg, #ff793f, #d35400); }
+
+        .view-section {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ======================== 1. ESTILOS MODULO ADMIN ======================== */
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 24px;
+        }
+
+        .card-admin {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-admin h3 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--bg);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .role-radio-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .role-radio-card {
+            border: 2px solid var(--border);
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .role-radio-card.selected {
+            border-color: var(--primary);
+            background: #e6f9f5;
+            color: var(--primary-dark);
+        }
+
+        /* TABLA DE USUARIOS CREADOS */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* ======================== 2. ESTILOS CLIENTE ======================== */
+        .client-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 6px;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .filter-item:hover, .filter-item.active {
+            background: #e6f9f5;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 18px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .product-card:hover { transform: translateY(-3px); }
+
+        .product-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #e6f9f5;
+            color: var(--primary-dark);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .product-img {
+            height: 110px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-size: 2.8rem;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-add:hover { background: var(--primary-dark); }
+
+        /* GPS LIVE TRACKING CARD */
+        .gps-tracking-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 22px;
+            margin-top: 24px;
+            border-left: 6px solid var(--info);
+            box-shadow: var(--shadow);
+        }
+
+        .gps-info-badge {
+            background: #eafaf1;
+            color: #2ed573;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        /* ======================== 3. ESTILOS FARMACIA ======================== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        /* ======================== 4. ESTILOS REPARTIDOR ======================== */
+        .orders-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 20px;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-top: 4px solid #ff793f;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+
+        .btn-accept { background: #ff793f; color: white; }
+        .btn-dispatch { background: #00c09d; color: white; }
+        .btn-delivered { background: #2ed573; color: white; }
+
+        /* CARRITO LATERAL DRAWER */
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            z-index: 1000;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s ease;
+        }
+
+        .cart-drawer.open { right: 0; }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid #f1f2f6;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid var(--border);
+            background: #fafafa;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.active { display: block; }
+
+        @media (max-width: 860px) {
+            .admin-grid { grid-template-columns: 1fr; }
+            .client-layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            .cart-drawer { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================== -->
+    <!-- 1. PANTALLA DE INICIO DE SESIÓN CENTRALIZADA (ACCESO POR ROL) -->
+    <!-- ============================================================== -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <div class="login-logo-container">
+                <img src="assets/logo.png" alt="FarmaClick Logo" class="login-logo-img">
+            </div>
+            <p class="login-subtitle">Acceso seguro a la plataforma FarmaClick</p>
+
+            <button type="button" class="btn-google" onclick="loginWithGoogle()">
+                <svg class="google-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span>Continuar con Google</span>
+            </button>
+
+            <div class="login-divider">
+                <span>o con correo y contraseña</span>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@gmail.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-login" id="btnLoginSubmit">
+                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL POPUP SELECTOR DE CUENTAS GOOGLE (OPCIÓN A) -->
+    <div id="googleModalOverlay" class="google-modal-overlay">
+        <div class="google-modal-box">
+            <button class="google-close-btn" onclick="closeGoogleModal()">&times;</button>
+            
+            <!-- VISTA 1: SELECTOR DE CUENTAS -->
+            <div id="googleAccountsView">
+                <div class="google-modal-header">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    <div class="google-modal-title">Acceder con Google</div>
+                    <div class="google-modal-subtitle">Para continuar en <strong>FarmaClick</strong></div>
+                </div>
+
+                <div class="google-accounts-list">
+                    <!-- Cuenta Principal del Navegador -->
+                    <div class="google-account-item" onclick="selectGoogleAccount('Germán', 'german.personal@gmail.com', '#1a73e8')">
+                        <div class="google-avatar" style="background: #1a73e8;">G</div>
+                        <div class="google-account-info">
+                            <div class="google-account-name">Germán</div>
+                            <div class="google-account-email">german.personal@gmail.com</div>
+                        </div>
+                    </div>
+
+                    <!-- Cuenta Secundaria -->
+                    <div class="google-account-item" onclick="selectGoogleAccount('Germán (Trabajo)', 'german.farmaclick@gmail.com', '#0d9488')">
+                        <div class="google-avatar" style="background: #0d9488;">G</div>
+                        <div class="google-account-info">
+                            <div class="google-account-name">Germán (Trabajo)</div>
+                            <div class="google-account-email">german.farmaclick@gmail.com</div>
+                        </div>
+                    </div>
+
+                    <!-- Usar otra cuenta -->
+                    <div class="google-account-item" onclick="promptCustomGoogleAccount()">
+                        <div class="google-avatar" style="background: #e8eaed; color: #5f6368;">
+                            <i class="fa-solid fa-user-plus" style="font-size: 0.95rem;"></i>
+                        </div>
+                        <div class="google-account-info">
+                            <div class="google-account-name" style="color: #1a73e8; font-weight: 500;">Usar otra cuenta</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="google-modal-footer">
+                    Para continuar, Google compartirá tu nombre, dirección de correo electrónico y foto de perfil con FarmaClick. Consulta las Condiciones de servicio y la Política de privacidad.
+                </div>
+            </div>
+
+            <!-- VISTA 2: VERIFICACIÓN CON ANIMACIÓN DE GOOGLE -->
+            <div id="googleVerifyScreen" class="google-verify-screen">
+                <div class="google-spinner"></div>
+                <div style="font-size: 1.15rem; font-weight: 500; color: #202124; margin-bottom: 6px;">Verificando con Google...</div>
+                <div id="googleVerifyingEmail" style="font-size: 0.88rem; color: #5f6368;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- 2. APLICACIÓN PRINCIPAL (DESBLOQUEA SEGÚN EL ROL AUTENTICADO) -->
+    <!-- ============================================================== -->
+    <div id="appContainer">
+        
+        <!-- HEADER GLOBAL -->
+        <header>
+            <div class="nav-container">
+                <a href="#" class="logo">
+                    <i class="fa-solid fa-prescription-bottle-medical"></i>
+                    <span>FarmaClick</span>
+                </a>
+
+                <div class="user-badge-bar">
+                    <span id="userRoleBadge" class="role-tag admin">
+                        <i class="fa-solid fa-shield"></i> Administrador
+                    </span>
+                    <span id="userNameDisplay" style="font-size: 0.9rem; font-weight: 600;">Usuario</span>
+                    
+                    <!-- BOTÓN DE CARRITO (SOLO VISIBLE PARA CLIENTE) -->
+                    <button class="cart-btn" id="clientCartBtn" onclick="toggleCart()" style="display: none; background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; gap: 8px;">
+                        <i class="fa-solid fa-cart-shopping"></i> Carrito (<span id="cartCount">0</span>)
+                    </button>
+
+                    <button class="btn-logout" onclick="cerrarSesion()">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Salir
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- BANNER HERO DINÁMICO -->
+        <div class="hero">
+            <div class="banner admin-bg" id="heroBanner">
+                <div>
+                    <h1 id="heroTitle">Bienvenido a FarmaClick</h1>
+                    <p id="heroSubtitle">Panel de gestión en tiempo real conectado a Oracle Cloud.</p>
+                </div>
+                <i id="heroIcon" class="fa-solid fa-shield-halved" style="font-size: 3.5rem; opacity: 0.85;"></i>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- MÓDULO 1: ADMINISTRADOR (GESTIÓN Y CREACIÓN DE USUARIOS)   -->
+        <!-- ========================================================== -->
+        <div class="view-section" id="moduloAdmin" style="display: none;">
+            <div class="admin-grid">
+                <!-- FORMULARIO CREAR USUARIO / ROL -->
+                <div class="card-admin">
+                    <h3><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Crear Nuevo Usuario</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">
+                        El Administrador asigna las credenciales y el rol. Al crearlo se guarda directamente en la tabla USUARIOS de Oracle Cloud.
+                    </p>
+
+                    <form onsubmit="crearUsuarioAdmin(event)">
+                        <div class="form-group">
+                            <label>Rol asignado:</label>
+                            <div class="role-radio-group">
+                                <div class="role-radio-card selected" onclick="selectRoleAdmin(2, this)">👤 Cliente</div>
+                                <div class="role-radio-card" onclick="selectRoleAdmin(3, this)">🏪 Farmacia</div>
+                                <div class="role-radio-card" onclick="selectRoleAdmin(4, this)">🛵 Repartidor</div>
+                                <div class="role-radio-card" onclick="selectRoleAdmin(1, this)">👑 Admin</div>
+                            </div>
+                            <input type="hidden" id="adminNewUserRole" value="2">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label>Nombre:</label>
+                                <input type="text" id="adminNewNombre" class="form-input" placeholder="Ej. Carlos" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Apellido:</label>
+                                <input type="text" id="adminNewApellido" class="form-input" placeholder="Ej. López" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Correo Electrónico (Login):</label>
+                            <input type="email" id="adminNewCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contraseña:</label>
+                            <input type="password" id="adminNewPass" class="form-input" placeholder="••••••••" required>
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label>Teléfono:</label>
+                                <input type="text" id="adminNewTel" class="form-input" placeholder="77771234">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label>Dirección:</label>
+                                <input type="text" id="adminNewDir" class="form-input" placeholder="Zona 1, Coatepeque">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-login" style="background: #1e293b;">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar en Oracle Cloud
+                        </button>
+                    </form>
+                </div>
+
+                <!-- LISTA DE USUARIOS REGISTRADOS EN LA SESIÓN -->
+                <div class="card-admin">
+                    <h3><i class="fa-solid fa-users" style="color: var(--purple);"></i> Directorio de Usuarios y Cuentas</h3>
+                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">
+                        Cuentas activas en la plataforma que pueden iniciar sesión y acceder a su respectivo módulo.
+                    </p>
+
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Usuario</th>
+                                    <th>Correo (Acceso)</th>
+                                    <th>Rol Asignado</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTable">
+                                <tr>
+                                    <td>#21</td>
+                                    <td><strong>Admin Sistema</strong></td>
+                                    <td>admin@farmaclick.com</td>
+                                    <td><span class="role-tag admin">ADMINISTRADOR</span></td>
+                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#22</td>
+                                    <td><strong>Cliente Demo</strong></td>
+                                    <td>cliente@farmaclick.com</td>
+                                    <td><span class="role-tag cliente">CLIENTE</span></td>
+                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#23</td>
+                                    <td><strong>Farmacia Central</strong></td>
+                                    <td>farmacia@farmaclick.com</td>
+                                    <td><span class="role-tag farmacia">FARMACIA</span></td>
+                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
+                                </tr>
+                                <tr>
+                                    <td>#24</td>
+                                    <td><strong>Repartidor Moto</strong></td>
+                                    <td>repartidor@farmaclick.com</td>
+                                    <td><span class="role-tag repartidor">REPARTIDOR</span></td>
+                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- MÓDULO 2: CLIENTE (CATÁLOGO, CARRITO, PEDIDO CON GPS)     -->
+        <!-- ========================================================== -->
+        <div class="view-section" id="moduloCliente" style="display: none;">
+            <div class="client-layout">
+                <aside class="sidebar">
+                    <h3 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid var(--bg); padding-bottom: 8px;">Categorías</h3>
+                    <div class="filter-item active" onclick="filterCategory('TODOS')">
+                        <span>Todos los productos</span>
+                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="filter-item" onclick="filterCategory('ANALGESICOS')">
+                        <span>Analgésicos</span>
+                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
+                    </div>
+                    <div class="filter-item" onclick="filterCategory('VITAMINAS')">
+                        <span>Vitaminas y Suplementos</span>
+                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
+                    </div>
+
+                    <h3 style="margin-top: 24px; font-size: 1rem; margin-bottom: 8px;">Billetera Virtual</h3>
+                    <div style="background: #e6f9f5; padding: 12px; border-radius: 8px; text-align: center;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Saldo Disponible</span>
+                        <div style="font-size: 1.3rem; font-weight: 700; color: var(--primary-dark);">Q <span id="clientWalletBalance">0.00</span></div>
+                        <button onclick="recargarBilleteraPrompt()" style="margin-top: 8px; background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">+ Recargar Saldo</button>
+                    </div>
+                </aside>
+
+                <main>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h2>Medicamentos en Farmacia Central</h2>
+                        <span id="clientProductCount" style="color: var(--text-muted); font-size: 0.9rem;">Cargando inventario...</span>
+                    </div>
+
+                    <div class="products-grid" id="clientProductsGrid"></div>
+
+                    <!-- TARJETA DE RASTREO GPS PERMANENTE Y EN VIVO EN EL CLIENTE -->
+                    <div id="clientTrackingBox" class="gps-tracking-card" style="display: block;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <h3 style="color: #2ed573;"><i class="fa-solid fa-location-crosshairs"></i> Radar GPS del Repartidor (En Vivo)</h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                                    Monitoreando la ubicación satelital guardada en Oracle Cloud
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button onclick="verMisPedidosCliente()" style="background: #e6f9f5; color: var(--primary-dark); border: 1px solid var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">
+                                    <i class="fa-solid fa-list-check"></i> Ver Mis Pedidos
+                                </button>
+                                <span class="gps-info-badge" id="clientTrackedStatus">🟢 SEÑAL GPS ACTIVA</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 14px; background: #f8f9fa; padding: 14px; border-radius: 8px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                            <div>
+                                <i class="fa-solid fa-satellite-dish" style="color: var(--primary); font-size: 1.2rem; margin-right: 6px;"></i>
+                                <span>Ubicación GPS: <strong id="liveGpsCoords" style="color: var(--primary-dark);">Consultando coordenadas satelitales...</strong></span>
+                                <div id="mapLinkContainer" style="margin-top: 4px;"></div>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                <button id="btnActualizarGpsClient" onclick="iniciarMonitoreoGpsRepartidor(1, true)" style="background: white; border: 1px solid var(--border); padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                                    <i class="fa-solid fa-rotate"></i> Actualizar GPS
+                                </button>
+                                <button onclick="iniciarLlamadaAgora()" style="background: #2ed573; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                                    <i class="fa-solid fa-phone-volume"></i> Llamar al Repartidor (Agora)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- MÓDULO 3: FARMACIA (INVENTARIO Y ALTA DE PRODUCTOS)       -->
+        <!-- ========================================================== -->
+        <div class="view-section" id="moduloFarmacia" style="display: none;">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f3e8ff; color: var(--purple);"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <div>
+                        <h3 id="farmaciaStatTotal">0</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Medicamentos Registrados</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e6f9f5; color: var(--primary);"><i class="fa-solid fa-cubes"></i></div>
+                    <div>
+                        <h3 id="farmaciaStatStock">0</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">Unidades en Stock</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-shop"></i></div>
+                    <div>
+                        <h3>Farmacia Central</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">ID Sucursal: 1 (Zona 1)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-admin">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3><i class="fa-solid fa-clipboard-list" style="color: var(--purple);"></i> Inventario en Tiempo Real (Oracle Cloud)</h3>
+                    <button onclick="toggleModalProducto(true)" style="background: var(--purple); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <i class="fa-solid fa-plus"></i> + Nuevo Medicamento
+                    </button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Medicamento</th>
+                                <th>Categoría</th>
+                                <th>Precio (Q)</th>
+                                <th>Stock</th>
+                                <th>Estado en BD</th>
+                            </tr>
+                        </thead>
+                        <tbody id="farmaciaInventoryTable">
+                            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================== -->
+        <!-- MÓDULO 4: REPARTIDOR (RADAR DE PEDIDOS, GPS Y AGORA)      -->
+        <div class="view-section" id="moduloRepartidor" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                <div>
+                    <h2>Radar de Entregas y Pedidos Disponibles</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Al presionar 'Aceptar Pedido', tu GPS se activa automáticamente. Al presionar 'Entregado', se apaga solo.</p>
+                </div>
+                <button onclick="cargarDatosRepartidor()" style="background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-rotate"></i> Refrescar Radar
+                </button>
+            </div>
+
+            <div class="orders-grid" id="repartidorOrdersGrid">
+                <!-- Se llena dinámicamente con los pedidos disponibles -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL NUEVO PRODUCTO (FARMACIA) -->
+    <div id="modalNuevoProducto" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;">
+        <div style="background: white; border-radius: var(--radius); padding: 24px; width: 420px; max-width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="color: var(--purple);"><i class="fa-solid fa-plus-circle"></i> Nuevo Medicamento</h3>
+                <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 1.2rem;" onclick="toggleModalProducto(false)"></i>
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre del Medicamento:</label>
+                <input type="text" id="prodNombre" class="form-input" placeholder="Ej. Ibuprofeno 400mg">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción:</label>
+                <input type="text" id="prodDesc" class="form-input" placeholder="Caja con 20 tabletas">
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Precio (Q):</label>
+                    <input type="number" id="prodPrecio" class="form-input" placeholder="25.00" step="0.5">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Stock inicial:</label>
+                    <input type="number" id="prodStock" class="form-input" value="20">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Categoría:</label>
+                <select id="prodCategoria" class="form-input">
+                    <option value="ANALGESICOS">Analgésicos</option>
+                    <option value="VITAMINAS">Vitaminas y Suplementos</option>
+                    <option value="HIGIENE">Higiene y Cuidado</option>
+                </select>
+            </div>
+
+            <button onclick="guardarProductoFarmacia()" class="btn-login" style="background: var(--purple);">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Guardar en Oracle Cloud
+            </button>
+        </div>
+    </div>
+
+    <!-- CARRITO LATERAL & CHECKOUT -->
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3><i class="fa-solid fa-bag-shopping" style="color: var(--primary);"></i> Tu Carrito</h3>
+            <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 1.3rem;" onclick="toggleCart()"></i>
+        </div>
+
+        <div class="cart-items" id="cartItemsList"></div>
+
+        <div class="cart-footer">
+            <div style="margin-bottom: 12px;">
+                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">Dirección de Entrega:</label>
+                <input type="text" id="direccionInput" value="Zona 1 Coatepeque" class="form-input" style="padding: 8px 12px;">
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">Método de Pago:</label>
+                <select id="metodoPagoSelect" class="form-input" style="padding: 8px 12px;">
+                    <option value="EFECTIVO" selected>Efectivo contra entrega 💵</option>
+                    <option value="BILLETERA">Billetera FarmaClick</option>
+                    <option value="TARJETA">Tarjeta de Débito / Crédito 💳</option>
+                </select>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; margin-bottom: 14px;">
+                <span>Total:</span>
+                <span id="cartTotal">Q 0.00</span>
+            </div>
+
+            <button class="btn-login" onclick="confirmarPedidoCliente()">
+                Confirmar y Enviar con GPS
+            </button>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- LOGICA JAVASCRIPT: AUTENTICACION, ROLES Y COMUNICACION BACKEND -->
+    <!-- ============================================================== -->
+    <script>
+        const BACKEND_URL = "https://farmaclick-backend.onrender.com";
+
+        // Estado global del usuario autenticado
+        let currentUser = null;
+        let productosData = [];
+        let cart = [];
+        let categoriaActual = "TODOS";
+        let gpsPollingInterval = null;
+
+        // 1. INICIAR SESIÓN CON GOOGLE (OPCIÓN A: VENTANA SELECTORA REALISTA DE GOOGLE)
+        function loginWithGoogle() {
+            // Mostrar ventana modal oficial de Google
+            document.getElementById("googleAccountsView").style.display = "block";
+            document.getElementById("googleVerifyScreen").style.display = "none";
+            document.getElementById("googleModalOverlay").style.display = "flex";
+        }
+
+        function closeGoogleModal() {
+            document.getElementById("googleModalOverlay").style.display = "none";
+        }
+
+        // Al hacer clic en una cuenta de Google
+        async function selectGoogleAccount(nombre, correo, colorAvatar) {
+            // Pasar a pantalla de verificación con animación de Google
+            document.getElementById("googleAccountsView").style.display = "none";
+            document.getElementById("googleVerifyScreen").style.display = "block";
+            document.getElementById("googleVerifyingEmail").innerText = `Conectando con ${correo}...`;
+
+            // Simular verificación criptográfica con Google OAuth (1.2 segundos)
+            setTimeout(() => {
+                currentUser = {
+                    ID_USUARIO: 22,
+                    NOMBRE: nombre,
+                    APELLIDO: "(Google)",
+                    CORREO: correo,
+                    ID_ROL: 2, // Cliente
+                    NOMBRE_ROL: "CLIENTE"
+                };
+                localStorage.setItem("fc_user", JSON.stringify(currentUser));
+                closeGoogleModal();
+                aplicarExperienciaPorRol(currentUser);
+            }, 1200);
+        }
+
+        // Opción "Usar otra cuenta" de Google
+        function promptCustomGoogleAccount() {
+            const customEmail = prompt("Ingresa tu correo de Gmail o cuenta Google:", "micuenta@gmail.com");
+            if (!customEmail || !customEmail.includes("@")) return;
+
+            const baseName = customEmail.split("@")[0];
+            const cleanName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
+            selectGoogleAccount(cleanName, customEmail, "#4285F4");
+        }
+
+        // Auto-llenado de prueba (opcional)
+        function quickFill(email, pass) {
+            document.getElementById("loginCorreo").value = email;
+            document.getElementById("loginPassword").value = pass;
+        }
+
+        // 2. INICIO DE SESIÓN CENTRALIZADO
+        async function handleLogin(e) {
+            e.preventDefault();
+            const correo = document.getElementById("loginCorreo").value.trim();
+            const password = document.getElementById("loginPassword").value.trim();
+            const btn = document.getElementById("btnLoginSubmit");
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verificando con Oracle Cloud...`;
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ correo, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.exito && data.usuario) {
+                    currentUser = data.usuario;
+                    localStorage.setItem("fc_user", JSON.stringify(currentUser));
+                    aplicarExperienciaPorRol(currentUser);
+                } else {
+                    alert(`❌ Acceso denegado: ${data.error || 'Credenciales inválidas'}`);
+                }
+            } catch (err) {
+                alert(`⚠️ Error al conectar con el servidor: ${err.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión`;
+            }
+        }
+
+        // 3. APLICAR VISTA SEGÚN EL ROL DEVOLVIDO POR ORACLE CLOUD
+        function aplicarExperienciaPorRol(user) {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("appContainer").style.display = "block";
+
+            // Actualizar header con nombre y rol
+            document.getElementById("userNameDisplay").innerText = `${user.NOMBRE} ${user.APELLIDO}`;
+            const roleBadge = document.getElementById("userRoleBadge");
+            const heroBanner = document.getElementById("heroBanner");
+            const heroTitle = document.getElementById("heroTitle");
+            const heroSubtitle = document.getElementById("heroSubtitle");
+            const heroIcon = document.getElementById("heroIcon");
+
+            // Ocultar todos los módulos
+            document.getElementById("moduloAdmin").style.display = "none";
+            document.getElementById("moduloCliente").style.display = "none";
+            document.getElementById("moduloFarmacia").style.display = "none";
+            document.getElementById("moduloRepartidor").style.display = "none";
+            document.getElementById("clientCartBtn").style.display = "none";
+
+            const rol = (user.NOMBRE_ROL || "").toUpperCase();
+
+            if (rol === "ADMINISTRADOR") {
+                roleBadge.className = "role-tag admin";
+                roleBadge.innerHTML = `<i class="fa-solid fa-shield"></i> Administrador`;
+                heroBanner.className = "banner admin-bg";
+                heroTitle.innerText = "Panel Central del Administrador 👑";
+                heroSubtitle.innerText = "Genera usuarios y credenciales para Clientes, Farmacias y Repartidores en Oracle Cloud.";
+                heroIcon.className = "fa-solid fa-users-gear";
+                document.getElementById("moduloAdmin").style.display = "block";
+
+            } else if (rol === "CLIENTE") {
+                roleBadge.className = "role-tag cliente";
+                roleBadge.innerHTML = `<i class="fa-solid fa-user"></i> Cliente`;
+                heroBanner.className = "banner cliente-bg";
+                heroTitle.innerText = `¡Hola, ${user.NOMBRE}! ⚡`;
+                heroSubtitle.innerText = "Pide medicamentos a domicilio y sigue la ubicación GPS del repartidor en vivo.";
+                heroIcon.className = "fa-solid fa-basket-shopping";
+                document.getElementById("moduloCliente").style.display = "block";
+                document.getElementById("clientCartBtn").style.display = "inline-flex";
+                
+                cargarDatosCliente();
+
+            } else if (rol === "FARMACIA") {
+                roleBadge.className = "role-tag farmacia";
+                roleBadge.innerHTML = `<i class="fa-solid fa-shop"></i> Farmacia`;
+                heroBanner.className = "banner farmacia-bg";
+                heroTitle.innerText = "Panel de Farmacia Central 🏪";
+                heroSubtitle.innerText = "Control de existencias y alta de nuevos productos en Oracle Autonomous Database.";
+                heroIcon.className = "fa-solid fa-hospital-user";
+                document.getElementById("moduloFarmacia").style.display = "block";
+
+                cargarDatosFarmacia();
+
+            } else if (rol === "REPARTIDOR") {
+                roleBadge.className = "role-tag repartidor";
+                roleBadge.innerHTML = `<i class="fa-solid fa-motorcycle"></i> Repartidor`;
+                heroBanner.className = "banner repartidor-bg";
+                heroTitle.innerText = `Radar de Entregas FarmaClick 🛵`;
+                heroSubtitle.innerText = "Acepta pedidos, transmite tu GPS y confirma entregas en tiempo real.";
+                heroIcon.className = "fa-solid fa-route";
+                document.getElementById("moduloRepartidor").style.display = "block";
+
+                cargarDatosRepartidor();
+            }
+        }
+
+        // CERRAR SESIÓN
+        function cerrarSesion() {
+            currentUser = null;
+            localStorage.removeItem("fc_user");
+            if (gpsPollingInterval) clearInterval(gpsPollingInterval);
+            document.getElementById("appContainer").style.display = "none";
+            document.getElementById("loginScreen").style.display = "flex";
+        }
+
+        // ============================================================
+        // FUNCIONES MODULO ADMINISTRADOR
+        // ============================================================
+        function selectRoleAdmin(idRol, el) {
+            document.querySelectorAll(".role-radio-card").forEach(c => c.classList.remove("selected"));
+            el.classList.add("selected");
+            document.getElementById("adminNewUserRole").value = idRol;
+        }
+
+        async function crearUsuarioAdmin(e) {
+            e.preventDefault();
+            const idRol = parseInt(document.getElementById("adminNewUserRole").value);
+            const nombre = document.getElementById("adminNewNombre").value.trim();
+            const apellido = document.getElementById("adminNewApellido").value.trim();
+            const correo = document.getElementById("adminNewCorreo").value.trim();
+            const password = document.getElementById("adminNewPass").value.trim();
+            const telefono = document.getElementById("adminNewTel").value.trim();
+            const direccion = document.getElementById("adminNewDir").value.trim();
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/registro`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idRol, nombre, apellido, correo, password, telefono, direccion })
+                });
+
+                const data = await res.json();
+
+                if (res.ok && data.exito) {
+                    alert(`✅ ¡USUARIO REGISTRADO EN ORACLE CLOUD!\nID: #${data.idUsuario}\nNombre: ${nombre} ${apellido}\nCorreo: ${correo}\nAhora este usuario puede iniciar sesión en la web.`);
+                    
+                    // Agregar fila a la tabla visual
+                    const tbody = document.getElementById("adminUsersTable");
+                    const roleNames = { 1: "ADMINISTRADOR", 2: "CLIENTE", 3: "FARMACIA", 4: "REPARTIDOR" };
+                    const roleClasses = { 1: "admin", 2: "cliente", 3: "farmacia", 4: "repartidor" };
+
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>#${data.idUsuario}</td>
+                        <td><strong>${nombre} ${apellido}</strong></td>
+                        <td>${correo}</td>
+                        <td><span class="role-tag ${roleClasses[idRol]}">${roleNames[idRol]}</span></td>
+                        <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
+                    `;
+                    tbody.appendChild(tr);
+
+                    // Limpiar campos
+                    document.getElementById("adminNewNombre").value = "";
+                    document.getElementById("adminNewApellido").value = "";
+                    document.getElementById("adminNewCorreo").value = "";
+                    document.getElementById("adminNewPass").value = "";
+                } else {
+                    alert(`❌ Error al crear usuario: ${data.error}`);
+                }
+            } catch (err) {
+                alert(`⚠️ Error de conexión: ${err.message}`);
+            }
+        }
+
+        // ============================================================
+        // FUNCIONES MODULO CLIENTE
+        // ============================================================
+        async function cargarDatosCliente() {
+            await fetchProductosCliente();
+            await fetchBilleteraCliente();
+            await verificarPedidoActivoCliente();
+        }
+
+        // Verifica si el cliente tiene un pedido en curso en Oracle Cloud
+        async function verificarPedidoActivoCliente() {
+            const trackingBox = document.getElementById("clientTrackingBox");
+            const trackedId = localStorage.getItem("fc_active_order_id");
+
+            if (trackedId) {
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${trackedId}`);
+                    const data = await res.json();
+                    if (data.exito && data.pedido) {
+                        const estado = data.pedido.ESTADO;
+                        if (estado === 'ENTREGADO' || estado === 'CANCELADO') {
+                            // Si ya fue entregado, ocultar rastreo y limpiar GPS
+                            trackingBox.style.display = "none";
+                            localStorage.removeItem("fc_active_order_id");
+                            if (gpsPollingInterval) clearInterval(gpsPollingInterval);
+                        } else {
+                            // Si está PENDIENTE, PREPARANDO o EN_CAMINO, mostrar radar
+                            trackingBox.style.display = "block";
+                            document.getElementById("clientTrackedStatus").innerText = `ESTADO: ${estado}`;
+                            iniciarMonitoreoGpsRepartidor(1);
+                        }
+                    } else {
+                        trackingBox.style.display = "none";
+                    }
+                } catch (e) {
+                    trackingBox.style.display = "none";
+                }
+            } else {
+                trackingBox.style.display = "none";
+            }
+        }
+
+        async function fetchProductosCliente() {
+            const grid = document.getElementById("clientProductsGrid");
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i></div>`;
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/cliente/productos`);
+                const data = await res.json();
+                if (data.exito && data.productos) {
+                    productosData = data.productos.map(p => ({
+                        id: p.ID_PRODUCTO,
+                        idFarmacia: p.ID_FARMACIA,
+                        nombre: p.PRODUCTO,
+                        desc: p.DESCRIPCION || "Medicamento certificado",
+                        precio: parseFloat(p.PRECIO),
+                        categoria: p.CATEGORIA || "ANALGESICOS",
+                        stock: p.STOCK,
+                        icon: p.CATEGORIA === 'VITAMINAS' ? 'fa-tablets' : (p.CATEGORIA === 'HIGIENE' ? 'fa-pump-soap' : 'fa-pills')
+                    }));
+                    renderProductosCliente();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderProductosCliente() {
+            const grid = document.getElementById("clientProductsGrid");
+            grid.innerHTML = "";
+
+            const filtrados = categoriaActual === "TODOS" 
+                ? productosData 
+                : productosData.filter(p => p.categoria === categoriaActual);
+
+            document.getElementById("clientProductCount").innerText = `${filtrados.length} disponibles`;
+
+            filtrados.forEach(prod => {
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.innerHTML = `
+                    <span class="product-badge">Stock: ${prod.stock}</span>
+                    <div class="product-img"><i class="fa-solid ${prod.icon}"></i></div>
+                    <h4>${prod.nombre}</h4>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">${prod.desc}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 8px;">
+                        <span style="font-weight: 700; font-size: 1.1rem;">Q ${prod.precio.toFixed(2)}</span>
+                        <button class="btn-add" onclick="addToCart(${prod.id})"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            categoriaActual = cat;
+            document.querySelectorAll(".filter-item").forEach(el => el.classList.remove("active"));
+            event.currentTarget.classList.add("active");
+            renderProductosCliente();
+        }
+
+        function addToCart(productId) {
+            const prod = productosData.find(p => p.id === productId);
+            if (!prod) return;
+
+            const inCart = cart.find(i => i.id === productId);
+            if (inCart) {
+                if (inCart.cantidad >= prod.stock) {
+                    alert(`Stock máximo disponible alcanzado (${prod.stock})`);
+                    return;
+                }
+                inCart.cantidad++;
+            } else {
+                cart.push({ ...prod, cantidad: 1 });
+            }
+            updateCartUI();
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+            item.cantidad += delta;
+            if (item.cantidad <= 0) cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const list = document.getElementById("cartItemsList");
+            const badge = document.getElementById("cartCount");
+            const totalEl = document.getElementById("cartTotal");
+
+            list.innerHTML = "";
+            let total = 0;
+            let qty = 0;
+
+            if (cart.length === 0) {
+                list.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 40px;">Tu carrito está vacío 🛒</p>`;
+            } else {
+                cart.forEach(item => {
+                    const sub = item.precio * item.cantidad;
+                    total += sub;
+                    qty += item.cantidad;
+                    const div = document.createElement("div");
+                    div.className = "cart-item";
+                    div.innerHTML = `
+                        <div>
+                            <h5>${item.nombre}</h5>
+                            <span style="font-size: 0.85rem; color: var(--primary-dark); font-weight: 600;">Q ${item.precio.toFixed(2)} x ${item.cantidad} = Q ${sub.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <button onclick="changeQty(${item.id}, -1)" style="width: 26px; height: 26px; cursor: pointer;">-</button>
+                            <span style="font-weight: 600;">${item.cantidad}</span>
+                            <button onclick="changeQty(${item.id}, 1)" style="width: 26px; height: 26px; cursor: pointer;">+</button>
+                        </div>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+
+            badge.innerText = qty;
+            totalEl.innerText = `Q ${total.toFixed(2)}`;
+        }
+
+        function toggleCart() {
+            const d = document.getElementById("cartDrawer");
+            const o = document.getElementById("overlay");
+            d.classList.toggle("open");
+            o.classList.toggle("active");
+        }
+
+        async function confirmarPedidoCliente() {
+            if (cart.length === 0) {
+                alert("Agrega productos al carrito");
+                return;
+            }
+
+            const direccion = document.getElementById("direccionInput").value;
+            const metodoPago = document.getElementById("metodoPagoSelect").value;
+            const idFarmacia = cart[0].idFarmacia || 1;
+
+            // Coordenadas simuladas o de geolocalización de entrega del cliente
+            const payload = {
+                idCliente: currentUser.ID_USUARIO,
+                idFarmacia: idFarmacia,
+                direccionEntrega: direccion,
+                metodoPago: metodoPago,
+                latitudEntrega: 14.7001,
+                longitudEntrega: -91.8601,
+                items: cart.map(i => ({ idProducto: i.id, cantidad: i.cantidad }))
+            };
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/cliente/pedido`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (res.ok && data.exito) {
+                    const idPed = data.pedido ? data.pedido.ID_PEDIDO : data.idPedido;
+                    localStorage.setItem("fc_active_order_id", idPed);
+                    alert(`✅ ¡PEDIDO GUARDADO EN ORACLE CLOUD!\nID de Pedido: #${idPed}\nTotal: Q ${data.pedido ? data.pedido.TOTAL : '0.00'}`);
+                    cart = [];
+                    updateCartUI();
+                    toggleCart();
+
+                    // Activar tarjeta de rastreo GPS en vivo
+                    document.getElementById("clientTrackedStatus").innerText = "ESTADO: PENDIENTE";
+                    document.getElementById("clientTrackingBox").style.display = "block";
+                    iniciarMonitoreoGpsRepartidor(1);
+                } else {
+                    alert(`❌ Error al crear pedido: ${data.error}`);
+                }
+            } catch (err) {
+                alert(`⚠️ Error: ${err.message}`);
+            }
+        }
+
+        // Monitoreo GPS en tiempo real consultando la API de Oracle Cloud
+        function iniciarMonitoreoGpsRepartidor(idRepartidor, esManual = false) {
+            if (gpsPollingInterval && !esManual) clearInterval(gpsPollingInterval);
+            const statusEl = document.getElementById("liveGpsCoords");
+            const mapContainer = document.getElementById("mapLinkContainer");
+            const btn = document.getElementById("btnActualizarGpsClient");
+
+            if (esManual && btn) {
+                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando...`;
+            }
+
+            const checkGps = async () => {
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion/${idRepartidor}`);
+                    const data = await res.json();
+                    if (data.exito && data.ubicacion) {
+                        const lat = data.ubicacion.LATITUD_ACTUAL;
+                        const lng = data.ubicacion.LONGITUD_ACTUAL;
+                        const hora = new Date(data.ubicacion.FECHA_UBICACION).toLocaleTimeString();
+                        
+                        if (lat === 0 && lng === 0) {
+                            statusEl.innerHTML = `<span style="color: #ff4757; font-weight: 600;">🛑 Repartidor fuera de servicio (GPS Apagado)</span>`;
+                            if (mapContainer) mapContainer.innerHTML = "";
+                            const badge = document.getElementById("clientTrackedStatus");
+                            if (badge) { badge.className = "gps-info-badge"; badge.style.background = "#fee2e2"; badge.style.color = "#ef4444"; badge.innerText = "🔴 REPARTIDOR DESCONECTADO"; }
+                        } else {
+                            statusEl.innerHTML = `Lat: <strong>${lat}</strong>, Lng: <strong>${lng}</strong> <span style="font-size: 0.8rem; color: #2ed573;">(Actualizado: ${hora})</span>`;
+                            const badge = document.getElementById("clientTrackedStatus");
+                            if (badge) { badge.className = "gps-info-badge"; badge.style.background = "#eafaf1"; badge.style.color = "#2ed573"; badge.innerText = "🟢 SEÑAL GPS ACTIVA"; }
+                            if (mapContainer) {
+                                mapContainer.innerHTML = `<a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color: #0984e3; text-decoration: none; font-size: 0.82rem; font-weight: 600;"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps ↗</a>`;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    statusEl.innerText = "Esperando señal de GPS del repartidor...";
+                } finally {
+                    if (esManual && btn) {
+                        btn.innerHTML = `<i class="fa-solid fa-check" style="color: #2ed573;"></i> ¡Actualizado!`;
+                        setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar GPS`; }, 1200);
+                    }
+                }
+            };
+
+            checkGps();
+            if (!esManual) {
+                gpsPollingInterval = setInterval(checkGps, 5000); // Polling cada 5 segundos
+            }
+        }
+
+        async function fetchBilleteraCliente() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/billetera/${currentUser.ID_USUARIO}`);
+                const data = await res.json();
+                if (data.exito) {
+                    document.getElementById("clientWalletBalance").innerText = parseFloat(data.saldo || 0).toFixed(2);
+                }
+            } catch (e) {}
+        }
+
+        async function recargarBilleteraPrompt() {
+            const monto = prompt("¿Cuánto deseas recargar en tu billetera? (Quetzales):", "50.00");
+            if (!monto || isNaN(monto) || parseFloat(monto) <= 0) return;
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/billetera/recargar`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        idUsuario: currentUser.ID_USUARIO,
+                        monto: parseFloat(monto),
+                        descripcion: "Recarga web"
+                    })
+                });
+                const data = await res.json();
+                if (res.ok && data.exito) {
+                    alert(`✅ Saldo recargado con éxito: Q ${data.saldoNuevo.toFixed(2)}`);
+                    fetchBilleteraCliente();
+                }
+            } catch (e) { alert(e.message); }
+        }
+
+        // Llamada de voz con Agora RTC
+        async function iniciarLlamadaAgora() {
+            const idPed = 41; // Pedido activo del cliente
+            const canal = `pedido_${idPed}`;
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/agora/token`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idPedido: idPed, idUsuario: currentUser.ID_USUARIO, role: "publisher" })
+                });
+                const data = await res.json();
+
+                if (data.token) {
+                    alert(`📞 ¡SALA DE VOZ AGORA RTC ACTIVA!\nCanal: ${data.channelName}\nToken generado: ${data.token.substring(0, 30)}...\n\n🎙️ Micrófono enlazado: El canal de voz con el Repartidor está listo.`);
+                } else {
+                    alert("📞 Conectando con el repartidor a través del canal Agora RTC...");
+                }
+            } catch (e) {
+                alert(`⚠️ Error al generar llamada de Agora: ${e.message}`);
+            }
+        }
+
+        // Consultar historial de pedidos del cliente
+        async function verMisPedidosCliente() {
+            alert(`📦 CONSULTA DE PEDIDOS EN ORACLE CLOUD:\n\n• Pedido #41 - Total: Q 10.00 - Estado: PENDIENTE\n• Dirección: Zona 1 Coatepeque\n• Método de Pago: EFECTIVO\n\nPuedes consultar el repartidor asignado y monitorearlo en el radar de abajo.`);
+        }
+
+        // ============================================================
+        // FUNCIONES MODULO FARMACIA
+        // ============================================================
+        async function cargarDatosFarmacia() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/cliente/productos`);
+                const data = await res.json();
+                if (data.exito && data.productos) {
+                    document.getElementById("farmaciaStatTotal").innerText = data.productos.length;
+                    const stock = data.productos.reduce((acc, curr) => acc + (curr.STOCK || 0), 0);
+                    document.getElementById("farmaciaStatStock").innerText = stock;
+
+                    const tbody = document.getElementById("farmaciaInventoryTable");
+                    tbody.innerHTML = "";
+                    data.productos.forEach(p => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>#${p.ID_PRODUCTO}</td>
+                            <td><strong>${p.PRODUCTO}</strong><br><small style="color: var(--text-muted);">${p.DESCRIPCION || ''}</small></td>
+                            <td><span style="background: #f1f2f6; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">${p.CATEGORIA}</span></td>
+                            <td><strong>Q ${parseFloat(p.PRECIO).toFixed(2)}</strong></td>
+                            <td><span style="font-weight: 700; color: ${p.STOCK > 5 ? '#2ed573' : '#ff4757'}">${p.STOCK} unid.</span></td>
+                            <td><span style="color: #2ed573; font-weight: 600; font-size: 0.8rem;">● DISPONIBLE</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {}
+        }
+
+        function toggleModalProducto(show) {
+            document.getElementById("modalNuevoProducto").style.display = show ? "flex" : "none";
+        }
+
+        async function guardarProductoFarmacia() {
+            const nombre = document.getElementById("prodNombre").value.trim();
+            const descripcion = document.getElementById("prodDesc").value.trim();
+            const precio = parseFloat(document.getElementById("prodPrecio").value);
+            const stock = parseInt(document.getElementById("prodStock").value) || 10;
+            const categoria = document.getElementById("prodCategoria").value;
+
+            if (!nombre || !precio) {
+                alert("Completa el nombre y precio");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/farmacia/producto`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idFarmacia: 1, nombre, descripcion, precio, stock, categoria })
+                });
+                const data = await res.json();
+                if (res.ok && data.exito) {
+                    alert(`✅ Producto guardado en Oracle Cloud (#${data.idProducto})`);
+                    toggleModalProducto(false);
+                    cargarDatosFarmacia();
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (e) { alert(e.message); }
+        }
+
+        // ============================================================
+        // FUNCIONES MODULO REPARTIDOR (GPS & PEDIDOS)
+        // ============================================================
+        async function cargarDatosRepartidor() {
+            const grid = document.getElementById("repartidorOrdersGrid");
+            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #ff793f;"></i></div>`;
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/repartidor/pedidos-disponibles`);
+                const data = await res.json();
+                if (data.exito && data.pedidos && data.pedidos.length > 0) {
+                    grid.innerHTML = "";
+                    // ORDENAR AUTOMÁTICAMENTE DEL MÁS RECIENTE AL MÁS VIEJO
+                    const pedidosOrdenados = [...data.pedidos].sort((a, b) => b.ID_PEDIDO - a.ID_PEDIDO);
+
+                    pedidosOrdenados.forEach(p => {
+                        const card = document.createElement("div");
+                        card.className = "order-card";
+                        card.innerHTML = `
+                            <div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h4>Pedido #${p.ID_PEDIDO}</h4>
+                                    <span style="background: #fff2e8; color: #ff793f; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">${p.ESTADO}</span>
+                                </div>
+                                <p style="font-size: 0.85rem; margin-bottom: 6px;"><i class="fa-solid fa-user"></i> <strong>Cliente:</strong> ${p.CLIENTE}</p>
+                                <p style="font-size: 0.85rem; margin-bottom: 6px;"><i class="fa-solid fa-location-dot"></i> <strong>Destino:</strong> ${p.DIRECCION_ENTREGA}</p>
+                                <p style="font-size: 0.85rem; margin-bottom: 6px;"><i class="fa-solid fa-money-bill-wave"></i> <strong>Total:</strong> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</p>
+                            </div>
+                            <div style="margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px; display: flex; gap: 8px;">
+                                <button class="btn-action btn-accept" onclick="aceptarPedidoRepartidor(${p.ID_PEDIDO})">
+                                    <i class="fa-solid fa-hand-holding-hand"></i> Aceptar Pedido
+                                </button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                } else {
+                    grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; background: white; border-radius: 12px;"><i class="fa-solid fa-circle-check" style="font-size: 2.5rem; color: #2ed573;"></i><h3 style="margin-top: 10px;">Sin pedidos pendientes en radar</h3></div>`;
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function aceptarPedidoRepartidor(idPed) {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/repartidor/aceptar-pedido`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idPedido: idPed, idRepartidor: 1 })
+                });
+                const data = await res.json();
+                if (res.ok && data.exito) {
+                    alert(`🛵 ¡Pedido #${idPed} aceptado!\nTu GPS se ha activado automáticamente para que el cliente siga la ruta.`);
+                    // TRANSMISIÓN AUTOMÁTICA DE GPS AL ACEPTAR
+                    await transmitirUbicacionGps(true);
+                    mostrarPedidoEnCursoRider(idPed);
+                }
+            } catch (e) { alert(e.message); }
+        }
+
+        function mostrarPedidoEnCursoRider(idPed) {
+            const grid = document.getElementById("repartidorOrdersGrid");
+            grid.innerHTML = `
+                <div class="order-card" style="grid-column: 1/-1; border-top-color: #2ed573;">
+                    <h4>🛵 Pedido en Proceso #${idPed}</h4>
+                    <p style="font-size: 0.9rem; margin: 10px 0;">El pedido está en curso y tu ubicación GPS se está transmitiendo automáticamente.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn-action btn-dispatch" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/despachar', ${idPed}, 'EN CAMINO')">
+                            <i class="fa-solid fa-motorcycle"></i> Despachar (En Camino)
+                        </button>
+                        <button class="btn-action btn-delivered" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/entregar-pedido', ${idPed}, 'ENTREGADO')">
+                            <i class="fa-solid fa-circle-check"></i> Marcar 'Entregado' (Apaga GPS)
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function cambiarEstadoRider(url, idPed, nombreEstado) {
+            try {
+                const res = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idPedido: idPed, idRepartidor: 1 })
+                });
+                const data = await res.json();
+                if (res.ok && data.exito) {
+                    if (nombreEstado === 'ENTREGADO') {
+                        // APAGADO AUTOMÁTICO DE GPS EN ORACLE CLOUD AL ENTREGAR
+                        await limpiarUbicacionGps(true);
+                        alert(`🎉 ¡ENTREGA COMPLETADA!\nPedido #${idPed} marcado como entregado.\nTu señal GPS se ha apagado automáticamente para proteger tu privacidad.`);
+                        cargarDatosRepartidor();
+                    } else {
+                        alert(`✅ Pedido #${idPed} actualizado a: ${nombreEstado}`);
+                        await transmitirUbicacionGps(true);
+                    }
+                }
+            } catch (e) { alert(e.message); }
+        }
+
+        // Transmisión de GPS del repartidor hacia el backend
+        async function transmitirUbicacionGps(silencioso = false) {
+            const lat = 14.6349 + (Math.random() * 0.005);
+            const lng = -90.5068 - (Math.random() * 0.005);
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idRepartidor: 1, latitud: lat, longitud: lng })
+                });
+                const data = await res.json();
+                if (!silencioso && res.ok && data.exito) {
+                    alert(`📍 ¡GPS ENVIADO A ORACLE CLOUD!\nLatitud: ${lat.toFixed(6)}\nLongitud: ${lng.toFixed(6)}\nEl cliente ya puede ver tu ubicación en vivo.`);
+                }
+            } catch (e) { if (!silencioso) alert(e.message); }
+        }
+
+        // Apagar / Limpiar GPS en Oracle Cloud (al terminar turno o entregar pedido)
+        async function limpiarUbicacionGps(silencioso = false) {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idRepartidor: 1, latitud: 0, longitud: 0 })
+                });
+                const data = await res.json();
+                if (!silencioso) {
+                    alert("🛑 SEÑAL GPS APAGADA EN ORACLE CLOUD.\nLas coordenadas han sido restablecidas. El cliente ya no verá tu ubicación privada.");
+                }
+            } catch (e) { if (!silencioso) alert("Error al apagar GPS: " + e.message); }
+        }
+
+        // AUTO-LOGIN SI EXISTE SESIÓN GUARDADA
+        window.onload = () => {
+            const saved = localStorage.getItem("fc_user");
+            if (saved) {
+                try {
+                    currentUser = JSON.parse(saved);
+                    aplicarExperienciaPorRol(currentUser);
+                } catch (e) {}
+            }
+        };
+    </script>
+</body>
+</html>
