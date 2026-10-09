@@ -446,10 +446,10 @@
         .gps-tracking-card {
             background: white;
             border-radius: var(--radius);
-            padding: 22px;
+            padding: 24px;
             margin-top: 24px;
-            border-left: 6px solid var(--info);
-            box-shadow: var(--shadow);
+            border-left: 6px solid var(--primary);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
         }
 
         .gps-info-badge {
@@ -459,6 +459,92 @@
             border-radius: 20px;
             font-weight: 700;
             font-size: 0.8rem;
+        }
+
+        /* BARRA DE ESTADO ESTILO PEDIDOS YA */
+        .order-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            margin: 20px 0 24px 0;
+            padding: 0 10px;
+        }
+
+        .order-stepper-progress {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            right: 30px;
+            height: 4px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .order-stepper-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            transition: width 0.4s ease;
+        }
+
+        .order-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .step-icon-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .order-step.active .step-icon-circle {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(0, 192, 157, 0.2);
+            animation: pulseStep 1.5s infinite;
+        }
+
+        .order-step.completed .step-icon-circle {
+            background: #2ed573;
+            border-color: #2ed573;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .order-step.active .step-label {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .order-step.completed .step-label {
+            color: #2ed573;
+        }
+
+        @keyframes pulseStep {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
         }
 
         /* ======================== 3. ESTILOS FARMACIA ======================== */
@@ -817,16 +903,55 @@
                     <div id="clientTrackingBox" class="gps-tracking-card" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                             <div>
-                                <h3 style="color: #2ed573;"><i class="fa-solid fa-location-crosshairs"></i> Radar GPS del Repartidor (En Vivo)</h3>
-                                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-                                    Monitoreando la ubicación satelital guardada en Oracle Cloud
+                                <h3 style="color: var(--primary-dark); font-size: 1.15rem;"><i class="fa-solid fa-bag-shopping" style="color: var(--primary);"></i> Seguimiento de tu Pedido</h3>
+                                <p id="orderEstimatedTime" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+                                    Tiempo estimado de entrega: <strong>15 - 25 min</strong>
                                 </p>
                             </div>
                             <div style="display: flex; gap: 10px; align-items: center;">
                                 <button onclick="verMisPedidosCliente()" style="background: #e6f9f5; color: var(--primary-dark); border: 1px solid var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">
                                     <i class="fa-solid fa-list-check"></i> Ver Mis Pedidos
                                 </button>
-                                <span class="gps-info-badge" id="clientTrackedStatus">🟢 SEÑAL GPS ACTIVA</span>
+                                <span class="gps-info-badge" id="clientTrackedStatus">🟢 PENDIENTE</span>
+                            </div>
+                        </div>
+
+                        <!-- BARRA DE PROGRESO VISUAL ESTILO PEDIDOS YA -->
+                        <div class="order-stepper">
+                            <div class="order-stepper-progress">
+                                <div class="order-stepper-progress-fill" id="orderStepProgressFill"></div>
+                            </div>
+
+                            <!-- PASO 1: RECIBIDO / PENDIENTE -->
+                            <div class="order-step active" id="step1">
+                                <div class="step-icon-circle">
+                                    <i class="fa-solid fa-receipt"></i>
+                                </div>
+                                <span class="step-label">Recibido</span>
+                            </div>
+
+                            <!-- PASO 2: EN PREPARACIÓN -->
+                            <div class="order-step" id="step2">
+                                <div class="step-icon-circle">
+                                    <i class="fa-solid fa-box-open"></i>
+                                </div>
+                                <span class="step-label">Preparando</span>
+                            </div>
+
+                            <!-- PASO 3: EN CAMINO -->
+                            <div class="order-step" id="step3">
+                                <div class="step-icon-circle">
+                                    <i class="fa-solid fa-motorcycle"></i>
+                                </div>
+                                <span class="step-label">En Camino</span>
+                            </div>
+
+                            <!-- PASO 4: ENTREGADO -->
+                            <div class="order-step" id="step4">
+                                <div class="step-icon-circle">
+                                    <i class="fa-solid fa-house-chimney-user"></i>
+                                </div>
+                                <span class="step-label">Entregado</span>
                             </div>
                         </div>
 
@@ -1266,16 +1391,16 @@
                     const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${trackedId}`);
                     const data = await res.json();
                     if (data.exito && data.pedido) {
-                        const estado = data.pedido.ESTADO;
+                        const estado = (data.pedido.ESTADO || "").toUpperCase();
                         if (estado === 'ENTREGADO' || estado === 'CANCELADO') {
                             // Si ya fue entregado, ocultar rastreo y limpiar GPS
                             trackingBox.style.display = "none";
                             localStorage.removeItem("fc_active_order_id");
                             if (gpsPollingInterval) clearInterval(gpsPollingInterval);
                         } else {
-                            // Si está PENDIENTE, PREPARANDO o EN_CAMINO, mostrar radar
+                            // Si está PENDIENTE, PREPARANDO o EN CAMINO, mostrar radar con stepper
                             trackingBox.style.display = "block";
-                            document.getElementById("clientTrackedStatus").innerText = `ESTADO: ${estado}`;
+                            actualizarStepperPedidosYa(estado, trackedId);
                             iniciarMonitoreoGpsRepartidor(1);
                         }
                     } else {
@@ -1286,6 +1411,58 @@
                 }
             } else {
                 trackingBox.style.display = "none";
+            }
+        }
+
+        // Actualiza visualmente el flujo de estado idéntico a PedidosYa
+        function actualizarStepperPedidosYa(estado, idPed) {
+            const step1 = document.getElementById("step1");
+            const step2 = document.getElementById("step2");
+            const step3 = document.getElementById("step3");
+            const step4 = document.getElementById("step4");
+            const fill = document.getElementById("orderStepProgressFill");
+            const badge = document.getElementById("clientTrackedStatus");
+            const estTime = document.getElementById("orderEstimatedTime");
+
+            // Resetear clases
+            [step1, step2, step3, step4].forEach(s => {
+                s.className = "order-step";
+            });
+
+            if (estado === "PENDIENTE") {
+                step1.className = "order-step active";
+                fill.style.width = "0%";
+                badge.innerText = `● PEDIDO #${idPed}: RECIBIDO`;
+                badge.style.background = "#fff2e8";
+                badge.style.color = "#ff793f";
+                estTime.innerHTML = `El repartidor está revisando tu orden. Entrega estimada: <strong>20 - 30 min</strong>`;
+            } else if (estado === "PREPARANDO" || estado === "ACEPTADO") {
+                step1.className = "order-step completed";
+                step2.className = "order-step active";
+                fill.style.width = "33%";
+                badge.innerText = `● PEDIDO #${idPed}: PREPARANDO`;
+                badge.style.background = "#fef3c7";
+                badge.style.color = "#d97706";
+                estTime.innerHTML = `La farmacia y el repartidor preparan tus medicamentos. Entrega estimada: <strong>15 - 20 min</strong>`;
+            } else if (estado === "EN CAMINO" || estado === "DESPACHADO") {
+                step1.className = "order-step completed";
+                step2.className = "order-step completed";
+                step3.className = "order-step active";
+                fill.style.width = "66%";
+                badge.innerText = `● PEDIDO #${idPed}: EN CAMINO`;
+                badge.style.background = "#eafaf1";
+                badge.style.color = "#2ed573";
+                estTime.innerHTML = `🛵 ¡El repartidor va hacia tu ubicación! Sigue su moto en el mapa abajo. Entrega estimada: <strong>5 - 10 min</strong>`;
+            } else if (estado === "ENTREGADO") {
+                step1.className = "order-step completed";
+                step2.className = "order-step completed";
+                step3.className = "order-step completed";
+                step4.className = "order-step active";
+                fill.style.width = "100%";
+                badge.innerText = `● PEDIDO #${idPed}: ENTREGADO`;
+                badge.style.background = "#eafaf1";
+                badge.style.color = "#2ed573";
+                estTime.innerHTML = `¡Tu pedido ha sido entregado exitosamente! Gracias por comprar en FarmaClick.`;
             }
         }
 
@@ -1469,9 +1646,9 @@
                     updateCartUI();
                     toggleCart();
 
-                    // Activar tarjeta de rastreo GPS en vivo
-                    document.getElementById("clientTrackedStatus").innerText = "ESTADO: PENDIENTE";
+                    // Activar tarjeta de rastreo GPS en vivo con stepper
                     document.getElementById("clientTrackingBox").style.display = "block";
+                    actualizarStepperPedidosYa("PENDIENTE", idPed);
                     iniciarMonitoreoGpsRepartidor(1);
                 } else {
                     alert(`❌ Error al crear pedido: ${data.error}`);
