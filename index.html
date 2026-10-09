@@ -1777,9 +1777,21 @@
                 const data = await res.json();
                 if (data.exito && data.pedido) {
                     const p = data.pedido;
-                    alert(`📦 DETALLE DE TU PEDIDO EN ORACLE CLOUD:\n\n• Pedido: #${p.ID_PEDIDO}\n• Estado: ${p.ESTADO}\n• Total: Q ${parseFloat(p.TOTAL).toFixed(2)}\n• Dirección: ${p.DIRECCION_ENTREGA}\n• Método de Pago: ${p.METODO_PAGO}`);
+                    const msg = `📦 DETALLE DE TU PEDIDO EN ORACLE CLOUD:\n\n• Pedido: #${p.ID_PEDIDO}\n• Estado: ${p.ESTADO}\n• Total: Q ${parseFloat(p.TOTAL).toFixed(2)}\n• Dirección: ${p.DIRECCION_ENTREGA}\n• Método de Pago: ${p.METODO_PAGO}\n\n¿Deseas cerrar el seguimiento en pantalla?`;
+                    if (p.ESTADO === 'ENTREGADO' || p.ESTADO === 'CANCELADO') {
+                        alert(`📦 DETALLE DE TU PEDIDO EN ORACLE CLOUD:\n\n• Pedido: #${p.ID_PEDIDO}\n• Estado: ${p.ESTADO}\n• Total: Q ${parseFloat(p.TOTAL).toFixed(2)}`);
+                        localStorage.removeItem("fc_active_order_id");
+                        document.getElementById("clientTrackingBox").style.display = "none";
+                    } else {
+                        if (confirm(msg)) {
+                            localStorage.removeItem("fc_active_order_id");
+                            document.getElementById("clientTrackingBox").style.display = "none";
+                        }
+                    }
                 } else {
-                    alert(`📦 Pedido activo: #${activeId}`);
+                    localStorage.removeItem("fc_active_order_id");
+                    document.getElementById("clientTrackingBox").style.display = "none";
+                    alert(`📦 Pedido #${activeId} no encontrado en base de datos. Se limpió el seguimiento.`);
                 }
             } catch (e) {
                 alert(`📦 Pedido activo: #${activeId}`);
@@ -1901,33 +1913,47 @@
         // Verifica si el repartidor tiene una entrega activa y la renderiza de forma fija
         async function verificarPedidoActivoRepartidor() {
             const container = document.getElementById("repartidorActiveOrderContainer");
-            const activeId = localStorage.getItem("fc_rider_active_order_id");
+            let pActivo = null;
 
-            if (!activeId) {
-                container.style.display = "none";
-                return;
+            // 1. Primero intentar consultar pedidos activos asignados al repartidor en Oracle Cloud
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/repartidor/pedidos-activos/1`);
+                const data = await res.json();
+                if (data.exito && data.pedidos && data.pedidos.length > 0) {
+                    pActivo = data.pedidos[0];
+                    localStorage.setItem("fc_rider_active_order_id", pActivo.ID_PEDIDO);
+                }
+            } catch (err) {}
+
+            // 2. Si no respondió o no trajo por endpoint nuevo, consultar por id guardado localmente (ej: 61)
+            if (!pActivo) {
+                const activeId = localStorage.getItem("fc_rider_active_order_id") || localStorage.getItem("fc_active_order_id");
+                if (activeId) {
+                    try {
+                        const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${activeId}`);
+                        const data = await res.json();
+                        if (data.exito && data.pedido) {
+                            const p = data.pedido;
+                            if (p.ESTADO !== 'ENTREGADO' && p.ESTADO !== 'CANCELADO') {
+                                pActivo = p;
+                                localStorage.setItem("fc_rider_active_order_id", p.ID_PEDIDO);
+                            }
+                        }
+                    } catch (e) {}
+                }
             }
 
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${activeId}`);
-                const data = await res.json();
-                if (data.exito && data.pedido) {
-                    const p = data.pedido;
-                    if (p.ESTADO === 'ENTREGADO' || p.ESTADO === 'CANCELADO') {
-                        container.style.display = "none";
-                        localStorage.removeItem("fc_rider_active_order_id");
-                        detenerGpsRepartidor();
-                    } else {
-                        renderTarjetaEntregaActiva(p);
-                        iniciarGpsRealRepartidor();
-                    }
-                } else {
-                    container.style.display = "none";
-                }
-            } catch (e) {
-                console.error(e);
+            // 3. Renderizar o limpiar según corresponda
+            if (pActivo) {
+                renderTarjetaEntregaActiva(pActivo);
+                iniciarGpsRealRepartidor();
+            } else {
+                container.style.display = "none";
+                localStorage.removeItem("fc_rider_active_order_id");
+                detenerGpsRepartidor();
             }
         }
+
 
         function renderTarjetaEntregaActiva(p) {
             const container = document.getElementById("repartidorActiveOrderContainer");

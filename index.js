@@ -857,6 +857,42 @@ app.get('/api/repartidor/pedidos-disponibles', async (req, res) => {
     }
 });
 
+// Pedidos activos del repartidor (en preparación o en camino)
+app.get('/api/repartidor/pedidos-activos/:idRepartidor', async (req, res) => {
+    let conn;
+    try {
+        const idRepartidor = req.params.idRepartidor;
+        conn = await getDbConnection();
+
+
+        const result = await conn.execute(
+            `SELECT *
+             FROM VW_PEDIDOS_COMPLETOS
+             WHERE ESTADO IN ('PREPARANDO', 'EN_CAMINO', 'ACEPTADO', 'DESPACHADO')
+               AND ID_REPARTIDOR = :idRepartidor
+             ORDER BY ID_PEDIDO DESC`,
+            [idRepartidor]
+        );
+
+        return res.json({
+            exito: true,
+            pedidos: result.rows
+        });
+    } catch (err) {
+        return res.status(500).json({
+            exito: false,
+            error: err.message
+        });
+    } finally {
+        if (conn) {
+            try {
+                await conn.close();
+            } catch (e) {}
+        }
+    }
+});
+
+
 // Aceptar pedido
 app.post('/api/repartidor/aceptar-pedido', async (req, res) => {
     let conn;
