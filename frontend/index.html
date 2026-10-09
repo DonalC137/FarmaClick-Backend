@@ -909,10 +909,45 @@
         <!-- ========================================================== -->
         <!-- MÓDULO 4: REPARTIDOR (RADAR DE PEDIDOS, GPS Y AGORA)      -->
         <div class="view-section" id="moduloRepartidor" style="display: none;">
+            <!-- SECCIÓN 1: PEDIDO ACTIVO / EN CURSO (NUNCA SE PIERDE AL REFRESCAR) -->
+            <div id="repartidorActiveOrderContainer" style="display: none; margin-bottom: 24px;">
+                <div class="card-admin" style="border-left: 6px solid #2ed573; background: #fafffc;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+                        <div>
+                            <span class="gps-info-badge" id="riderActiveBadge" style="background: #eafaf1; color: #2ed573;">● PEDIDO EN CURSO</span>
+                            <h3 style="margin-top: 6px; color: var(--text-main);"><i class="fa-solid fa-motorcycle" style="color: #ff793f;"></i> <span id="riderActiveOrderTitle">Pedido #0</span></h3>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button id="btnLlamarClienteRider" onclick="iniciarLlamadaAgoraRider()" style="background: #2ed573; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                                <i class="fa-solid fa-phone-volume"></i> Llamar al Cliente
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="riderActiveOrderDetails" style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 16px; line-height: 1.6;">
+                        <!-- Información del cliente y destino -->
+                    </div>
+
+                    <div style="background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <i class="fa-solid fa-satellite-dish" style="color: #2ed573;"></i>
+                            <span style="font-size: 0.88rem; font-weight: 600;">GPS Satelital Real:</span>
+                            <span id="riderGpsStatusText" style="font-size: 0.85rem; color: var(--text-muted); margin-left: 6px;">Transmitiendo señal...</span>
+                        </div>
+                        <div id="riderGpsCoordsDisplay" style="font-size: 0.85rem; font-weight: 700; color: var(--primary-dark);"></div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="riderActiveActions">
+                        <!-- Botones Despachar y Entregado -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN 2: PEDIDOS DISPONIBLES EN RADAR -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
                 <div>
-                    <h2>Radar de Entregas y Pedidos Disponibles</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Al presionar 'Aceptar Pedido', tu GPS se activa automáticamente. Al presionar 'Entregado', se apaga solo.</p>
+                    <h2>Radar de Pedidos Disponibles</h2>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Los clientes solicitan medicamentos en tiempo real a través de Oracle Cloud.</p>
                 </div>
                 <button onclick="cargarDatosRepartidor()" style="background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                     <i class="fa-solid fa-rotate"></i> Refrescar Radar
@@ -1374,14 +1409,29 @@
             const metodoPago = document.getElementById("metodoPagoSelect").value;
             const idFarmacia = cart[0].idFarmacia || 1;
 
-            // Coordenadas simuladas o de geolocalización de entrega del cliente
+            // Obtener coordenadas GPS reales del teléfono/computadora del cliente
+            let latCliente = 14.7001;
+            let lngCliente = -91.8601;
+
+            if ("geolocation" in navigator) {
+                try {
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 7000 });
+                    });
+                    latCliente = pos.coords.latitude;
+                    lngCliente = pos.coords.longitude;
+                } catch (err) {
+                    console.log("No se concedió permiso de GPS o tardó demasiado, usando ubicación predeterminada.");
+                }
+            }
+
             const payload = {
                 idCliente: currentUser.ID_USUARIO,
                 idFarmacia: idFarmacia,
                 direccionEntrega: direccion,
                 metodoPago: metodoPago,
-                latitudEntrega: 14.7001,
-                longitudEntrega: -91.8601,
+                latitudEntrega: latCliente,
+                longitudEntrega: lngCliente,
                 items: cart.map(i => ({ idProducto: i.id, cantidad: i.cantidad }))
             };
 
@@ -1495,9 +1545,9 @@
             } catch (e) { alert(e.message); }
         }
 
-        // Llamada de voz con Agora RTC
+        // Llamada de voz con Agora RTC (del Cliente hacia el Repartidor)
         async function iniciarLlamadaAgora() {
-            const idPed = 41; // Pedido activo del cliente
+            const idPed = localStorage.getItem("fc_active_order_id") || 41;
             const canal = `pedido_${idPed}`;
 
             try {
@@ -1509,9 +1559,9 @@
                 const data = await res.json();
 
                 if (data.token) {
-                    alert(`📞 ¡SALA DE VOZ AGORA RTC ACTIVA!\nCanal: ${data.channelName}\nToken generado: ${data.token.substring(0, 30)}...\n\n🎙️ Micrófono enlazado: El canal de voz con el Repartidor está listo.`);
+                    alert(`📞 ¡SALA DE VOZ AGORA RTC ACTIVA!\nCanal: ${data.channelName}\n\n🎙️ Conectando por voz con el Repartidor del Pedido #${idPed}...`);
                 } else {
-                    alert("📞 Conectando con el repartidor a través del canal Agora RTC...");
+                    alert(`📞 Conectando con el repartidor en el canal Agora RTC (pedido_${idPed})...`);
                 }
             } catch (e) {
                 alert(`⚠️ Error al generar llamada de Agora: ${e.message}`);
@@ -1586,10 +1636,17 @@
             } catch (e) { alert(e.message); }
         }
 
+        // Variable para rastreo continuo de GPS del repartidor
+        let riderGpsWatchId = null;
+
         // ============================================================
         // FUNCIONES MODULO REPARTIDOR (GPS & PEDIDOS)
         // ============================================================
         async function cargarDatosRepartidor() {
+            // 1. Verificar si hay un pedido en curso guardado localmente o activo
+            await verificarPedidoActivoRepartidor();
+
+            // 2. Cargar pedidos pendientes en radar
             const grid = document.getElementById("repartidorOrdersGrid");
             grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #ff793f;"></i></div>`;
 
@@ -1628,6 +1685,60 @@
             } catch (e) { console.error(e); }
         }
 
+        // Verifica si el repartidor tiene una entrega activa y la renderiza de forma fija
+        async function verificarPedidoActivoRepartidor() {
+            const container = document.getElementById("repartidorActiveOrderContainer");
+            const activeId = localStorage.getItem("fc_rider_active_order_id");
+
+            if (!activeId) {
+                container.style.display = "none";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${activeId}`);
+                const data = await res.json();
+                if (data.exito && data.pedido) {
+                    const p = data.pedido;
+                    if (p.ESTADO === 'ENTREGADO' || p.ESTADO === 'CANCELADO') {
+                        container.style.display = "none";
+                        localStorage.removeItem("fc_rider_active_order_id");
+                        detenerGpsRepartidor();
+                    } else {
+                        renderTarjetaEntregaActiva(p);
+                        iniciarGpsRealRepartidor();
+                    }
+                } else {
+                    container.style.display = "none";
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderTarjetaEntregaActiva(p) {
+            const container = document.getElementById("repartidorActiveOrderContainer");
+            container.style.display = "block";
+            document.getElementById("riderActiveOrderTitle").innerText = `Pedido #${p.ID_PEDIDO} (${p.ESTADO})`;
+            document.getElementById("riderActiveBadge").innerText = `● ESTADO: ${p.ESTADO}`;
+
+            document.getElementById("riderActiveOrderDetails").innerHTML = `
+                <div><i class="fa-solid fa-user"></i> <strong>Cliente:</strong> ${p.CLIENTE || 'Cliente'}</div>
+                <div><i class="fa-solid fa-location-dot" style="color: #ff4757;"></i> <strong>Destino:</strong> ${p.DIRECCION_ENTREGA}</div>
+                <div><i class="fa-solid fa-money-bill-wave" style="color: #2ed573;"></i> <strong>Total a Cobrar:</strong> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</div>
+            `;
+
+            const actionsDiv = document.getElementById("riderActiveActions");
+            actionsDiv.innerHTML = `
+                <button class="btn-action btn-dispatch" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/despachar', ${p.ID_PEDIDO}, 'EN CAMINO')">
+                    <i class="fa-solid fa-motorcycle"></i> Despachar (En Camino)
+                </button>
+                <button class="btn-action btn-delivered" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/entregar-pedido', ${p.ID_PEDIDO}, 'ENTREGADO')">
+                    <i class="fa-solid fa-circle-check"></i> Marcar 'Entregado' (Apaga GPS)
+                </button>
+            `;
+        }
+
         async function aceptarPedidoRepartidor(idPed) {
             try {
                 const res = await fetch(`${BACKEND_URL}/api/repartidor/aceptar-pedido`, {
@@ -1637,30 +1748,14 @@
                 });
                 const data = await res.json();
                 if (res.ok && data.exito) {
-                    alert(`🛵 ¡Pedido #${idPed} aceptado!\nTu GPS se ha activado automáticamente para que el cliente siga la ruta.`);
-                    // TRANSMISIÓN AUTOMÁTICA DE GPS AL ACEPTAR
-                    await transmitirUbicacionGps(true);
-                    mostrarPedidoEnCursoRider(idPed);
+                    localStorage.setItem("fc_rider_active_order_id", idPed);
+                    alert(`🛵 ¡Pedido #${idPed} aceptado!\nTu GPS satelital se ha activado para transmitir tu ubicación real al cliente.`);
+                    await verificarPedidoActivoRepartidor();
+                    await cargarDatosRepartidor();
+                } else {
+                    alert(`Error: ${data.error || 'No se pudo aceptar el pedido'}`);
                 }
             } catch (e) { alert(e.message); }
-        }
-
-        function mostrarPedidoEnCursoRider(idPed) {
-            const grid = document.getElementById("repartidorOrdersGrid");
-            grid.innerHTML = `
-                <div class="order-card" style="grid-column: 1/-1; border-top-color: #2ed573;">
-                    <h4>🛵 Pedido en Proceso #${idPed}</h4>
-                    <p style="font-size: 0.9rem; margin: 10px 0;">El pedido está en curso y tu ubicación GPS se está transmitiendo automáticamente.</p>
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button class="btn-action btn-dispatch" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/despachar', ${idPed}, 'EN CAMINO')">
-                            <i class="fa-solid fa-motorcycle"></i> Despachar (En Camino)
-                        </button>
-                        <button class="btn-action btn-delivered" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/entregar-pedido', ${idPed}, 'ENTREGADO')">
-                            <i class="fa-solid fa-circle-check"></i> Marcar 'Entregado' (Apaga GPS)
-                        </button>
-                    </div>
-                </div>
-            `;
         }
 
         async function cambiarEstadoRider(url, idPed, nombreEstado) {
@@ -1673,49 +1768,98 @@
                 const data = await res.json();
                 if (res.ok && data.exito) {
                     if (nombreEstado === 'ENTREGADO') {
-                        // APAGADO AUTOMÁTICO DE GPS EN ORACLE CLOUD AL ENTREGAR
+                        localStorage.removeItem("fc_rider_active_order_id");
+                        detenerGpsRepartidor();
                         await limpiarUbicacionGps(true);
-                        alert(`🎉 ¡ENTREGA COMPLETADA!\nPedido #${idPed} marcado como entregado.\nTu señal GPS se ha apagado automáticamente para proteger tu privacidad.`);
+                        alert(`🎉 ¡ENTREGA COMPLETADA!\nPedido #${idPed} entregado con éxito.\nTu señal GPS se ha apagado en Oracle Cloud para proteger tu privacidad.`);
+                        document.getElementById("repartidorActiveOrderContainer").style.display = "none";
                         cargarDatosRepartidor();
                     } else {
-                        alert(`✅ Pedido #${idPed} actualizado a: ${nombreEstado}`);
-                        await transmitirUbicacionGps(true);
+                        alert(`📍 Pedido #${idPed} actualizado a: ${nombreEstado}`);
+                        await transmitirUbicacionGpsReal();
+                        await verificarPedidoActivoRepartidor();
                     }
                 }
             } catch (e) { alert(e.message); }
         }
 
-        // Transmisión de GPS del repartidor hacia el backend
-        async function transmitirUbicacionGps(silencioso = false) {
-            const lat = 14.6349 + (Math.random() * 0.005);
-            const lng = -90.5068 - (Math.random() * 0.005);
+        // LECTURA DE GPS REAL DEL CELULAR DEL REPARTIDOR
+        function iniciarGpsRealRepartidor() {
+            if ("geolocation" in navigator) {
+                // Transmitir inmediatamente la primera posición
+                transmitirUbicacionGpsReal();
 
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idRepartidor: 1, latitud: lat, longitud: lng })
-                });
-                const data = await res.json();
-                if (!silencioso && res.ok && data.exito) {
-                    alert(`📍 ¡GPS ENVIADO A ORACLE CLOUD!\nLatitud: ${lat.toFixed(6)}\nLongitud: ${lng.toFixed(6)}\nEl cliente ya puede ver tu ubicación en vivo.`);
+                // Seguir transmitiendo cada 6 segundos mientras se mueve
+                if (!riderGpsWatchId) {
+                    riderGpsWatchId = setInterval(() => {
+                        transmitirUbicacionGpsReal();
+                    }, 6000);
                 }
-            } catch (e) { if (!silencioso) alert(e.message); }
+            } else {
+                document.getElementById("riderGpsStatusText").innerText = "Geolocalización no soportada en este navegador.";
+            }
         }
 
-        // Apagar / Limpiar GPS en Oracle Cloud (al terminar turno o entregar pedido)
+        function detenerGpsRepartidor() {
+            if (riderGpsWatchId) {
+                clearInterval(riderGpsWatchId);
+                riderGpsWatchId = null;
+            }
+        }
+
+        async function transmitirUbicacionGpsReal() {
+            if (!navigator.geolocation) return;
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    document.getElementById("riderGpsStatusText").innerText = "● Transmitiendo señal GPS en vivo";
+                    document.getElementById("riderGpsCoordsDisplay").innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+
+                    try {
+                        await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ idRepartidor: 1, latitud: lat, longitud: lng })
+                        });
+                    } catch (e) {
+                        console.error("Error enviando GPS al backend:", e);
+                    }
+                },
+                (error) => {
+                    document.getElementById("riderGpsStatusText").innerText = "⚠️ Activa el GPS y concede permiso de ubicación en tu celular.";
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
+
+        // Apagar / Limpiar GPS en Oracle Cloud (al entregar pedido)
         async function limpiarUbicacionGps(silencioso = false) {
             try {
-                const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
+                await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ idRepartidor: 1, latitud: 0, longitud: 0 })
                 });
+            } catch (e) { console.error(e); }
+        }
+
+        // Llamada de voz con Agora RTC desde el Repartidor hacia el Cliente
+        async function iniciarLlamadaAgoraRider() {
+            const activeId = localStorage.getItem("fc_rider_active_order_id") || 41;
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/agora/token`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ idPedido: activeId, idUsuario: 1, role: "publisher" })
+                });
                 const data = await res.json();
-                if (!silencioso) {
-                    alert("🛑 SEÑAL GPS APAGADA EN ORACLE CLOUD.\nLas coordenadas han sido restablecidas. El cliente ya no verá tu ubicación privada.");
-                }
-            } catch (e) { if (!silencioso) alert("Error al apagar GPS: " + e.message); }
+                alert(`📞 ¡CANAL DE LLAMADA AGORA RTC ACTIVO!\nCanal: ${data.channelName || `pedido_${activeId}`}\n\n🎙️ Conectando por voz con el Cliente del Pedido #${activeId}...`);
+            } catch (e) {
+                alert(`📞 Conectando con el Cliente en canal Agora RTC...`);
+            }
         }
 
         // AUTO-LOGIN SI EXISTE SESIÓN GUARDADA
