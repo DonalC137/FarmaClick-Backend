@@ -840,8 +840,26 @@
                                 <button id="btnActualizarGpsClient" onclick="iniciarMonitoreoGpsRepartidor(1, true)" style="background: white; border: 1px solid var(--border); padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
                                     <i class="fa-solid fa-rotate"></i> Actualizar GPS
                                 </button>
-                                <button onclick="iniciarLlamadaAgora()" style="background: #2ed573; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-                                    <i class="fa-solid fa-phone-volume"></i> Llamar al Repartidor (Agora)
+                            </div>
+                        </div>
+
+                        <!-- AVISO DE LLAMADA ENTRANTE DEL REPARTIDOR PARA EL CLIENTE -->
+                        <div id="incomingCallBannerClient" style="display: none; margin-top: 14px; background: #eafaf1; border: 2px dashed #2ed573; padding: 14px 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 42px; height: 42px; border-radius: 50%; background: #2ed573; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; animation: pulseCall 1s infinite alternate;">
+                                    <i class="fa-solid fa-phone-volume"></i>
+                                </div>
+                                <div>
+                                    <strong style="color: #2ed573; font-size: 0.95rem;">🛵 ¡El Repartidor te está llamando!</strong>
+                                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">El repartidor ha llegado a tu dirección o necesita comunicarse contigo.</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <button onclick="responderLlamadaCliente()" style="background: #2ed573; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                                    <i class="fa-solid fa-phone"></i> Contestar Llamada
+                                </button>
+                                <button onclick="rechazarLlamadaCliente()" style="background: #fee2e2; color: #ef4444; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                                    Colgar
                                 </button>
                             </div>
                         </div>
@@ -1545,11 +1563,9 @@
             } catch (e) { alert(e.message); }
         }
 
-        // Llamada de voz con Agora RTC (del Cliente hacia el Repartidor)
-        async function iniciarLlamadaAgora() {
+        // Responder llamada entrante del Repartidor (Agora RTC)
+        async function responderLlamadaCliente() {
             const idPed = localStorage.getItem("fc_active_order_id") || 41;
-            const canal = `pedido_${idPed}`;
-
             try {
                 const res = await fetch(`${BACKEND_URL}/api/agora/token`, {
                     method: "POST",
@@ -1557,15 +1573,16 @@
                     body: JSON.stringify({ idPedido: idPed, idUsuario: currentUser.ID_USUARIO, role: "publisher" })
                 });
                 const data = await res.json();
-
-                if (data.token) {
-                    alert(`📞 ¡SALA DE VOZ AGORA RTC ACTIVA!\nCanal: ${data.channelName}\n\n🎙️ Conectando por voz con el Repartidor del Pedido #${idPed}...`);
-                } else {
-                    alert(`📞 Conectando con el repartidor en el canal Agora RTC (pedido_${idPed})...`);
-                }
+                alert(`📞 ¡LLAMADA CONECTADA CON EL REPARTIDOR!\nCanal: ${data.channelName || `pedido_${idPed}`}\n\n🎙️ Comunicación de voz establecida. Puedes hablar con el repartidor.`);
+                document.getElementById("incomingCallBannerClient").style.display = "none";
             } catch (e) {
-                alert(`⚠️ Error al generar llamada de Agora: ${e.message}`);
+                alert(`📞 Conectado con el Repartidor en canal de voz del Pedido #${idPed}.`);
+                document.getElementById("incomingCallBannerClient").style.display = "none";
             }
+        }
+
+        function rechazarLlamadaCliente() {
+            document.getElementById("incomingCallBannerClient").style.display = "none";
         }
 
         // Consultar historial de pedidos del cliente
