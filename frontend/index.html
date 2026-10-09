@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -532,70 +532,39 @@
     <!-- ════════════════════════════════════════════════════
          LOGIN SCREEN
     ════════════════════════════════════════════════════ -->
-    <div id="loginScreen">
-        <!-- LEFT PANEL -->
-        <div class="login-left">
-            <div class="login-left-logo">
-                <div class="login-left-logo-icon"><i class="fa-solid fa-prescription-bottle-medical"></i></div>
-                <span>FarmaClick</span>
-            </div>
-            <h1>Tu farmacia,<br><span>en tu puerta.</span></h1>
-            <p>Plataforma integral de delivery de medicamentos con rastreo GPS en tiempo real, conectada a Oracle Cloud.</p>
-            <div class="login-features">
-                <div class="login-feature">
-                    <div class="login-feature-icon green"><i class="fa-solid fa-satellite-dish"></i></div>
-                    <span>Rastreo GPS en vivo del repartidor</span>
-                </div>
-                <div class="login-feature">
-                    <div class="login-feature-icon purple"><i class="fa-solid fa-store"></i></div>
-                    <span>Múltiples farmacias, un solo pedido</span>
-                </div>
-                <div class="login-feature">
-                    <div class="login-feature-icon orange"><i class="fa-solid fa-cloud"></i></div>
-                    <span>Base de datos Oracle Autonomous Cloud</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- RIGHT FORM -->
-        <div class="login-right">
-            <div class="login-form-header">
-                <h2>Iniciar Sesión</h2>
-                <p>Accede con tus credenciales asignadas</p>
-            </div>
-
-            <form onsubmit="handleLogin(event)" style="width:100%">
-                <div class="form-group">
-                    <label>Correo Electrónico</label>
-                    <div class="input-with-icon">
-                        <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
-                        <i class="fa-solid fa-envelope input-icon"></i>
+        <div id="loginScreen">
+        <div class="login-right" style="width: 100%; border-left: none; background: transparent; display: flex; align-items: center; justify-content: center;">
+            <div style="background: var(--card); padding: 50px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); width: 100%; max-width: 440px; position: relative; z-index: 10;">
+                <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 30px;">
+                    <div style="width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #0d1117; margin-bottom: 16px; box-shadow: 0 0 24px var(--primary-glow);">
+                        <i class="fa-solid fa-prescription-bottle-medical"></i>
                     </div>
+                    <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text); letter-spacing: -0.5px;">FarmaClick</h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">Accede con tus credenciales asignadas</p>
                 </div>
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <div class="input-with-icon">
-                        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
-                        <i class="fa-solid fa-lock input-icon"></i>
-                    </div>
-                </div>
-                <button type="submit" class="btn-login" id="btnLoginSubmit">
-                    <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
-                </button>
-            </form>
 
-            <div class="quick-access">
-                <p>Acceso rápido de prueba</p>
-                <div class="quick-btns">
-                    <button class="quick-btn" onclick="quickFill('admin@farmaclick.com','admin123')">👑 Admin</button>
-                    <button class="quick-btn" onclick="quickFill('cliente@farmaclick.com','cliente123')">👤 Cliente</button>
-                    <button class="quick-btn" onclick="quickFill('farmacia@farmaclick.com','farmacia123')">🏪 Farmacia</button>
-                    <button class="quick-btn" onclick="quickFill('repartidor@farmaclick.com','repartidor123')">🛵 Repartidor</button>
-                </div>
+                <form onsubmit="handleLogin(event)" style="width:100%">
+                    <div class="form-group">
+                        <label>Correo Electrónico</label>
+                        <div class="input-with-icon">
+                            <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
+                            <i class="fa-solid fa-envelope input-icon"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <div class="input-with-icon">
+                            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                            <i class="fa-solid fa-lock input-icon"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-login" id="btnLoginSubmit" style="margin-top: 10px;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
+                    </button>
+                </form>
             </div>
         </div>
     </div>
-
     <!-- ════════════════════════════════════════════════════
          APP CONTAINER
     ════════════════════════════════════════════════════ -->
@@ -624,7 +593,7 @@
             <div class="banner admin-bg" id="heroBanner">
                 <div>
                     <h1 id="heroTitle">Bienvenido a FarmaClick</h1>
-                    <p id="heroSubtitle">Panel de gestión en tiempo real conectado a Oracle Cloud.</p>
+                    <p id="heroSubtitle">Panel de gestión en tiempo real conectado a.</p>
                 </div>
                 <i id="heroIcon" class="fa-solid fa-shield-halved" style="font-size:3rem;opacity:0.5;"></i>
             </div>
@@ -659,7 +628,7 @@
                             <div class="form-group" style="flex:1;"><label>Dirección</label><input type="text" id="adminNewDir" class="form-input" placeholder="Zona 1, Coatepeque"></div>
                         </div>
                         <button type="submit" class="btn-login" style="background:linear-gradient(135deg,#6366f1,#4f46e5);">
-                            <i class="fa-solid fa-floppy-disk"></i> Guardar en Oracle Cloud
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar
                         </button>
                     </form>
                 </div>
@@ -872,7 +841,7 @@
                 </select>
             </div>
             <button onclick="guardarProductoFarmacia()" class="btn-login" style="background:linear-gradient(135deg,var(--purple),#7c3aed);">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Guardar en Oracle Cloud
+                <i class="fa-solid fa-cloud-arrow-up"></i> Guardar
             </button>
         </div>
     </div>
@@ -986,7 +955,7 @@
                 roleBadge.innerHTML = `<i class="fa-solid fa-shop"></i> Farmacia`;
                 heroBanner.className = "banner farmacia-bg";
                 document.getElementById("heroTitle").innerText = "Panel de Farmacia Central 🏪";
-                document.getElementById("heroSubtitle").innerText = "Control de existencias y alta de productos en Oracle Cloud.";
+                document.getElementById("heroSubtitle").innerText = "Control de existencias y alta de productos.";
                 document.getElementById("heroIcon").className = "fa-solid fa-hospital-user";
                 document.getElementById("moduloFarmacia").style.display = "block";
                 cargarDatosFarmacia();
@@ -1585,3 +1554,4 @@
     </script>
 </body>
 </html>
+
