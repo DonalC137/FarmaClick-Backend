@@ -797,24 +797,10 @@
             </div>
             <p class="login-subtitle">Acceso seguro a la plataforma FarmaClick</p>
 
-            <button type="button" class="btn-google" onclick="loginWithGoogle()">
-                <svg class="google-icon" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                </svg>
-                <span>Continuar con Google</span>
-            </button>
-
-            <div class="login-divider">
-                <span>o con correo y contraseña</span>
-            </div>
-
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>Correo Electrónico:</label>
-                    <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@gmail.com" required>
+                    <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
                 </div>
 
                 <div class="form-group">
@@ -826,68 +812,6 @@
                     <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
                 </button>
             </form>
-        </div>
-    </div>
-
-    <!-- MODAL POPUP SELECTOR DE CUENTAS GOOGLE (OPCIÓN A) -->
-    <div id="googleModalOverlay" class="google-modal-overlay">
-        <div class="google-modal-box">
-            <button class="google-close-btn" onclick="closeGoogleModal()">&times;</button>
-            
-            <!-- VISTA 1: SELECTOR DE CUENTAS -->
-            <div id="googleAccountsView">
-                <div class="google-modal-header">
-                    <svg viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                    </svg>
-                    <div class="google-modal-title">Acceder con Google</div>
-                    <div class="google-modal-subtitle">Para continuar en <strong>FarmaClick</strong></div>
-                </div>
-
-                <div class="google-accounts-list">
-                    <!-- Cuenta Principal del Navegador -->
-                    <div class="google-account-item" onclick="selectGoogleAccount('Germán', 'german.personal@gmail.com', '#1a73e8')">
-                        <div class="google-avatar" style="background: #1a73e8;">G</div>
-                        <div class="google-account-info">
-                            <div class="google-account-name">Germán</div>
-                            <div class="google-account-email">german.personal@gmail.com</div>
-                        </div>
-                    </div>
-
-                    <!-- Cuenta Secundaria -->
-                    <div class="google-account-item" onclick="selectGoogleAccount('Germán (Trabajo)', 'german.farmaclick@gmail.com', '#0d9488')">
-                        <div class="google-avatar" style="background: #0d9488;">G</div>
-                        <div class="google-account-info">
-                            <div class="google-account-name">Germán (Trabajo)</div>
-                            <div class="google-account-email">german.farmaclick@gmail.com</div>
-                        </div>
-                    </div>
-
-                    <!-- Usar otra cuenta -->
-                    <div class="google-account-item" onclick="promptCustomGoogleAccount()">
-                        <div class="google-avatar" style="background: #e8eaed; color: #5f6368;">
-                            <i class="fa-solid fa-user-plus" style="font-size: 0.95rem;"></i>
-                        </div>
-                        <div class="google-account-info">
-                            <div class="google-account-name" style="color: #1a73e8; font-weight: 500;">Usar otra cuenta</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="google-modal-footer">
-                    Para continuar, Google compartirá tu nombre, dirección de correo electrónico y foto de perfil con FarmaClick. Consulta las Condiciones de servicio y la Política de privacidad.
-                </div>
-            </div>
-
-            <!-- VISTA 2: VERIFICACIÓN CON ANIMACIÓN DE GOOGLE -->
-            <div id="googleVerifyScreen" class="google-verify-screen">
-                <div class="google-spinner"></div>
-                <div style="font-size: 1.15rem; font-weight: 500; color: #202124; margin-bottom: 6px;">Verificando con Google...</div>
-                <div id="googleVerifyingEmail" style="font-size: 0.88rem; color: #5f6368;"></div>
-            </div>
         </div>
     </div>
 
@@ -1290,51 +1214,6 @@
         let cart = [];
         let categoriaActual = "TODOS";
         let gpsPollingInterval = null;
-
-        // 1. INICIAR SESIÓN CON GOOGLE (OPCIÓN A: VENTANA SELECTORA REALISTA DE GOOGLE)
-        function loginWithGoogle() {
-            // Mostrar ventana modal oficial de Google
-            document.getElementById("googleAccountsView").style.display = "block";
-            document.getElementById("googleVerifyScreen").style.display = "none";
-            document.getElementById("googleModalOverlay").style.display = "flex";
-        }
-
-        function closeGoogleModal() {
-            document.getElementById("googleModalOverlay").style.display = "none";
-        }
-
-        // Al hacer clic en una cuenta de Google
-        async function selectGoogleAccount(nombre, correo, colorAvatar) {
-            // Pasar a pantalla de verificación con animación de Google
-            document.getElementById("googleAccountsView").style.display = "none";
-            document.getElementById("googleVerifyScreen").style.display = "block";
-            document.getElementById("googleVerifyingEmail").innerText = `Conectando con ${correo}...`;
-
-            // Simular verificación criptográfica con Google OAuth (1.2 segundos)
-            setTimeout(() => {
-                currentUser = {
-                    ID_USUARIO: 22,
-                    NOMBRE: nombre,
-                    APELLIDO: "(Google)",
-                    CORREO: correo,
-                    ID_ROL: 2, // Cliente
-                    NOMBRE_ROL: "CLIENTE"
-                };
-                localStorage.setItem("fc_user", JSON.stringify(currentUser));
-                closeGoogleModal();
-                aplicarExperienciaPorRol(currentUser);
-            }, 1200);
-        }
-
-        // Opción "Usar otra cuenta" de Google
-        function promptCustomGoogleAccount() {
-            const customEmail = prompt("Ingresa tu correo de Gmail o cuenta Google:", "micuenta@gmail.com");
-            if (!customEmail || !customEmail.includes("@")) return;
-
-            const baseName = customEmail.split("@")[0];
-            const cleanName = baseName.charAt(0).toUpperCase() + baseName.slice(1);
-            selectGoogleAccount(cleanName, customEmail, "#4285F4");
-        }
 
         // Auto-llenado de prueba (opcional)
         function quickFill(email, pass) {
