@@ -814,7 +814,7 @@
                     <div class="products-grid" id="clientProductsGrid"></div>
 
                     <!-- TARJETA DE RASTREO GPS PERMANENTE Y EN VIVO EN EL CLIENTE -->
-                    <div id="clientTrackingBox" class="gps-tracking-card" style="display: block;">
+                    <div id="clientTrackingBox" class="gps-tracking-card" style="display: none;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                             <div>
                                 <h3 style="color: #2ed573;"><i class="fa-solid fa-location-crosshairs"></i> Radar GPS del Repartidor (En Vivo)</h3>
@@ -1587,9 +1587,26 @@
             if (banner) banner.style.setProperty("display", "none", "important");
         }
 
-        // Consultar historial de pedidos del cliente
+        // Consultar historial de pedidos del cliente en Oracle Cloud
         async function verMisPedidosCliente() {
-            alert(`📦 CONSULTA DE PEDIDOS EN ORACLE CLOUD:\n\n• Pedido #41 - Total: Q 10.00 - Estado: PENDIENTE\n• Dirección: Zona 1 Coatepeque\n• Método de Pago: EFECTIVO\n\nPuedes consultar el repartidor asignado y monitorearlo en el radar de abajo.`);
+            const activeId = localStorage.getItem("fc_active_order_id");
+            if (!activeId) {
+                alert("📦 No tienes ningún pedido en curso en este momento.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${activeId}`);
+                const data = await res.json();
+                if (data.exito && data.pedido) {
+                    const p = data.pedido;
+                    alert(`📦 DETALLE DE TU PEDIDO EN ORACLE CLOUD:\n\n• Pedido: #${p.ID_PEDIDO}\n• Estado: ${p.ESTADO}\n• Total: Q ${parseFloat(p.TOTAL).toFixed(2)}\n• Dirección: ${p.DIRECCION_ENTREGA}\n• Método de Pago: ${p.METODO_PAGO}`);
+                } else {
+                    alert(`📦 Pedido activo: #${activeId}`);
+                }
+            } catch (e) {
+                alert(`📦 Pedido activo: #${activeId}`);
+            }
         }
 
         // ============================================================
