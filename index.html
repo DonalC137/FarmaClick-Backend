@@ -844,7 +844,7 @@
                         </div>
 
                         <!-- AVISO DE LLAMADA ENTRANTE DEL REPARTIDOR PARA EL CLIENTE -->
-                        <div id="incomingCallBannerClient" style="display: none; margin-top: 14px; background: #eafaf1; border: 2px dashed #2ed573; padding: 14px 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                        <div id="incomingCallBannerClient" style="display: none !important; margin-top: 14px; background: #eafaf1; border: 2px dashed #2ed573; padding: 14px 18px; border-radius: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <div style="width: 42px; height: 42px; border-radius: 50%; background: #2ed573; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; animation: pulseCall 1s infinite alternate;">
                                     <i class="fa-solid fa-phone-volume"></i>
@@ -1574,15 +1574,17 @@
                 });
                 const data = await res.json();
                 alert(`📞 ¡LLAMADA CONECTADA CON EL REPARTIDOR!\nCanal: ${data.channelName || `pedido_${idPed}`}\n\n🎙️ Comunicación de voz establecida. Puedes hablar con el repartidor.`);
-                document.getElementById("incomingCallBannerClient").style.display = "none";
             } catch (e) {
                 alert(`📞 Conectado con el Repartidor en canal de voz del Pedido #${idPed}.`);
-                document.getElementById("incomingCallBannerClient").style.display = "none";
+            } finally {
+                const banner = document.getElementById("incomingCallBannerClient");
+                if (banner) banner.style.setProperty("display", "none", "important");
             }
         }
 
         function rechazarLlamadaCliente() {
-            document.getElementById("incomingCallBannerClient").style.display = "none";
+            const banner = document.getElementById("incomingCallBannerClient");
+            if (banner) banner.style.setProperty("display", "none", "important");
         }
 
         // Consultar historial de pedidos del cliente
