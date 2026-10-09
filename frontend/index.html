@@ -3,669 +3,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarmaClick - Sistema Integral Delivery & Administración</title>
-    <!-- Fuentes e Iconos -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>FarmaClick — Delivery & Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
-            --primary: #00c09d;
-            --primary-dark: #00997d;
-            --accent: #ff4757;
-            --warning: #ffa502;
-            --info: #2ed573;
-            --purple: #6c5ce7;
-            --dark: #2f3542;
-            --bg: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-main: #2f3542;
-            --text-muted: #747d8c;
-            --border: #e4e7eb;
-            --shadow: 0 4px 15px rgba(0,0,0,0.06);
-            --radius: 12px;
-        }
+            --primary: #00d4aa;
+            --primary-dark: #00a884;
+            --primary-glow: rgba(0, 212, 170, 0.18);
+            --accent: #ff5370;
+            --warning: #ffb347;
+            --success: #00e676;
+            --purple: #a78bfa;
+            --blue: #60a5fa;
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
+            /* Dark theme */
+            --bg: #0d1117;
+            --bg-2: #161b22;
+            --bg-3: #1c2333;
+            --bg-4: #21262d;
+            --card: #161b22;
+            --card-hover: #1c2333;
+            --border: rgba(255,255,255,0.08);
+            --border-hover: rgba(0,212,170,0.35);
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --text-dim: #484f58;
+            --shadow: 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+            --radius: 14px;
+            --radius-sm: 8px;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            min-height: 100vh;
-        }
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
 
-        /* VISTA DE LOGIN CENTRALIZADA ULTRA MODERNA */
+        /* ═══════════════════════════════════════════
+           LOGIN SCREEN — PROFESSIONAL DARK
+        ═══════════════════════════════════════════ */
         #loginScreen {
             display: flex;
             min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%), radial-gradient(circle at 10% 20%, rgba(0, 192, 157, 0.15) 0%, transparent 40%);
-            padding: 24px;
+            background: var(--bg);
             position: relative;
+            overflow: hidden;
         }
 
         #loginScreen::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2300c09d' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(0,212,170,0.12) 0%, transparent 70%);
+            top: -100px; left: -100px;
+            pointer-events: none;
+        }
+        #loginScreen::after {
+            content: '';
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(167,139,250,0.08) 0%, transparent 70%);
+            bottom: -100px; right: -100px;
             pointer-events: none;
         }
 
-        .login-card {
-            background: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-            width: 100%;
-            max-width: 440px;
-            padding: 40px 34px;
-            text-align: center;
+        .login-left {
+            flex: 1;
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 80px;
             position: relative;
             z-index: 2;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
         }
-
-        .login-logo-container {
-            margin-bottom: 18px;
+        .login-left-logo {
             display: flex;
-            justify-content: center;
             align-items: center;
+            gap: 14px;
+            margin-bottom: 60px;
+        }
+        .login-left-logo-icon {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: #0d1117;
+            box-shadow: 0 0 24px var(--primary-glow);
+        }
+        .login-left-logo span {
+            font-size: 1.6rem; font-weight: 800; color: var(--text);
+            letter-spacing: -0.5px;
+        }
+        .login-left h1 {
+            font-size: 3rem; font-weight: 800;
+            line-height: 1.15; color: var(--text);
+            letter-spacing: -1px; margin-bottom: 20px;
+        }
+        .login-left h1 span { color: var(--primary); }
+        .login-left p {
+            font-size: 1.05rem; color: var(--text-muted);
+            line-height: 1.7; max-width: 420px; margin-bottom: 48px;
+        }
+        .login-features { display: flex; flex-direction: column; gap: 16px; }
+        .login-feature {
+            display: flex; align-items: center; gap: 14px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+        .login-feature-icon {
+            width: 36px; height: 36px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.95rem; flex-shrink: 0;
+        }
+        .login-feature-icon.green { background: rgba(0,212,170,0.12); color: var(--primary); }
+        .login-feature-icon.purple { background: rgba(167,139,250,0.12); color: var(--purple); }
+        .login-feature-icon.orange { background: rgba(255,179,71,0.12); color: var(--warning); }
+        .login-feature span { font-size: 0.88rem; color: var(--text-muted); font-weight: 500; }
+
+        .login-right {
+            width: 480px;
+            background: var(--bg-2);
+            border-left: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            padding: 60px 50px;
+            position: relative; z-index: 2;
         }
 
-        .login-logo-img {
-            max-width: 150px;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 10px rgba(0, 192, 157, 0.2));
-            transition: transform 0.3s ease;
-        }
+        .login-form-header { text-align: center; margin-bottom: 36px; }
+        .login-form-header h2 { font-size: 1.8rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .login-form-header p { font-size: 0.88rem; color: var(--text-muted); }
 
-        .login-logo-img:hover {
-            transform: scale(1.04);
-        }
-
-        .login-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 4px;
-        }
-
-        .login-subtitle {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 16px;
-        }
-
+        .form-group { margin-bottom: 18px; }
         .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-main);
+            display: block; font-size: 0.82rem; font-weight: 600;
+            color: var(--text-muted); margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px;
         }
-
         .form-input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-size: 0.92rem;
-            transition: all 0.2s;
-            outline: none;
-            background: #fafbfc;
+            width: 100%; padding: 13px 16px;
+            background: var(--bg-3); border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm); font-size: 0.92rem;
+            color: var(--text); outline: none; transition: all 0.2s;
         }
-
+        .form-input::placeholder { color: var(--text-dim); }
         .form-input:focus {
-            background: #ffffff;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3.5px rgba(0, 192, 157, 0.15);
+            background: var(--bg-4);
+            box-shadow: 0 0 0 3px var(--primary-glow);
         }
+        select.form-input { cursor: pointer; }
+        select.form-input option { background: var(--bg-3); color: var(--text); }
+
+        .input-with-icon { position: relative; }
+        .input-with-icon .form-input { padding-left: 44px; }
+        .input-with-icon .input-icon {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            color: var(--text-dim); font-size: 0.95rem;
+        }
+        .input-with-icon .form-input:focus + .input-icon,
+        .input-with-icon:focus-within .input-icon { color: var(--primary); }
 
         .btn-login {
-            width: 100%;
-            background: linear-gradient(135deg, #00c09d, #00997d);
-            color: white;
-            border: none;
-            padding: 13px;
-            border-radius: 10px;
-            font-size: 0.98rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 6px;
-            box-shadow: 0 4px 14px rgba(0, 192, 157, 0.3);
+            width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #0d1117; border: none; padding: 14px;
+            border-radius: var(--radius-sm); font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: all 0.25s; margin-top: 8px;
+            box-shadow: 0 4px 20px rgba(0,212,170,0.3); letter-spacing: 0.3px;
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,212,170,0.45); }
+        .btn-login:active { transform: translateY(0); }
+
+        .quick-access {
+            margin-top: 28px; width: 100%;
+        }
+        .quick-access p { font-size: 0.78rem; color: var(--text-dim); text-align: center; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .quick-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .quick-btn {
+            padding: 9px 6px; border: 1px solid var(--border);
+            background: transparent; border-radius: var(--radius-sm);
+            color: var(--text-muted); font-size: 0.78rem; font-weight: 500;
+            cursor: pointer; transition: 0.2s; text-align: center;
+        }
+        .quick-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
+
+        @media (max-width: 860px) {
+            .login-left { display: none; }
+            .login-right { width: 100%; border-left: none; padding: 40px 24px; }
         }
 
-        .btn-login:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(0, 192, 157, 0.4);
-        }
+        /* ═══════════════════════════════════════════
+           APP CONTAINER
+        ═══════════════════════════════════════════ */
+        #appContainer { display: none; padding-bottom: 60px; }
 
-        /* SEPARADOR DIVIDER */
-        .login-divider {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            color: #94a3b8;
-            font-size: 0.82rem;
-            font-weight: 500;
-        }
-
-        .login-divider::before,
-        .login-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
-        .login-divider span {
-            padding: 0 12px;
-        }
-
-        /* APLICACIÓN PRINCIPAL (DESPUÉS DEL LOGIN) */
-        #appContainer {
-            display: none;
-            padding-bottom: 60px;
-        }
-
-        /* HEADER Y TOPBAR */
         header {
-            background: #ffffff;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: var(--bg-2); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
             padding: 12px 24px;
         }
-
         .nav-container {
-            max-width: 1300px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
+            max-width: 1340px; margin: 0 auto;
+            display: flex; align-items: center;
+            justify-content: space-between; gap: 16px; flex-wrap: wrap;
         }
-
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.3rem; font-weight: 800;
+            color: var(--primary); text-decoration: none;
         }
-
-        .user-badge-bar {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 0.95rem; color: #0d1117;
         }
+        .user-badge-bar { display: flex; align-items: center; gap: 10px; }
 
         .role-tag {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            display: inline-flex; align-items: center; gap: 6px;
         }
+        .role-tag.admin { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.2); }
+        .role-tag.cliente { background: rgba(0,212,170,0.12); color: var(--primary); border: 1px solid rgba(0,212,170,0.2); }
+        .role-tag.farmacia { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+        .role-tag.repartidor { background: rgba(255,179,71,0.12); color: var(--warning); border: 1px solid rgba(255,179,71,0.2); }
 
-        .role-tag.admin { background: #fee2e2; color: #ef4444; }
-        .role-tag.cliente { background: #e6f9f5; color: var(--primary-dark); }
-        .role-tag.farmacia { background: #f3e8ff; color: var(--purple); }
-        .role-tag.repartidor { background: #ffedd5; color: #f97316; }
+        #userNameDisplay { font-size: 0.88rem; font-weight: 600; color: var(--text-muted); }
 
         .btn-logout {
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            color: var(--accent);
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: 0.2s;
+            background: transparent; border: 1px solid var(--border);
+            padding: 6px 14px; border-radius: 20px; font-size: 0.82rem;
+            cursor: pointer; color: var(--accent); font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
         }
+        .btn-logout:hover { background: rgba(255,83,112,0.1); border-color: var(--accent); }
 
-        .btn-logout:hover {
-            background: #ffebee;
-            border-color: var(--accent);
-        }
-
-        /* BANNER HERO DINÁMICO */
-        .hero {
-            max-width: 1300px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
+        .hero { max-width: 1340px; margin: 20px auto; padding: 0 20px; }
         .banner {
-            border-radius: var(--radius);
-            padding: 24px 30px;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-radius: var(--radius); padding: 26px 32px;
+            color: white; display: flex; justify-content: space-between; align-items: center;
+        }
+        .banner.admin-bg { background: linear-gradient(135deg, #1a1f35 0%, #2d2359 100%); border: 1px solid rgba(167,139,250,0.15); }
+        .banner.cliente-bg { background: linear-gradient(135deg, #0a2818 0%, #0d3d2a 100%); border: 1px solid rgba(0,212,170,0.15); }
+        .banner.farmacia-bg { background: linear-gradient(135deg, #1a0f3a 0%, #2c1a5e 100%); border: 1px solid rgba(167,139,250,0.15); }
+        .banner.repartidor-bg { background: linear-gradient(135deg, #2a1000 0%, #451a00 100%); border: 1px solid rgba(255,179,71,0.15); }
+        .banner h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; }
+        .banner p { font-size: 0.85rem; opacity: 0.7; }
+
+        .view-section { max-width: 1340px; margin: 0 auto; padding: 0 20px; }
+
+        /* ═══════════════════════════════════════════
+           CARDS & COMMON
+        ═══════════════════════════════════════════ */
+        .card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+        .card h3 {
+            font-size: 1rem; font-weight: 700; margin-bottom: 18px;
+            padding-bottom: 12px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px; color: var(--text);
         }
 
-        .banner.admin-bg { background: linear-gradient(135deg, #1e293b, #334155); }
-        .banner.cliente-bg { background: linear-gradient(135deg, #00c09d, #00796b); }
-        .banner.farmacia-bg { background: linear-gradient(135deg, #6c5ce7, #4834d4); }
-        .banner.repartidor-bg { background: linear-gradient(135deg, #ff793f, #d35400); }
+        /* ═══════════════════════════════════════════
+           ADMIN MODULE
+        ═══════════════════════════════════════════ */
+        .admin-grid { display: grid; grid-template-columns: 370px 1fr; gap: 24px; }
 
-        .view-section {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* ======================== 1. ESTILOS MODULO ADMIN ======================== */
-        .admin-grid {
-            display: grid;
-            grid-template-columns: 360px 1fr;
-            gap: 24px;
-        }
-
-        .card-admin {
-            background: white;
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .card-admin h3 {
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--bg);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .role-radio-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
+        .role-radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px; }
         .role-radio-card {
-            border: 2px solid var(--border);
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 0.82rem;
-            font-weight: 600;
-            transition: 0.2s;
+            border: 1.5px solid var(--border); padding: 10px;
+            border-radius: var(--radius-sm); cursor: pointer; text-align: center;
+            font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
+            transition: 0.2s; background: var(--bg-3);
         }
+        .role-radio-card:hover { border-color: var(--primary); color: var(--primary); }
+        .role-radio-card.selected { border-color: var(--primary); background: var(--primary-glow); color: var(--primary); }
 
-        .role-radio-card.selected {
-            border-color: var(--primary);
-            background: #e6f9f5;
-            color: var(--primary-dark);
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+        th { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--text-dim); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--text); }
+        tbody tr:hover td { background: var(--bg-3); }
 
-        /* TABLA DE USUARIOS CREADOS */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.88rem;
-        }
-
-        th {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 2px solid var(--border);
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        /* ======================== 2. ESTILOS CLIENTE ======================== */
-        .client-layout {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 24px;
-        }
+        /* ═══════════════════════════════════════════
+           CLIENT MODULE
+        ═══════════════════════════════════════════ */
+        .client-layout { display: grid; grid-template-columns: 260px 1fr; gap: 24px; }
 
         .sidebar {
-            background: white;
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            height: fit-content;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px;
+            height: fit-content; position: sticky; top: 76px;
+        }
+        .sidebar h3 { font-size: 0.75rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+        .pharmacy-selector {
+            margin-bottom: 20px;
+        }
+        .pharmacy-select-btn {
+            width: 100%;
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px;
+            background: var(--bg-3); border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm); cursor: pointer;
+            color: var(--text); font-size: 0.88rem; font-weight: 500;
+            transition: 0.2s; position: relative;
+        }
+        .pharmacy-select-btn:hover, .pharmacy-select-btn.active { border-color: var(--primary); background: var(--primary-glow); color: var(--primary); }
+        .pharmacy-select-btn .fa-store { color: var(--primary); }
+        .pharmacy-select-btn .badge {
+            margin-left: auto;
+            background: var(--primary); color: #0d1117;
+            font-size: 0.68rem; font-weight: 700; padding: 2px 7px;
+            border-radius: 10px;
         }
 
         .filter-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 6px;
-            transition: 0.2s;
-            font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 9px 12px; border-radius: var(--radius-sm);
+            cursor: pointer; margin-bottom: 4px;
+            font-size: 0.875rem; color: var(--text-muted); transition: 0.15s;
         }
+        .filter-item:hover, .filter-item.active { background: var(--primary-glow); color: var(--primary); font-weight: 600; }
 
-        .filter-item:hover, .filter-item.active {
-            background: #e6f9f5;
-            color: var(--primary);
-            font-weight: 600;
+        .wallet-box {
+            background: var(--bg-3); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 14px; text-align: center; margin-top: 20px;
         }
+        .wallet-box .label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .wallet-box .amount { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+        .wallet-btn {
+            width: 100%; background: var(--primary-glow); color: var(--primary);
+            border: 1px solid rgba(0,212,170,0.25); padding: 8px; border-radius: var(--radius-sm);
+            font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .wallet-btn:hover { background: var(--primary); color: #0d1117; }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 18px;
-        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
 
         .product-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 16px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; transition: all 0.25s; cursor: default;
         }
-
-        .product-card:hover { transform: translateY(-3px); }
+        .product-card:hover { transform: translateY(-3px); border-color: var(--border-hover); box-shadow: 0 12px 40px rgba(0,212,170,0.1); }
 
         .product-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #e6f9f5;
-            color: var(--primary-dark);
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: 600;
+            position: absolute; top: 12px; right: 12px;
+            background: var(--bg-3); color: var(--text-muted);
+            font-size: 0.7rem; padding: 3px 8px; border-radius: 10px;
+            font-weight: 600; border: 1px solid var(--border);
         }
-
+        .product-farmacia-badge {
+            font-size: 0.68rem; color: var(--primary);
+            background: var(--primary-glow); border: 1px solid rgba(0,212,170,0.2);
+            padding: 2px 8px; border-radius: 10px; font-weight: 600;
+            display: inline-block; margin-bottom: 8px;
+        }
         .product-img {
-            height: 110px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            color: var(--primary);
-            font-size: 2.8rem;
+            height: 100px; background: var(--bg-3);
+            border-radius: var(--radius-sm); display: flex;
+            align-items: center; justify-content: center;
+            margin-bottom: 12px; color: var(--primary); font-size: 2.5rem;
         }
+        .product-card h4 { font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+        .product-card p { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 10px; }
+        .product-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; }
+        .product-price { font-weight: 800; font-size: 1.05rem; color: var(--text); }
 
         .btn-add {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            background: var(--primary); color: #0d1117;
+            border: none; width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+        }
+        .btn-add:hover { background: var(--primary-dark); transform: scale(1.1); }
+
+        /* Main header strip */
+        .products-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 18px; flex-wrap: wrap; gap: 12px;
+        }
+        .products-header h2 { font-size: 1.2rem; font-weight: 700; color: var(--text); }
+        .products-header .count { font-size: 0.82rem; color: var(--text-muted); }
+
+        /* PHARMACY TAB BAR */
+        .pharmacy-tabs {
+            display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;
+        }
+        .pharmacy-tab {
+            display: flex; align-items: center; gap: 7px;
+            padding: 7px 16px; border-radius: 20px;
+            border: 1.5px solid var(--border); background: var(--bg-3);
+            color: var(--text-muted); font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; transition: 0.2s;
+        }
+        .pharmacy-tab:hover { border-color: var(--primary); color: var(--primary); }
+        .pharmacy-tab.active { background: var(--primary-glow); border-color: var(--primary); color: var(--primary); }
+
+        /* GPS TRACKING */
+        .gps-tracking-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius); padding: 22px; margin-top: 24px;
+        }
+        .gps-info-badge {
+            padding: 4px 12px; border-radius: 20px;
+            font-weight: 700; font-size: 0.78rem;
+        }
+
+        /* ORDER STEPPER */
+        .order-stepper { display: flex; align-items: flex-start; justify-content: space-between; position: relative; margin: 22px 0; padding: 0 10px; }
+        .order-stepper-progress { position: absolute; top: 20px; left: 30px; right: 30px; height: 3px; background: var(--bg-4); z-index: 1; }
+        .order-stepper-progress-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.4s ease; }
+        .order-step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+        .step-icon-circle {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: var(--bg-3); border: 2.5px solid var(--bg-4);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-dim); font-size: 1rem; transition: all 0.3s ease;
+        }
+        .order-step.active .step-icon-circle { background: var(--primary); border-color: var(--primary); color: #0d1117; box-shadow: 0 0 0 4px var(--primary-glow); animation: pulseStep 1.5s infinite; }
+        .order-step.completed .step-icon-circle { background: var(--success); border-color: var(--success); color: #0d1117; }
+        .step-label { font-size: 0.75rem; font-weight: 600; color: var(--text-dim); }
+        .order-step.active .step-label { color: var(--primary); }
+        .order-step.completed .step-label { color: var(--success); }
+        @keyframes pulseStep { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        @keyframes pulseCall { 0% { box-shadow: 0 0 0 0 rgba(0,230,118,0.5); } 100% { box-shadow: 0 0 0 10px rgba(0,230,118,0); } }
+
+        /* ═══════════════════════════════════════════
+           FARMACIA MODULE
+        ═══════════════════════════════════════════ */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px;
+            display: flex; align-items: center; gap: 16px;
+        }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+
+        /* ═══════════════════════════════════════════
+           REPARTIDOR MODULE
+        ═══════════════════════════════════════════ */
+        .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .order-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 20px;
+            border-top: 3px solid var(--warning);
+            display: flex; flex-direction: column; justify-content: space-between;
             transition: 0.2s;
         }
-
-        .btn-add:hover { background: var(--primary-dark); }
-
-        /* GPS LIVE TRACKING CARD */
-        .gps-tracking-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 24px;
-            margin-top: 24px;
-            border-left: 6px solid var(--primary);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-        }
-
-        .gps-info-badge {
-            background: #eafaf1;
-            color: #2ed573;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.8rem;
-        }
-
-        /* BARRA DE ESTADO ESTILO PEDIDOS YA */
-        .order-stepper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-            margin: 20px 0 24px 0;
-            padding: 0 10px;
-        }
-
-        .order-stepper-progress {
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            right: 30px;
-            height: 4px;
-            background: #e2e8f0;
-            z-index: 1;
-        }
-
-        .order-stepper-progress-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--primary);
-            transition: width 0.4s ease;
-        }
-
-        .order-step {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 8px;
-        }
-
-        .step-icon-circle {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: white;
-            border: 3px solid #cbd5e1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #94a3b8;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .order-step.active .step-icon-circle {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: white;
-            box-shadow: 0 0 0 4px rgba(0, 192, 157, 0.2);
-            animation: pulseStep 1.5s infinite;
-        }
-
-        .order-step.completed .step-icon-circle {
-            background: #2ed573;
-            border-color: #2ed573;
-            color: white;
-        }
-
-        .step-label {
-            font-size: 0.82rem;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        .order-step.active .step-label {
-            color: var(--primary-dark);
-            font-weight: 700;
-        }
-
-        .order-step.completed .step-label {
-            color: #2ed573;
-        }
-
-        @keyframes pulseStep {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
-        }
-
-        /* ======================== 3. ESTILOS FARMACIA ======================== */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
-
-        /* ======================== 4. ESTILOS REPARTIDOR ======================== */
-        .orders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-            gap: 20px;
-        }
-
-        .order-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border-top: 4px solid #ff793f;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        .order-card:hover { border-top-color: var(--primary); box-shadow: var(--shadow); }
 
         .btn-action {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: 0.2s;
+            flex: 1; padding: 10px; border: none; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 0.82rem; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px; transition: 0.2s;
+        }
+        .btn-accept { background: linear-gradient(135deg, #ff793f, #e05a20); color: white; }
+        .btn-dispatch { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #0d1117; }
+        .btn-delivered { background: linear-gradient(135deg, var(--success), #00b860); color: #0d1117; }
+        .btn-action:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        /* ═══════════════════════════════════════════
+           CART DRAWER
+        ═══════════════════════════════════════════ */
+        .cart-btn {
+            display: none; background: var(--primary); color: #0d1117;
+            border: none; padding: 7px 16px; border-radius: 20px;
+            font-weight: 700; cursor: pointer; gap: 8px;
+            align-items: center; font-size: 0.85rem;
         }
 
-        .btn-accept { background: #ff793f; color: white; }
-        .btn-dispatch { background: #00c09d; color: white; }
-        .btn-delivered { background: #2ed573; color: white; }
-
-        /* CARRITO LATERAL DRAWER */
-        .cart-drawer {
-            position: fixed;
-            top: 0;
-            right: -420px;
-            width: 400px;
-            height: 100vh;
-            background: white;
-            z-index: 1000;
-            box-shadow: -5px 0 25px rgba(0,0,0,0.15);
-            display: flex;
-            flex-direction: column;
-            transition: right 0.3s ease;
-        }
-
-        .cart-drawer.open { right: 0; }
-
-        .cart-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .cart-items { flex: 1; overflow-y: auto; padding: 20px; }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 12px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid #f1f2f6;
-        }
-
-        .cart-footer {
-            padding: 20px;
-            border-top: 1px solid var(--border);
-            background: #fafafa;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.4);
-            z-index: 999;
-            display: none;
-        }
-
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.65); z-index: 999; display: none; }
         .overlay.active { display: block; }
+
+        .cart-drawer {
+            position: fixed; top: 0; right: -460px; width: 440px; height: 100vh;
+            background: var(--bg-2); z-index: 1000;
+            box-shadow: -8px 0 40px rgba(0,0,0,0.5); border-left: 1px solid var(--border);
+            display: flex; flex-direction: column; transition: right 0.3s ease;
+        }
+        .cart-drawer.open { right: 0; }
+        .cart-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .cart-item h5 { font-size: 0.88rem; color: var(--text); margin-bottom: 2px; }
+        .cart-item .farmacia-tag { font-size: 0.72rem; color: var(--primary); }
+        .cart-item .price { font-size: 0.82rem; color: var(--text-muted); }
+        .cart-qty { display: flex; gap: 6px; align-items: center; }
+        .qty-btn { width: 26px; height: 26px; border: 1px solid var(--border); background: var(--bg-3); color: var(--text); border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: 0.15s; }
+        .qty-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .cart-footer { padding: 20px 24px; border-top: 1px solid var(--border); background: var(--bg-3); }
+        .cart-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 800; margin-bottom: 16px; color: var(--text); }
+        .cart-total span:last-child { color: var(--primary); }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-box { background: var(--bg-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; width: 440px; max-width: 94%; }
+        .modal-box h3 { font-size: 1.05rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+        .modal-close { cursor: pointer; color: var(--text-muted); font-size: 1.2rem; margin-left: auto; }
+        .modal-close:hover { color: var(--accent); }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
 
         @media (max-width: 860px) {
             .admin-grid { grid-template-columns: 1fr; }
@@ -677,185 +529,150 @@
 </head>
 <body>
 
-    <!-- ============================================================== -->
-    <!-- 1. PANTALLA DE INICIO DE SESIÓN CENTRALIZADA (ACCESO POR ROL) -->
-    <!-- ============================================================== -->
+    <!-- ════════════════════════════════════════════════════
+         LOGIN SCREEN
+    ════════════════════════════════════════════════════ -->
     <div id="loginScreen">
-        <div class="login-card">
-            <div class="login-logo-container">
-                <img src="assets/logo.png" alt="FarmaClick Logo" class="login-logo-img">
+        <!-- LEFT PANEL -->
+        <div class="login-left">
+            <div class="login-left-logo">
+                <div class="login-left-logo-icon"><i class="fa-solid fa-prescription-bottle-medical"></i></div>
+                <span>FarmaClick</span>
             </div>
-            <p class="login-subtitle">Acceso seguro a la plataforma FarmaClick</p>
-
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Correo Electrónico:</label>
-                    <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
+            <h1>Tu farmacia,<br><span>en tu puerta.</span></h1>
+            <p>Plataforma integral de delivery de medicamentos con rastreo GPS en tiempo real, conectada a Oracle Cloud.</p>
+            <div class="login-features">
+                <div class="login-feature">
+                    <div class="login-feature-icon green"><i class="fa-solid fa-satellite-dish"></i></div>
+                    <span>Rastreo GPS en vivo del repartidor</span>
                 </div>
-
-                <div class="form-group">
-                    <label>Contraseña:</label>
-                    <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                <div class="login-feature">
+                    <div class="login-feature-icon purple"><i class="fa-solid fa-store"></i></div>
+                    <span>Múltiples farmacias, un solo pedido</span>
                 </div>
+                <div class="login-feature">
+                    <div class="login-feature-icon orange"><i class="fa-solid fa-cloud"></i></div>
+                    <span>Base de datos Oracle Autonomous Cloud</span>
+                </div>
+            </div>
+        </div>
 
+        <!-- RIGHT FORM -->
+        <div class="login-right">
+            <div class="login-form-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Accede con tus credenciales asignadas</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" style="width:100%">
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <div class="input-with-icon">
+                        <input type="email" id="loginCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <div class="input-with-icon">
+                        <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                        <i class="fa-solid fa-lock input-icon"></i>
+                    </div>
+                </div>
                 <button type="submit" class="btn-login" id="btnLoginSubmit">
                     <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
                 </button>
             </form>
+
+            <div class="quick-access">
+                <p>Acceso rápido de prueba</p>
+                <div class="quick-btns">
+                    <button class="quick-btn" onclick="quickFill('admin@farmaclick.com','admin123')">👑 Admin</button>
+                    <button class="quick-btn" onclick="quickFill('cliente@farmaclick.com','cliente123')">👤 Cliente</button>
+                    <button class="quick-btn" onclick="quickFill('farmacia@farmaclick.com','farmacia123')">🏪 Farmacia</button>
+                    <button class="quick-btn" onclick="quickFill('repartidor@farmaclick.com','repartidor123')">🛵 Repartidor</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ============================================================== -->
-    <!-- 2. APLICACIÓN PRINCIPAL (DESBLOQUEA SEGÚN EL ROL AUTENTICADO) -->
-    <!-- ============================================================== -->
+    <!-- ════════════════════════════════════════════════════
+         APP CONTAINER
+    ════════════════════════════════════════════════════ -->
     <div id="appContainer">
-        
-        <!-- HEADER GLOBAL -->
+
+        <!-- HEADER -->
         <header>
             <div class="nav-container">
                 <a href="#" class="logo">
-                    <i class="fa-solid fa-prescription-bottle-medical"></i>
+                    <div class="logo-icon"><i class="fa-solid fa-prescription-bottle-medical"></i></div>
                     <span>FarmaClick</span>
                 </a>
-
                 <div class="user-badge-bar">
-                    <span id="userRoleBadge" class="role-tag admin">
-                        <i class="fa-solid fa-shield"></i> Administrador
-                    </span>
-                    <span id="userNameDisplay" style="font-size: 0.9rem; font-weight: 600;">Usuario</span>
-                    
-                    <!-- BOTÓN DE CARRITO (SOLO VISIBLE PARA CLIENTE) -->
-                    <button class="cart-btn" id="clientCartBtn" onclick="toggleCart()" style="display: none; background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; gap: 8px;">
-                        <i class="fa-solid fa-cart-shopping"></i> Carrito (<span id="cartCount">0</span>)
+                    <span id="userRoleBadge" class="role-tag admin"><i class="fa-solid fa-shield"></i> Administrador</span>
+                    <span id="userNameDisplay">Usuario</span>
+                    <button class="cart-btn" id="clientCartBtn" onclick="toggleCart()" style="display:none;">
+                        <i class="fa-solid fa-bag-shopping"></i> Carrito <span id="cartCount" style="background:rgba(0,0,0,0.25);padding:1px 7px;border-radius:10px;margin-left:2px;">0</span>
                     </button>
-
-                    <button class="btn-logout" onclick="cerrarSesion()">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Salir
-                    </button>
+                    <button class="btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Salir</button>
                 </div>
             </div>
         </header>
 
-        <!-- BANNER HERO DINÁMICO -->
+        <!-- HERO BANNER -->
         <div class="hero">
             <div class="banner admin-bg" id="heroBanner">
                 <div>
                     <h1 id="heroTitle">Bienvenido a FarmaClick</h1>
                     <p id="heroSubtitle">Panel de gestión en tiempo real conectado a Oracle Cloud.</p>
                 </div>
-                <i id="heroIcon" class="fa-solid fa-shield-halved" style="font-size: 3.5rem; opacity: 0.85;"></i>
+                <i id="heroIcon" class="fa-solid fa-shield-halved" style="font-size:3rem;opacity:0.5;"></i>
             </div>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- MÓDULO 1: ADMINISTRADOR (GESTIÓN Y CREACIÓN DE USUARIOS)   -->
-        <!-- ========================================================== -->
-        <div class="view-section" id="moduloAdmin" style="display: none;">
+        <!-- ═══════════════════════════════════════════
+             MÓDULO 1: ADMINISTRADOR
+        ═══════════════════════════════════════════ -->
+        <div class="view-section" id="moduloAdmin" style="display:none;">
             <div class="admin-grid">
-                <!-- FORMULARIO CREAR USUARIO / ROL -->
-                <div class="card-admin">
-                    <h3><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Crear Nuevo Usuario</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 16px;">
-                        El Administrador asigna las credenciales y el rol. Al crearlo se guarda directamente en la tabla USUARIOS de Oracle Cloud.
-                    </p>
-
+                <div class="card">
+                    <h3><i class="fa-solid fa-user-plus" style="color:var(--primary)"></i> Crear Nuevo Usuario</h3>
                     <form onsubmit="crearUsuarioAdmin(event)">
                         <div class="form-group">
-                            <label>Rol asignado:</label>
+                            <label>Rol asignado</label>
                             <div class="role-radio-group">
-                                <div class="role-radio-card selected" onclick="selectRoleAdmin(2, this)">👤 Cliente</div>
-                                <div class="role-radio-card" onclick="selectRoleAdmin(3, this)">🏪 Farmacia</div>
-                                <div class="role-radio-card" onclick="selectRoleAdmin(4, this)">🛵 Repartidor</div>
-                                <div class="role-radio-card" onclick="selectRoleAdmin(1, this)">👑 Admin</div>
+                                <div class="role-radio-card selected" onclick="selectRoleAdmin(2,this)">👤 Cliente</div>
+                                <div class="role-radio-card" onclick="selectRoleAdmin(3,this)">🏪 Farmacia</div>
+                                <div class="role-radio-card" onclick="selectRoleAdmin(4,this)">🛵 Repartidor</div>
+                                <div class="role-radio-card" onclick="selectRoleAdmin(1,this)">👑 Admin</div>
                             </div>
                             <input type="hidden" id="adminNewUserRole" value="2">
                         </div>
-
-                        <div style="display: flex; gap: 10px;">
-                            <div class="form-group" style="flex: 1;">
-                                <label>Nombre:</label>
-                                <input type="text" id="adminNewNombre" class="form-input" placeholder="Ej. Carlos" required>
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label>Apellido:</label>
-                                <input type="text" id="adminNewApellido" class="form-input" placeholder="Ej. López" required>
-                            </div>
+                        <div style="display:flex;gap:10px;">
+                            <div class="form-group" style="flex:1;"><label>Nombre</label><input type="text" id="adminNewNombre" class="form-input" placeholder="Carlos" required></div>
+                            <div class="form-group" style="flex:1;"><label>Apellido</label><input type="text" id="adminNewApellido" class="form-input" placeholder="López" required></div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Correo Electrónico (Login):</label>
-                            <input type="email" id="adminNewCorreo" class="form-input" placeholder="usuario@farmaclick.com" required>
+                        <div class="form-group"><label>Correo (Login)</label><input type="email" id="adminNewCorreo" class="form-input" placeholder="usuario@farmaclick.com" required></div>
+                        <div class="form-group"><label>Contraseña</label><input type="password" id="adminNewPass" class="form-input" placeholder="••••••••" required></div>
+                        <div style="display:flex;gap:10px;">
+                            <div class="form-group" style="flex:1;"><label>Teléfono</label><input type="text" id="adminNewTel" class="form-input" placeholder="77771234"></div>
+                            <div class="form-group" style="flex:1;"><label>Dirección</label><input type="text" id="adminNewDir" class="form-input" placeholder="Zona 1, Coatepeque"></div>
                         </div>
-
-                        <div class="form-group">
-                            <label>Contraseña:</label>
-                            <input type="password" id="adminNewPass" class="form-input" placeholder="••••••••" required>
-                        </div>
-
-                        <div style="display: flex; gap: 10px;">
-                            <div class="form-group" style="flex: 1;">
-                                <label>Teléfono:</label>
-                                <input type="text" id="adminNewTel" class="form-input" placeholder="77771234">
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label>Dirección:</label>
-                                <input type="text" id="adminNewDir" class="form-input" placeholder="Zona 1, Coatepeque">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-login" style="background: #1e293b;">
+                        <button type="submit" class="btn-login" style="background:linear-gradient(135deg,#6366f1,#4f46e5);">
                             <i class="fa-solid fa-floppy-disk"></i> Guardar en Oracle Cloud
                         </button>
                     </form>
                 </div>
-
-                <!-- LISTA DE USUARIOS REGISTRADOS EN LA SESIÓN -->
-                <div class="card-admin">
-                    <h3><i class="fa-solid fa-users" style="color: var(--purple);"></i> Directorio de Usuarios y Cuentas</h3>
-                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">
-                        Cuentas activas en la plataforma que pueden iniciar sesión y acceder a su respectivo módulo.
-                    </p>
-
-                    <div style="overflow-x: auto;">
+                <div class="card">
+                    <h3><i class="fa-solid fa-users" style="color:var(--purple)"></i> Directorio de Usuarios</h3>
+                    <div style="overflow-x:auto;">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Usuario</th>
-                                    <th>Correo (Acceso)</th>
-                                    <th>Rol Asignado</th>
-                                    <th>Estado</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>ID</th><th>Usuario</th><th>Correo</th><th>Rol</th><th>Estado</th></tr></thead>
                             <tbody id="adminUsersTable">
-                                <tr>
-                                    <td>#21</td>
-                                    <td><strong>Admin Sistema</strong></td>
-                                    <td>admin@farmaclick.com</td>
-                                    <td><span class="role-tag admin">ADMINISTRADOR</span></td>
-                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#22</td>
-                                    <td><strong>Cliente Demo</strong></td>
-                                    <td>cliente@farmaclick.com</td>
-                                    <td><span class="role-tag cliente">CLIENTE</span></td>
-                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#23</td>
-                                    <td><strong>Farmacia Central</strong></td>
-                                    <td>farmacia@farmaclick.com</td>
-                                    <td><span class="role-tag farmacia">FARMACIA</span></td>
-                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
-                                </tr>
-                                <tr>
-                                    <td>#24</td>
-                                    <td><strong>Repartidor Moto</strong></td>
-                                    <td>repartidor@farmaclick.com</td>
-                                    <td><span class="role-tag repartidor">REPARTIDOR</span></td>
-                                    <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
-                                </tr>
+                                <tr><td>#21</td><td><strong>Admin Sistema</strong></td><td>admin@farmaclick.com</td><td><span class="role-tag admin">ADMIN</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                                <tr><td>#22</td><td><strong>Cliente Demo</strong></td><td>cliente@farmaclick.com</td><td><span class="role-tag cliente">CLIENTE</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                                <tr><td>#23</td><td><strong>Farmacia Central</strong></td><td>farmacia@farmaclick.com</td><td><span class="role-tag farmacia">FARMACIA</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                                <tr><td>#24</td><td><strong>Repartidor Moto</strong></td><td>repartidor@farmaclick.com</td><td><span class="role-tag repartidor">REPARTIDOR</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -863,127 +680,92 @@
             </div>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- MÓDULO 2: CLIENTE (CATÁLOGO, CARRITO, PEDIDO CON GPS)     -->
-        <!-- ========================================================== -->
-        <div class="view-section" id="moduloCliente" style="display: none;">
+        <!-- ═══════════════════════════════════════════
+             MÓDULO 2: CLIENTE
+        ═══════════════════════════════════════════ -->
+        <div class="view-section" id="moduloCliente" style="display:none;">
             <div class="client-layout">
                 <aside class="sidebar">
-                    <h3 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid var(--bg); padding-bottom: 8px;">Categorías</h3>
-                    <div class="filter-item active" onclick="filterCategory('TODOS')">
-                        <span>Todos los productos</span>
-                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
-                    </div>
-                    <div class="filter-item" onclick="filterCategory('ANALGESICOS')">
-                        <span>Analgésicos</span>
-                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
-                    </div>
-                    <div class="filter-item" onclick="filterCategory('VITAMINAS')">
-                        <span>Vitaminas y Suplementos</span>
-                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem;"></i>
+                    <h3>Farmacia</h3>
+                    <div class="pharmacy-selector">
+                        <button class="pharmacy-select-btn active" onclick="filtrarPorFarmacia(null,this)">
+                            <i class="fa-solid fa-store"></i> Todas las Farmacias
+                            <span class="badge" id="allFarmaciaCount">0</span>
+                        </button>
+                        <div id="farmaciaButtonsList" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;"></div>
                     </div>
 
-                    <h3 style="margin-top: 24px; font-size: 1rem; margin-bottom: 8px;">Billetera Virtual</h3>
-                    <div style="background: #e6f9f5; padding: 12px; border-radius: 8px; text-align: center;">
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">Saldo Disponible</span>
-                        <div style="font-size: 1.3rem; font-weight: 700; color: var(--primary-dark);">Q <span id="clientWalletBalance">0.00</span></div>
-                        <button onclick="recargarBilleteraPrompt()" style="margin-top: 8px; background: var(--primary); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; font-weight: 600;">+ Recargar Saldo</button>
+                    <h3 style="margin-top:16px;">Categorías</h3>
+                    <div class="filter-item active" onclick="filterCategory('TODOS',event)"><span>Todos los productos</span><i class="fa-solid fa-chevron-right" style="font-size:.7rem;"></i></div>
+                    <div class="filter-item" onclick="filterCategory('ANALGESICOS',event)"><span>Analgésicos</span><i class="fa-solid fa-chevron-right" style="font-size:.7rem;"></i></div>
+                    <div class="filter-item" onclick="filterCategory('VITAMINAS',event)"><span>Vitaminas</span><i class="fa-solid fa-chevron-right" style="font-size:.7rem;"></i></div>
+                    <div class="filter-item" onclick="filterCategory('HIGIENE',event)"><span>Higiene</span><i class="fa-solid fa-chevron-right" style="font-size:.7rem;"></i></div>
+
+                    <div class="wallet-box">
+                        <div class="label">Billetera Virtual</div>
+                        <div class="amount">Q <span id="clientWalletBalance">0.00</span></div>
+                        <button class="wallet-btn" onclick="recargarBilleteraPrompt()"><i class="fa-solid fa-plus"></i> Recargar Saldo</button>
                     </div>
                 </aside>
 
                 <main>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                        <h2>Medicamentos en Farmacia Central</h2>
-                        <span id="clientProductCount" style="color: var(--text-muted); font-size: 0.9rem;">Cargando inventario...</span>
+                    <div class="products-header">
+                        <h2 id="clientMainTitle">Medicamentos Disponibles</h2>
+                        <span id="clientProductCount" class="count">Cargando...</span>
                     </div>
 
                     <div class="products-grid" id="clientProductsGrid"></div>
 
-                    <!-- TARJETA DE RASTREO GPS PERMANENTE Y EN VIVO EN EL CLIENTE -->
-                    <div id="clientTrackingBox" class="gps-tracking-card" style="display: none;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <!-- GPS TRACKING BOX -->
+                    <div id="clientTrackingBox" class="gps-tracking-card" style="display:none;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px;">
                             <div>
-                                <h3 style="color: var(--primary-dark); font-size: 1.15rem;"><i class="fa-solid fa-bag-shopping" style="color: var(--primary);"></i> Seguimiento de tu Pedido</h3>
-                                <p id="orderEstimatedTime" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-                                    Tiempo estimado de entrega: <strong>15 - 25 min</strong>
-                                </p>
+                                <h3 style="border:none;padding:0;margin:0;font-size:1.05rem;"><i class="fa-solid fa-bag-shopping" style="color:var(--primary);"></i> Seguimiento de tu Pedido</h3>
+                                <p id="orderEstimatedTime" style="font-size:0.82rem;color:var(--text-muted);margin-top:4px;">Tiempo estimado: <strong>15-25 min</strong></p>
                             </div>
-                            <div style="display: flex; gap: 10px; align-items: center;">
-                                <button onclick="verMisPedidosCliente()" style="background: #e6f9f5; color: var(--primary-dark); border: 1px solid var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.82rem;">
-                                    <i class="fa-solid fa-list-check"></i> Ver Mis Pedidos
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <button onclick="verMisPedidosCliente()" style="background:var(--primary-glow);color:var(--primary);border:1px solid rgba(0,212,170,0.25);padding:7px 14px;border-radius:20px;font-weight:600;cursor:pointer;font-size:0.8rem;">
+                                    <i class="fa-solid fa-list-check"></i> Ver Pedido
                                 </button>
-                                <span class="gps-info-badge" id="clientTrackedStatus">🟢 PENDIENTE</span>
+                                <span class="gps-info-badge" id="clientTrackedStatus" style="background:var(--primary-glow);color:var(--primary);border:1px solid rgba(0,212,170,0.2);">🟢 PENDIENTE</span>
                             </div>
                         </div>
 
-                        <!-- BARRA DE PROGRESO VISUAL ESTILO PEDIDOS YA -->
                         <div class="order-stepper">
-                            <div class="order-stepper-progress">
-                                <div class="order-stepper-progress-fill" id="orderStepProgressFill"></div>
-                            </div>
-
-                            <!-- PASO 1: RECIBIDO / PENDIENTE -->
-                            <div class="order-step active" id="step1">
-                                <div class="step-icon-circle">
-                                    <i class="fa-solid fa-receipt"></i>
-                                </div>
-                                <span class="step-label">Recibido</span>
-                            </div>
-
-                            <!-- PASO 2: EN PREPARACIÓN -->
-                            <div class="order-step" id="step2">
-                                <div class="step-icon-circle">
-                                    <i class="fa-solid fa-box-open"></i>
-                                </div>
-                                <span class="step-label">Preparando</span>
-                            </div>
-
-                            <!-- PASO 3: EN CAMINO -->
-                            <div class="order-step" id="step3">
-                                <div class="step-icon-circle">
-                                    <i class="fa-solid fa-motorcycle"></i>
-                                </div>
-                                <span class="step-label">En Camino</span>
-                            </div>
-
-                            <!-- PASO 4: ENTREGADO -->
-                            <div class="order-step" id="step4">
-                                <div class="step-icon-circle">
-                                    <i class="fa-solid fa-house-chimney-user"></i>
-                                </div>
-                                <span class="step-label">Entregado</span>
-                            </div>
+                            <div class="order-stepper-progress"><div class="order-stepper-progress-fill" id="orderStepProgressFill"></div></div>
+                            <div class="order-step active" id="step1"><div class="step-icon-circle"><i class="fa-solid fa-receipt"></i></div><span class="step-label">Recibido</span></div>
+                            <div class="order-step" id="step2"><div class="step-icon-circle"><i class="fa-solid fa-box-open"></i></div><span class="step-label">Preparando</span></div>
+                            <div class="order-step" id="step3"><div class="step-icon-circle"><i class="fa-solid fa-motorcycle"></i></div><span class="step-label">En Camino</span></div>
+                            <div class="order-step" id="step4"><div class="step-icon-circle"><i class="fa-solid fa-house-chimney-user"></i></div><span class="step-label">Entregado</span></div>
                         </div>
 
-                        <div style="margin-top: 14px; background: #f8f9fa; padding: 14px; border-radius: 8px; font-size: 0.9rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;font-size:0.88rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
                             <div>
-                                <i class="fa-solid fa-satellite-dish" style="color: var(--primary); font-size: 1.2rem; margin-right: 6px;"></i>
-                                <span>Ubicación GPS: <strong id="liveGpsCoords" style="color: var(--primary-dark);">Consultando coordenadas satelitales...</strong></span>
-                                <div id="mapLinkContainer" style="margin-top: 4px;"></div>
+                                <i class="fa-solid fa-satellite-dish" style="color:var(--primary);margin-right:6px;"></i>
+                                GPS: <strong id="liveGpsCoords" style="color:var(--primary);">Consultando...</strong>
+                                <div id="mapLinkContainer" style="margin-top:4px;"></div>
                             </div>
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <button id="btnActualizarGpsClient" onclick="iniciarMonitoreoGpsRepartidor(1, true)" style="background: white; border: 1px solid var(--border); padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
-                                    <i class="fa-solid fa-rotate"></i> Actualizar GPS
-                                </button>
-                            </div>
+                            <button id="btnActualizarGpsClient" onclick="iniciarMonitoreoGpsRepartidor(1,true)" style="background:var(--bg-4);border:1px solid var(--border);color:var(--text-muted);padding:7px 14px;border-radius:20px;font-weight:600;cursor:pointer;font-size:0.82rem;">
+                                <i class="fa-solid fa-rotate"></i> Actualizar GPS
+                            </button>
                         </div>
 
-                        <!-- AVISO DE LLAMADA ENTRANTE DEL REPARTIDOR PARA EL CLIENTE -->
-                        <div id="incomingCallBannerClient" style="display: none !important; margin-top: 14px; background: #eafaf1; border: 2px dashed #2ed573; padding: 14px 18px; border-radius: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <div style="width: 42px; height: 42px; border-radius: 50%; background: #2ed573; color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; animation: pulseCall 1s infinite alternate;">
+                        <!-- INCOMING CALL BANNER -->
+                        <div id="incomingCallBannerClient" style="display:none !important;margin-top:14px;background:rgba(0,230,118,0.08);border:1.5px dashed var(--success);padding:14px 18px;border-radius:var(--radius-sm);justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+                            <div style="display:flex;align-items:center;gap:12px;">
+                                <div style="width:42px;height:42px;border-radius:50%;background:var(--success);color:#0d1117;display:flex;align-items:center;justify-content:center;font-size:1.1rem;animation:pulseCall 1.2s infinite;">
                                     <i class="fa-solid fa-phone-volume"></i>
                                 </div>
                                 <div>
-                                    <strong style="color: #2ed573; font-size: 0.95rem;">🛵 ¡El Repartidor te está llamando!</strong>
-                                    <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">El repartidor ha llegado a tu dirección o necesita comunicarse contigo.</p>
+                                    <strong style="color:var(--success);">🛵 ¡El Repartidor te está llamando!</strong>
+                                    <p style="font-size:0.8rem;color:var(--text-muted);margin-top:2px;">Necesita comunicarse contigo sobre la entrega.</p>
                                 </div>
                             </div>
-                            <div style="display: flex; gap: 8px;">
-                                <button onclick="responderLlamadaCliente()" style="background: #2ed573; color: white; border: none; padding: 8px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-                                    <i class="fa-solid fa-phone"></i> Contestar Llamada
+                            <div style="display:flex;gap:8px;">
+                                <button onclick="responderLlamadaCliente()" style="background:var(--success);color:#0d1117;border:none;padding:8px 18px;border-radius:20px;font-weight:700;cursor:pointer;font-size:0.82rem;">
+                                    <i class="fa-solid fa-phone"></i> Contestar
                                 </button>
-                                <button onclick="rechazarLlamadaCliente()" style="background: #fee2e2; color: #ef4444; border: none; padding: 8px 14px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;">
+                                <button onclick="rechazarLlamadaCliente()" style="background:rgba(255,83,112,0.12);color:var(--accent);border:1px solid rgba(255,83,112,0.2);padding:8px 14px;border-radius:20px;font-weight:600;cursor:pointer;font-size:0.82rem;">
                                     Colgar
                                 </button>
                             </div>
@@ -993,235 +775,169 @@
             </div>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- MÓDULO 3: FARMACIA (INVENTARIO Y ALTA DE PRODUCTOS)       -->
-        <!-- ========================================================== -->
-        <div class="view-section" id="moduloFarmacia" style="display: none;">
+        <!-- ═══════════════════════════════════════════
+             MÓDULO 3: FARMACIA
+        ═══════════════════════════════════════════ -->
+        <div class="view-section" id="moduloFarmacia" style="display:none;">
             <div class="dashboard-grid">
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: #f3e8ff; color: var(--purple);"><i class="fa-solid fa-boxes-stacked"></i></div>
-                    <div>
-                        <h3 id="farmaciaStatTotal">0</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Medicamentos Registrados</p>
-                    </div>
+                    <div class="stat-icon" style="background:rgba(167,139,250,0.12);color:var(--purple);"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <div><h3 id="farmaciaStatTotal" style="font-size:1.6rem;font-weight:800;color:var(--text);margin:0 0 2px;">0</h3><p style="font-size:0.8rem;color:var(--text-muted);">Medicamentos</p></div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: #e6f9f5; color: var(--primary);"><i class="fa-solid fa-cubes"></i></div>
-                    <div>
-                        <h3 id="farmaciaStatStock">0</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">Unidades en Stock</p>
-                    </div>
+                    <div class="stat-icon" style="background:rgba(0,212,170,0.12);color:var(--primary);"><i class="fa-solid fa-cubes"></i></div>
+                    <div><h3 id="farmaciaStatStock" style="font-size:1.6rem;font-weight:800;color:var(--text);margin:0 0 2px;">0</h3><p style="font-size:0.8rem;color:var(--text-muted);">Unidades en Stock</p></div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon" style="background: #fee2e2; color: #ef4444;"><i class="fa-solid fa-shop"></i></div>
-                    <div>
-                        <h3>Farmacia Central</h3>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">ID Sucursal: 1 (Zona 1)</p>
-                    </div>
+                    <div class="stat-icon" style="background:rgba(255,83,112,0.12);color:var(--accent);"><i class="fa-solid fa-shop"></i></div>
+                    <div><h3 style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 2px;">Farmacia Central</h3><p style="font-size:0.8rem;color:var(--text-muted);">ID Sucursal: 1</p></div>
                 </div>
             </div>
-
-            <div class="card-admin">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <h3><i class="fa-solid fa-clipboard-list" style="color: var(--purple);"></i> Inventario en Tiempo Real (Oracle Cloud)</h3>
-                    <button onclick="toggleModalProducto(true)" style="background: var(--purple); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                        <i class="fa-solid fa-plus"></i> + Nuevo Medicamento
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+                    <h3 style="border:none;padding:0;margin:0;font-size:1rem;"><i class="fa-solid fa-clipboard-list" style="color:var(--purple);"></i> Inventario en Tiempo Real</h3>
+                    <button onclick="toggleModalProducto(true)" style="background:linear-gradient(135deg,var(--purple),#7c3aed);color:white;border:none;padding:9px 18px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+                        <i class="fa-solid fa-plus"></i> Nuevo Medicamento
                     </button>
                 </div>
-
-                <div style="overflow-x: auto;">
+                <div style="overflow-x:auto;">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Medicamento</th>
-                                <th>Categoría</th>
-                                <th>Precio (Q)</th>
-                                <th>Stock</th>
-                                <th>Estado en BD</th>
-                            </tr>
-                        </thead>
-                        <tbody id="farmaciaInventoryTable">
-                            <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Cargando...</td></tr>
-                        </tbody>
+                        <thead><tr><th>ID</th><th>Medicamento</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th></tr></thead>
+                        <tbody id="farmaciaInventoryTable"><tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:30px;">Cargando...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- ========================================================== -->
-        <!-- MÓDULO 4: REPARTIDOR (RADAR DE PEDIDOS, GPS Y AGORA)      -->
-        <div class="view-section" id="moduloRepartidor" style="display: none;">
-            <!-- SECCIÓN 1: PEDIDO ACTIVO / EN CURSO (NUNCA SE PIERDE AL REFRESCAR) -->
-            <div id="repartidorActiveOrderContainer" style="display: none; margin-bottom: 24px;">
-                <div class="card-admin" style="border-left: 6px solid #2ed573; background: #fafffc;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px;">
+        <!-- ═══════════════════════════════════════════
+             MÓDULO 4: REPARTIDOR
+        ═══════════════════════════════════════════ -->
+        <div class="view-section" id="moduloRepartidor" style="display:none;">
+            <!-- PEDIDO ACTIVO -->
+            <div id="repartidorActiveOrderContainer" style="display:none;margin-bottom:24px;">
+                <div class="card" style="border-left:4px solid var(--success);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
                         <div>
-                            <span class="gps-info-badge" id="riderActiveBadge" style="background: #eafaf1; color: #2ed573;">● PEDIDO EN CURSO</span>
-                            <h3 style="margin-top: 6px; color: var(--text-main);"><i class="fa-solid fa-motorcycle" style="color: #ff793f;"></i> <span id="riderActiveOrderTitle">Pedido #0</span></h3>
+                            <span class="gps-info-badge" id="riderActiveBadge" style="background:rgba(0,230,118,0.1);color:var(--success);border:1px solid rgba(0,230,118,0.2);">● PEDIDO EN CURSO</span>
+                            <h3 style="margin-top:8px;border:none;padding:0;font-size:1.05rem;"><i class="fa-solid fa-motorcycle" style="color:var(--warning);"></i> <span id="riderActiveOrderTitle">Pedido #0</span></h3>
                         </div>
-                        <div style="display: flex; gap: 8px;">
-                            <button id="btnLlamarClienteRider" onclick="iniciarLlamadaAgoraRider()" style="background: #2ed573; color: white; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-                                <i class="fa-solid fa-phone-volume"></i> Llamar al Cliente
-                            </button>
-                        </div>
+                        <button id="btnLlamarClienteRider" onclick="iniciarLlamadaAgoraRider()" style="background:linear-gradient(135deg,var(--success),#00b860);color:#0d1117;border:none;padding:9px 18px;border-radius:20px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px;font-size:0.85rem;">
+                            <i class="fa-solid fa-phone-volume"></i> Llamar al Cliente
+                        </button>
                     </div>
-
-                    <div id="riderActiveOrderDetails" style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 16px; line-height: 1.6;">
-                        <!-- Información del cliente y destino -->
-                    </div>
-
-                    <div style="background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div id="riderActiveOrderDetails" style="font-size:0.9rem;color:var(--text-muted);margin-bottom:16px;line-height:1.8;background:var(--bg-3);padding:14px;border-radius:var(--radius-sm);border:1px solid var(--border);"></div>
+                    <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
                         <div>
-                            <i class="fa-solid fa-satellite-dish" style="color: #2ed573;"></i>
-                            <span style="font-size: 0.88rem; font-weight: 600;">GPS Satelital Real:</span>
-                            <span id="riderGpsStatusText" style="font-size: 0.85rem; color: var(--text-muted); margin-left: 6px;">Transmitiendo señal...</span>
+                            <i class="fa-solid fa-satellite-dish" style="color:var(--success);"></i>
+                            <span style="font-size:0.86rem;font-weight:600;margin-left:6px;color:var(--text);">GPS Satelital:</span>
+                            <span id="riderGpsStatusText" style="font-size:0.84rem;color:var(--text-muted);margin-left:6px;">Transmitiendo...</span>
                         </div>
-                        <div id="riderGpsCoordsDisplay" style="font-size: 0.85rem; font-weight: 700; color: var(--primary-dark);"></div>
+                        <div id="riderGpsCoordsDisplay" style="font-size:0.84rem;font-weight:700;color:var(--primary);"></div>
                     </div>
-
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;" id="riderActiveActions">
-                        <!-- Botones Despachar y Entregado -->
-                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;" id="riderActiveActions"></div>
                 </div>
             </div>
 
-            <!-- SECCIÓN 2: PEDIDOS DISPONIBLES EN RADAR -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+            <!-- RADAR -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
                 <div>
-                    <h2>Radar de Pedidos Disponibles</h2>
-                    <p style="font-size: 0.85rem; color: var(--text-muted);">Los clientes solicitan medicamentos en tiempo real a través de Oracle Cloud.</p>
+                    <h2 style="font-size:1.2rem;font-weight:700;color:var(--text);">Radar de Pedidos</h2>
+                    <p style="font-size:0.83rem;color:var(--text-muted);margin-top:3px;">Pedidos disponibles en tiempo real</p>
                 </div>
-                <button onclick="cargarDatosRepartidor()" style="background: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <button onclick="cargarDatosRepartidor()" style="background:var(--bg-3);border:1px solid var(--border);color:var(--text-muted);padding:9px 18px;border-radius:var(--radius-sm);font-weight:600;cursor:pointer;font-size:0.84rem;display:flex;align-items:center;gap:7px;transition:0.2s;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
                     <i class="fa-solid fa-rotate"></i> Refrescar Radar
                 </button>
             </div>
-
-            <div class="orders-grid" id="repartidorOrdersGrid">
-                <!-- Se llena dinámicamente con los pedidos disponibles -->
-            </div>
+            <div class="orders-grid" id="repartidorOrdersGrid"></div>
         </div>
 
-    </div>
+    </div><!-- /appContainer -->
 
-    <!-- MODAL NUEVO PRODUCTO (FARMACIA) -->
-    <div id="modalNuevoProducto" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center;">
-        <div style="background: white; border-radius: var(--radius); padding: 24px; width: 420px; max-width: 90%;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="color: var(--purple);"><i class="fa-solid fa-plus-circle"></i> Nuevo Medicamento</h3>
-                <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 1.2rem;" onclick="toggleModalProducto(false)"></i>
+    <!-- MODAL NUEVO PRODUCTO -->
+    <div id="modalNuevoProducto" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <h3><i class="fa-solid fa-pills" style="color:var(--purple);"></i> Nuevo Medicamento <i class="fa-solid fa-xmark modal-close" onclick="toggleModalProducto(false)"></i></h3>
+            <div class="form-group"><label>Nombre</label><input type="text" id="prodNombre" class="form-input" placeholder="Ej. Ibuprofeno 400mg"></div>
+            <div class="form-group"><label>Descripción</label><input type="text" id="prodDesc" class="form-input" placeholder="Caja con 20 tabletas"></div>
+            <div style="display:flex;gap:10px;">
+                <div class="form-group" style="flex:1;"><label>Precio (Q)</label><input type="number" id="prodPrecio" class="form-input" placeholder="25.00" step="0.5"></div>
+                <div class="form-group" style="flex:1;"><label>Stock</label><input type="number" id="prodStock" class="form-input" value="20"></div>
             </div>
-            
             <div class="form-group">
-                <label>Nombre del Medicamento:</label>
-                <input type="text" id="prodNombre" class="form-input" placeholder="Ej. Ibuprofeno 400mg">
-            </div>
-
-            <div class="form-group">
-                <label>Descripción:</label>
-                <input type="text" id="prodDesc" class="form-input" placeholder="Caja con 20 tabletas">
-            </div>
-
-            <div style="display: flex; gap: 10px;">
-                <div class="form-group" style="flex: 1;">
-                    <label>Precio (Q):</label>
-                    <input type="number" id="prodPrecio" class="form-input" placeholder="25.00" step="0.5">
-                </div>
-                <div class="form-group" style="flex: 1;">
-                    <label>Stock inicial:</label>
-                    <input type="number" id="prodStock" class="form-input" value="20">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Categoría:</label>
+                <label>Categoría</label>
                 <select id="prodCategoria" class="form-input">
                     <option value="ANALGESICOS">Analgésicos</option>
                     <option value="VITAMINAS">Vitaminas y Suplementos</option>
                     <option value="HIGIENE">Higiene y Cuidado</option>
                 </select>
             </div>
-
-            <button onclick="guardarProductoFarmacia()" class="btn-login" style="background: var(--purple);">
+            <button onclick="guardarProductoFarmacia()" class="btn-login" style="background:linear-gradient(135deg,var(--purple),#7c3aed);">
                 <i class="fa-solid fa-cloud-arrow-up"></i> Guardar en Oracle Cloud
             </button>
         </div>
     </div>
 
-    <!-- CARRITO LATERAL & CHECKOUT -->
+    <!-- CART DRAWER -->
     <div class="overlay" id="overlay" onclick="toggleCart()"></div>
     <div class="cart-drawer" id="cartDrawer">
         <div class="cart-header">
-            <h3><i class="fa-solid fa-bag-shopping" style="color: var(--primary);"></i> Tu Carrito</h3>
-            <i class="fa-solid fa-xmark" style="cursor: pointer; font-size: 1.3rem;" onclick="toggleCart()"></i>
+            <h3><i class="fa-solid fa-bag-shopping" style="color:var(--primary);"></i> Tu Carrito</h3>
+            <i class="fa-solid fa-xmark" style="cursor:pointer;color:var(--text-muted);font-size:1.2rem;" onclick="toggleCart()"></i>
         </div>
-
         <div class="cart-items" id="cartItemsList"></div>
-
         <div class="cart-footer">
-            <div style="margin-bottom: 12px;">
-                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">Dirección de Entrega:</label>
-                <input type="text" id="direccionInput" value="Zona 1 Coatepeque" class="form-input" style="padding: 8px 12px;">
+            <div class="form-group">
+                <label>Dirección de Entrega</label>
+                <input type="text" id="direccionInput" value="Zona 1 Coatepeque" class="form-input">
             </div>
-
-            <div style="margin-bottom: 16px;">
-                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">Método de Pago:</label>
-                <select id="metodoPagoSelect" class="form-input" style="padding: 8px 12px;">
-                    <option value="EFECTIVO" selected>Efectivo contra entrega 💵</option>
+            <div class="form-group">
+                <label>Método de Pago</label>
+                <select id="metodoPagoSelect" class="form-input">
+                    <option value="EFECTIVO">Efectivo contra entrega 💵</option>
                     <option value="BILLETERA">Billetera FarmaClick</option>
                     <option value="TARJETA">Tarjeta de Débito / Crédito 💳</option>
                 </select>
             </div>
-
-            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 700; margin-bottom: 14px;">
-                <span>Total:</span>
-                <span id="cartTotal">Q 0.00</span>
-            </div>
-
+            <div class="cart-total"><span>Total</span><span id="cartTotal">Q 0.00</span></div>
             <button class="btn-login" onclick="confirmarPedidoCliente()">
-                Confirmar y Enviar con GPS
+                <i class="fa-solid fa-location-dot"></i> Confirmar y Enviar con GPS
             </button>
         </div>
     </div>
 
-    <!-- ============================================================== -->
-    <!-- LOGICA JAVASCRIPT: AUTENTICACION, ROLES Y COMUNICACION BACKEND -->
-    <!-- ============================================================== -->
+    <!-- ════════════════════════════════════════════════════
+         JAVASCRIPT
+    ════════════════════════════════════════════════════ -->
     <script>
         const BACKEND_URL = "https://farmaclick-backend.onrender.com";
 
-        // Estado global del usuario autenticado
         let currentUser = null;
         let productosData = [];
         let cart = [];
         let categoriaActual = "TODOS";
+        let farmaciaActual = null; // null = todas
+        let farmaciasDisponibles = {};
         let gpsPollingInterval = null;
+        let riderGpsWatchId = null;
 
-        // Auto-llenado de prueba (opcional)
         function quickFill(email, pass) {
             document.getElementById("loginCorreo").value = email;
             document.getElementById("loginPassword").value = pass;
         }
 
-        // 2. INICIO DE SESIÓN CENTRALIZADO
         async function handleLogin(e) {
             e.preventDefault();
             const correo = document.getElementById("loginCorreo").value.trim();
             const password = document.getElementById("loginPassword").value.trim();
             const btn = document.getElementById("btnLoginSubmit");
-
             btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verificando con Oracle Cloud...`;
-
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Verificando...`;
             try {
                 const response = await fetch(`${BACKEND_URL}/api/login`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ correo, password })
                 });
-
                 const data = await response.json();
-
                 if (response.ok && data.exito && data.usuario) {
                     currentUser = data.usuario;
                     localStorage.setItem("fc_user", JSON.stringify(currentUser));
@@ -1230,81 +946,62 @@
                     alert(`❌ Acceso denegado: ${data.error || 'Credenciales inválidas'}`);
                 }
             } catch (err) {
-                alert(`⚠️ Error al conectar con el servidor: ${err.message}`);
+                alert(`⚠️ Error al conectar: ${err.message}`);
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión`;
             }
         }
 
-        // 3. APLICAR VISTA SEGÚN EL ROL DEVOLVIDO POR ORACLE CLOUD
         function aplicarExperienciaPorRol(user) {
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("appContainer").style.display = "block";
-
-            // Actualizar header con nombre y rol
             document.getElementById("userNameDisplay").innerText = `${user.NOMBRE} ${user.APELLIDO}`;
             const roleBadge = document.getElementById("userRoleBadge");
             const heroBanner = document.getElementById("heroBanner");
-            const heroTitle = document.getElementById("heroTitle");
-            const heroSubtitle = document.getElementById("heroSubtitle");
-            const heroIcon = document.getElementById("heroIcon");
-
-            // Ocultar todos los módulos
-            document.getElementById("moduloAdmin").style.display = "none";
-            document.getElementById("moduloCliente").style.display = "none";
-            document.getElementById("moduloFarmacia").style.display = "none";
-            document.getElementById("moduloRepartidor").style.display = "none";
+            ["moduloAdmin","moduloCliente","moduloFarmacia","moduloRepartidor"].forEach(id => document.getElementById(id).style.display = "none");
             document.getElementById("clientCartBtn").style.display = "none";
-
             const rol = (user.NOMBRE_ROL || "").toUpperCase();
 
             if (rol === "ADMINISTRADOR") {
                 roleBadge.className = "role-tag admin";
-                roleBadge.innerHTML = `<i class="fa-solid fa-shield"></i> Administrador`;
+                roleBadge.innerHTML = `<i class="fa-solid fa-shield"></i> Admin`;
                 heroBanner.className = "banner admin-bg";
-                heroTitle.innerText = "Panel Central del Administrador 👑";
-                heroSubtitle.innerText = "Genera usuarios y credenciales para Clientes, Farmacias y Repartidores en Oracle Cloud.";
-                heroIcon.className = "fa-solid fa-users-gear";
+                document.getElementById("heroTitle").innerText = "Panel Central del Administrador 👑";
+                document.getElementById("heroSubtitle").innerText = "Genera usuarios y credenciales para Clientes, Farmacias y Repartidores.";
+                document.getElementById("heroIcon").className = "fa-solid fa-users-gear";
                 document.getElementById("moduloAdmin").style.display = "block";
-
             } else if (rol === "CLIENTE") {
                 roleBadge.className = "role-tag cliente";
                 roleBadge.innerHTML = `<i class="fa-solid fa-user"></i> Cliente`;
                 heroBanner.className = "banner cliente-bg";
-                heroTitle.innerText = `¡Hola, ${user.NOMBRE}! ⚡`;
-                heroSubtitle.innerText = "Pide medicamentos a domicilio y sigue la ubicación GPS del repartidor en vivo.";
-                heroIcon.className = "fa-solid fa-basket-shopping";
+                document.getElementById("heroTitle").innerText = `¡Hola, ${user.NOMBRE}! ⚡`;
+                document.getElementById("heroSubtitle").innerText = "Elige tu farmacia, ordena medicamentos y rastrea en vivo a tu repartidor.";
+                document.getElementById("heroIcon").className = "fa-solid fa-basket-shopping";
                 document.getElementById("moduloCliente").style.display = "block";
                 document.getElementById("clientCartBtn").style.display = "inline-flex";
-                
                 cargarDatosCliente();
-
             } else if (rol === "FARMACIA") {
                 roleBadge.className = "role-tag farmacia";
                 roleBadge.innerHTML = `<i class="fa-solid fa-shop"></i> Farmacia`;
                 heroBanner.className = "banner farmacia-bg";
-                heroTitle.innerText = "Panel de Farmacia Central 🏪";
-                heroSubtitle.innerText = "Control de existencias y alta de nuevos productos en Oracle Autonomous Database.";
-                heroIcon.className = "fa-solid fa-hospital-user";
+                document.getElementById("heroTitle").innerText = "Panel de Farmacia Central 🏪";
+                document.getElementById("heroSubtitle").innerText = "Control de existencias y alta de productos en Oracle Cloud.";
+                document.getElementById("heroIcon").className = "fa-solid fa-hospital-user";
                 document.getElementById("moduloFarmacia").style.display = "block";
-
                 cargarDatosFarmacia();
-
             } else if (rol === "REPARTIDOR") {
                 roleBadge.className = "role-tag repartidor";
                 roleBadge.innerHTML = `<i class="fa-solid fa-motorcycle"></i> Repartidor`;
                 heroBanner.className = "banner repartidor-bg";
-                heroTitle.innerText = `Radar de Entregas FarmaClick 🛵`;
-                heroSubtitle.innerText = "Acepta pedidos, transmite tu GPS y confirma entregas en tiempo real.";
-                heroIcon.className = "fa-solid fa-route";
+                document.getElementById("heroTitle").innerText = `Radar de Entregas FarmaClick 🛵`;
+                document.getElementById("heroSubtitle").innerText = "Acepta pedidos, transmite tu GPS y confirma entregas en tiempo real.";
+                document.getElementById("heroIcon").className = "fa-solid fa-route";
                 document.getElementById("moduloRepartidor").style.display = "block";
-
                 cargarDatosRepartidor();
             }
         }
 
-        // CERRAR SESIÓN
         function cerrarSesion() {
             currentUser = null;
             localStorage.removeItem("fc_user");
@@ -1313,9 +1010,7 @@
             document.getElementById("loginScreen").style.display = "flex";
         }
 
-        // ============================================================
-        // FUNCIONES MODULO ADMINISTRADOR
-        // ============================================================
+        /* ─── ADMIN ─── */
         function selectRoleAdmin(idRol, el) {
             document.querySelectorAll(".role-radio-card").forEach(c => c.classList.remove("selected"));
             el.classList.add("selected");
@@ -1331,210 +1026,124 @@
             const password = document.getElementById("adminNewPass").value.trim();
             const telefono = document.getElementById("adminNewTel").value.trim();
             const direccion = document.getElementById("adminNewDir").value.trim();
-
             try {
                 const res = await fetch(`${BACKEND_URL}/api/registro`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    method: "POST", headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ idRol, nombre, apellido, correo, password, telefono, direccion })
                 });
-
                 const data = await res.json();
-
                 if (res.ok && data.exito) {
-                    alert(`✅ ¡USUARIO REGISTRADO EN ORACLE CLOUD!\nID: #${data.idUsuario}\nNombre: ${nombre} ${apellido}\nCorreo: ${correo}\nAhora este usuario puede iniciar sesión en la web.`);
-                    
-                    // Agregar fila a la tabla visual
-                    const tbody = document.getElementById("adminUsersTable");
-                    const roleNames = { 1: "ADMINISTRADOR", 2: "CLIENTE", 3: "FARMACIA", 4: "REPARTIDOR" };
-                    const roleClasses = { 1: "admin", 2: "cliente", 3: "farmacia", 4: "repartidor" };
-
+                    alert(`✅ Usuario registrado!\nID: #${data.idUsuario}\n${nombre} ${apellido} (${correo})`);
+                    const roleNames = {1:"ADMINISTRADOR",2:"CLIENTE",3:"FARMACIA",4:"REPARTIDOR"};
+                    const roleClasses = {1:"admin",2:"cliente",3:"farmacia",4:"repartidor"};
                     const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>#${data.idUsuario}</td>
-                        <td><strong>${nombre} ${apellido}</strong></td>
-                        <td>${correo}</td>
-                        <td><span class="role-tag ${roleClasses[idRol]}">${roleNames[idRol]}</span></td>
-                        <td><span style="color: #2ed573; font-weight: 600;">● ACTIVO</span></td>
-                    `;
-                    tbody.appendChild(tr);
-
-                    // Limpiar campos
-                    document.getElementById("adminNewNombre").value = "";
-                    document.getElementById("adminNewApellido").value = "";
-                    document.getElementById("adminNewCorreo").value = "";
-                    document.getElementById("adminNewPass").value = "";
-                } else {
-                    alert(`❌ Error al crear usuario: ${data.error}`);
-                }
-            } catch (err) {
-                alert(`⚠️ Error de conexión: ${err.message}`);
-            }
+                    tr.innerHTML = `<td>#${data.idUsuario}</td><td><strong>${nombre} ${apellido}</strong></td><td>${correo}</td><td><span class="role-tag ${roleClasses[idRol]}">${roleNames[idRol]}</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>`;
+                    document.getElementById("adminUsersTable").appendChild(tr);
+                    ["adminNewNombre","adminNewApellido","adminNewCorreo","adminNewPass"].forEach(id => document.getElementById(id).value = "");
+                } else { alert(`❌ Error: ${data.error}`); }
+            } catch (err) { alert(`⚠️ ${err.message}`); }
         }
 
-        // ============================================================
-        // FUNCIONES MODULO CLIENTE
-        // ============================================================
+        /* ─── CLIENTE ─── */
         async function cargarDatosCliente() {
             await fetchProductosCliente();
             await fetchBilleteraCliente();
             await verificarPedidoActivoCliente();
         }
 
-        // Verifica si el cliente tiene un pedido en curso en Oracle Cloud
-        async function verificarPedidoActivoCliente() {
-            const trackingBox = document.getElementById("clientTrackingBox");
-            const trackedId = localStorage.getItem("fc_active_order_id");
-
-            if (trackedId) {
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${trackedId}`);
-                    const data = await res.json();
-                    if (data.exito && data.pedido) {
-                        const estado = (data.pedido.ESTADO || "").toUpperCase();
-                        if (estado === 'ENTREGADO' || estado === 'CANCELADO') {
-                            // Si ya fue entregado, ocultar rastreo y limpiar GPS
-                            trackingBox.style.display = "none";
-                            localStorage.removeItem("fc_active_order_id");
-                            if (gpsPollingInterval) clearInterval(gpsPollingInterval);
-                        } else {
-                            // Si está PENDIENTE, PREPARANDO o EN CAMINO, mostrar radar con stepper
-                            trackingBox.style.display = "block";
-                            actualizarStepperPedidosYa(estado, trackedId);
-                            iniciarMonitoreoGpsRepartidor(1);
-                        }
-                    } else {
-                        trackingBox.style.display = "none";
-                    }
-                } catch (e) {
-                    trackingBox.style.display = "none";
-                }
-            } else {
-                trackingBox.style.display = "none";
-            }
-        }
-
-        // Actualiza visualmente el flujo de estado idéntico a PedidosYa
-        function actualizarStepperPedidosYa(estado, idPed) {
-            const step1 = document.getElementById("step1");
-            const step2 = document.getElementById("step2");
-            const step3 = document.getElementById("step3");
-            const step4 = document.getElementById("step4");
-            const fill = document.getElementById("orderStepProgressFill");
-            const badge = document.getElementById("clientTrackedStatus");
-            const estTime = document.getElementById("orderEstimatedTime");
-
-            // Resetear clases
-            [step1, step2, step3, step4].forEach(s => {
-                s.className = "order-step";
-            });
-
-            if (estado === "PENDIENTE") {
-                step1.className = "order-step active";
-                fill.style.width = "0%";
-                badge.innerText = `● PEDIDO #${idPed}: RECIBIDO`;
-                badge.style.background = "#fff2e8";
-                badge.style.color = "#ff793f";
-                estTime.innerHTML = `El repartidor está revisando tu orden. Entrega estimada: <strong>20 - 30 min</strong>`;
-            } else if (estado === "PREPARANDO" || estado === "ACEPTADO") {
-                step1.className = "order-step completed";
-                step2.className = "order-step active";
-                fill.style.width = "33%";
-                badge.innerText = `● PEDIDO #${idPed}: PREPARANDO`;
-                badge.style.background = "#fef3c7";
-                badge.style.color = "#d97706";
-                estTime.innerHTML = `La farmacia y el repartidor preparan tus medicamentos. Entrega estimada: <strong>15 - 20 min</strong>`;
-            } else if (estado === "EN CAMINO" || estado === "DESPACHADO") {
-                step1.className = "order-step completed";
-                step2.className = "order-step completed";
-                step3.className = "order-step active";
-                fill.style.width = "66%";
-                badge.innerText = `● PEDIDO #${idPed}: EN CAMINO`;
-                badge.style.background = "#eafaf1";
-                badge.style.color = "#2ed573";
-                estTime.innerHTML = `🛵 ¡El repartidor va hacia tu ubicación! Sigue su moto en el mapa abajo. Entrega estimada: <strong>5 - 10 min</strong>`;
-            } else if (estado === "ENTREGADO") {
-                step1.className = "order-step completed";
-                step2.className = "order-step completed";
-                step3.className = "order-step completed";
-                step4.className = "order-step active";
-                fill.style.width = "100%";
-                badge.innerText = `● PEDIDO #${idPed}: ENTREGADO`;
-                badge.style.background = "#eafaf1";
-                badge.style.color = "#2ed573";
-                estTime.innerHTML = `¡Tu pedido ha sido entregado exitosamente! Gracias por comprar en FarmaClick.`;
-            }
-        }
-
         async function fetchProductosCliente() {
             const grid = document.getElementById("clientProductsGrid");
-            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i></div>`;
-
+            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--primary);"></i></div>`;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/cliente/productos`);
                 const data = await res.json();
                 if (data.exito && data.productos) {
                     productosData = data.productos.map(p => ({
-                        id: p.ID_PRODUCTO,
-                        idFarmacia: p.ID_FARMACIA,
-                        nombre: p.PRODUCTO,
-                        desc: p.DESCRIPCION || "Medicamento certificado",
-                        precio: parseFloat(p.PRECIO),
-                        categoria: p.CATEGORIA || "ANALGESICOS",
+                        id: p.ID_PRODUCTO, idFarmacia: p.ID_FARMACIA,
+                        nombreFarmacia: p.FARMACIA || `Farmacia #${p.ID_FARMACIA}`,
+                        nombre: p.PRODUCTO, desc: p.DESCRIPCION || "Medicamento certificado",
+                        precio: parseFloat(p.PRECIO), categoria: p.CATEGORIA || "ANALGESICOS",
                         stock: p.STOCK,
                         icon: p.CATEGORIA === 'VITAMINAS' ? 'fa-tablets' : (p.CATEGORIA === 'HIGIENE' ? 'fa-pump-soap' : 'fa-pills')
                     }));
+                    // Build pharmacy list
+                    farmaciasDisponibles = {};
+                    productosData.forEach(p => { farmaciasDisponibles[p.idFarmacia] = p.nombreFarmacia; });
+                    renderFarmaciaButtons();
                     renderProductosCliente();
                 }
-            } catch (e) {
-                console.error(e);
-            }
+            } catch (e) { console.error(e); }
+        }
+
+        function renderFarmaciaButtons() {
+            const list = document.getElementById("farmaciaButtonsList");
+            list.innerHTML = "";
+            document.getElementById("allFarmaciaCount").innerText = productosData.length;
+            Object.entries(farmaciasDisponibles).forEach(([id, nombre]) => {
+                const count = productosData.filter(p => p.idFarmacia == id).length;
+                const btn = document.createElement("button");
+                btn.className = "pharmacy-select-btn";
+                btn.dataset.idFarmacia = id;
+                btn.innerHTML = `<i class="fa-solid fa-store"></i> ${nombre} <span class="badge">${count}</span>`;
+                btn.onclick = () => filtrarPorFarmacia(parseInt(id), btn);
+                list.appendChild(btn);
+            });
+        }
+
+        function filtrarPorFarmacia(idFarmacia, el) {
+            farmaciaActual = idFarmacia;
+            document.querySelectorAll(".pharmacy-select-btn").forEach(b => b.classList.remove("active"));
+            el.classList.add("active");
+            const titulo = idFarmacia === null ? "Todas las Farmacias" : farmaciasDisponibles[idFarmacia];
+            document.getElementById("clientMainTitle").innerText = `Medicamentos — ${titulo}`;
+            renderProductosCliente();
         }
 
         function renderProductosCliente() {
             const grid = document.getElementById("clientProductsGrid");
             grid.innerHTML = "";
-
-            const filtrados = categoriaActual === "TODOS" 
-                ? productosData 
-                : productosData.filter(p => p.categoria === categoriaActual);
-
+            let filtrados = farmaciaActual !== null
+                ? productosData.filter(p => p.idFarmacia == farmaciaActual)
+                : productosData;
+            if (categoriaActual !== "TODOS") filtrados = filtrados.filter(p => p.categoria === categoriaActual);
             document.getElementById("clientProductCount").innerText = `${filtrados.length} disponibles`;
-
+            if (filtrados.length === 0) {
+                grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted);">
+                    <i class="fa-solid fa-box-open" style="font-size:2.5rem;opacity:0.3;display:block;margin-bottom:12px;"></i>
+                    Sin productos en esta categoría</div>`;
+                return;
+            }
             filtrados.forEach(prod => {
                 const card = document.createElement("div");
                 card.className = "product-card";
                 card.innerHTML = `
                     <span class="product-badge">Stock: ${prod.stock}</span>
+                    <span class="product-farmacia-badge"><i class="fa-solid fa-store" style="font-size:.65rem;"></i> ${prod.nombreFarmacia}</span>
                     <div class="product-img"><i class="fa-solid ${prod.icon}"></i></div>
                     <h4>${prod.nombre}</h4>
-                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">${prod.desc}</p>
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 8px;">
-                        <span style="font-weight: 700; font-size: 1.1rem;">Q ${prod.precio.toFixed(2)}</span>
+                    <p>${prod.desc}</p>
+                    <div class="product-footer">
+                        <span class="product-price">Q ${prod.precio.toFixed(2)}</span>
                         <button class="btn-add" onclick="addToCart(${prod.id})"><i class="fa-solid fa-plus"></i></button>
-                    </div>
-                `;
+                    </div>`;
                 grid.appendChild(card);
             });
         }
 
-        function filterCategory(cat) {
+        function filterCategory(cat, event) {
             categoriaActual = cat;
             document.querySelectorAll(".filter-item").forEach(el => el.classList.remove("active"));
-            event.currentTarget.classList.add("active");
+            if (event) event.currentTarget.classList.add("active");
             renderProductosCliente();
         }
 
+        // Cart — supports multiple pharmacies (key = productId)
         function addToCart(productId) {
             const prod = productosData.find(p => p.id === productId);
             if (!prod) return;
-
-            const inCart = cart.find(i => i.id === productId);
+            const inCart = cart.find(i => i.id === productId && i.idFarmacia === prod.idFarmacia);
             if (inCart) {
-                if (inCart.cantidad >= prod.stock) {
-                    alert(`Stock máximo disponible alcanzado (${prod.stock})`);
-                    return;
-                }
+                if (inCart.cantidad >= prod.stock) { alert(`Stock máximo: ${prod.stock}`); return; }
                 inCart.cantidad++;
             } else {
                 cart.push({ ...prod, cantidad: 1 });
@@ -1542,11 +1151,11 @@
             updateCartUI();
         }
 
-        function changeQty(id, delta) {
-            const item = cart.find(i => i.id === id);
+        function changeQty(productId, idFarmacia, delta) {
+            const item = cart.find(i => i.id === productId && i.idFarmacia == idFarmacia);
             if (!item) return;
             item.cantidad += delta;
-            if (item.cantidad <= 0) cart = cart.filter(i => i.id !== id);
+            if (item.cantidad <= 0) cart = cart.filter(i => !(i.id === productId && i.idFarmacia == idFarmacia));
             updateCartUI();
         }
 
@@ -1554,283 +1163,241 @@
             const list = document.getElementById("cartItemsList");
             const badge = document.getElementById("cartCount");
             const totalEl = document.getElementById("cartTotal");
-
             list.innerHTML = "";
-            let total = 0;
-            let qty = 0;
-
+            let total = 0, qty = 0;
             if (cart.length === 0) {
-                list.innerHTML = `<p style="text-align: center; color: var(--text-muted); margin-top: 40px;">Tu carrito está vacío 🛒</p>`;
+                list.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--text-dim);"><i class="fa-solid fa-bag-shopping" style="font-size:2.5rem;opacity:0.3;display:block;margin-bottom:12px;"></i>Tu carrito está vacío</div>`;
             } else {
+                // Group by farmacia for clarity
+                const byFarmacia = {};
                 cart.forEach(item => {
-                    const sub = item.precio * item.cantidad;
-                    total += sub;
-                    qty += item.cantidad;
-                    const div = document.createElement("div");
-                    div.className = "cart-item";
-                    div.innerHTML = `
-                        <div>
-                            <h5>${item.nombre}</h5>
-                            <span style="font-size: 0.85rem; color: var(--primary-dark); font-weight: 600;">Q ${item.precio.toFixed(2)} x ${item.cantidad} = Q ${sub.toFixed(2)}</span>
-                        </div>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <button onclick="changeQty(${item.id}, -1)" style="width: 26px; height: 26px; cursor: pointer;">-</button>
-                            <span style="font-weight: 600;">${item.cantidad}</span>
-                            <button onclick="changeQty(${item.id}, 1)" style="width: 26px; height: 26px; cursor: pointer;">+</button>
-                        </div>
-                    `;
-                    list.appendChild(div);
+                    if (!byFarmacia[item.idFarmacia]) byFarmacia[item.idFarmacia] = { nombre: item.nombreFarmacia, items: [] };
+                    byFarmacia[item.idFarmacia].items.push(item);
+                });
+                Object.values(byFarmacia).forEach(group => {
+                    const header = document.createElement("div");
+                    header.innerHTML = `<div style="font-size:0.73rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;padding:10px 0 6px;display:flex;align-items:center;gap:6px;"><i class="fa-solid fa-store"></i> ${group.nombre}</div>`;
+                    list.appendChild(header);
+                    group.items.forEach(item => {
+                        const sub = item.precio * item.cantidad;
+                        total += sub; qty += item.cantidad;
+                        const div = document.createElement("div");
+                        div.className = "cart-item";
+                        div.innerHTML = `
+                            <div>
+                                <h5>${item.nombre}</h5>
+                                <span class="price">Q ${item.precio.toFixed(2)} × ${item.cantidad} = Q ${sub.toFixed(2)}</span>
+                            </div>
+                            <div class="cart-qty">
+                                <button class="qty-btn" onclick="changeQty(${item.id},${item.idFarmacia},-1)">−</button>
+                                <span style="font-weight:700;color:var(--text);min-width:20px;text-align:center;">${item.cantidad}</span>
+                                <button class="qty-btn" onclick="changeQty(${item.id},${item.idFarmacia},1)">+</button>
+                            </div>`;
+                        list.appendChild(div);
+                    });
                 });
             }
-
             badge.innerText = qty;
             totalEl.innerText = `Q ${total.toFixed(2)}`;
         }
 
         function toggleCart() {
-            const d = document.getElementById("cartDrawer");
-            const o = document.getElementById("overlay");
-            d.classList.toggle("open");
-            o.classList.toggle("active");
+            document.getElementById("cartDrawer").classList.toggle("open");
+            document.getElementById("overlay").classList.toggle("active");
         }
 
         async function confirmarPedidoCliente() {
-            if (cart.length === 0) {
-                alert("Agrega productos al carrito");
-                return;
-            }
-
+            if (cart.length === 0) { alert("Agrega productos al carrito"); return; }
             const direccion = document.getElementById("direccionInput").value;
             const metodoPago = document.getElementById("metodoPagoSelect").value;
             const idFarmacia = cart[0].idFarmacia || 1;
-
-            // Obtener coordenadas GPS reales del teléfono/computadora del cliente
-            let latCliente = 14.7001;
-            let lngCliente = -91.8601;
-
+            let latCliente = 14.7001, lngCliente = -91.8601;
             if ("geolocation" in navigator) {
                 try {
-                    const pos = await new Promise((resolve, reject) => {
-                        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 7000 });
-                    });
-                    latCliente = pos.coords.latitude;
-                    lngCliente = pos.coords.longitude;
-                } catch (err) {
-                    console.log("No se concedió permiso de GPS o tardó demasiado, usando ubicación predeterminada.");
-                }
+                    const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 7000 }));
+                    latCliente = pos.coords.latitude; lngCliente = pos.coords.longitude;
+                } catch (e) {}
             }
-
             const payload = {
-                idCliente: currentUser.ID_USUARIO,
-                idFarmacia: idFarmacia,
-                direccionEntrega: direccion,
-                metodoPago: metodoPago,
-                latitudEntrega: latCliente,
-                longitudEntrega: lngCliente,
+                idCliente: currentUser.ID_USUARIO, idFarmacia, direccionEntrega: direccion,
+                metodoPago, latitudEntrega: latCliente, longitudEntrega: lngCliente,
                 items: cart.map(i => ({ idProducto: i.id, cantidad: i.cantidad }))
             };
-
             try {
                 const res = await fetch(`${BACKEND_URL}/api/cliente/pedido`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
+                    method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
                 });
-
                 const data = await res.json();
                 if (res.ok && data.exito) {
                     const idPed = data.pedido ? data.pedido.ID_PEDIDO : data.idPedido;
                     localStorage.setItem("fc_active_order_id", idPed);
-                    alert(`✅ ¡PEDIDO GUARDADO EN ORACLE CLOUD!\nID de Pedido: #${idPed}\nTotal: Q ${data.pedido ? data.pedido.TOTAL : '0.00'}`);
-                    cart = [];
-                    updateCartUI();
-                    toggleCart();
-
-                    // Activar tarjeta de rastreo GPS en vivo con stepper
+                    alert(`✅ ¡Pedido #${idPed} creado!\nTotal: Q ${data.pedido ? data.pedido.TOTAL : '0.00'}`);
+                    cart = []; updateCartUI(); toggleCart();
                     document.getElementById("clientTrackingBox").style.display = "block";
                     actualizarStepperPedidosYa("PENDIENTE", idPed);
                     iniciarMonitoreoGpsRepartidor(1);
-                } else {
-                    alert(`❌ Error al crear pedido: ${data.error}`);
-                }
-            } catch (err) {
-                alert(`⚠️ Error: ${err.message}`);
-            }
+                } else { alert(`❌ Error: ${data.error}`); }
+            } catch (err) { alert(`⚠️ ${err.message}`); }
         }
 
-        // Monitoreo GPS en tiempo real consultando la API de Oracle Cloud
+        async function verificarPedidoActivoCliente() {
+            const trackingBox = document.getElementById("clientTrackingBox");
+            const trackedId = localStorage.getItem("fc_active_order_id");
+            if (trackedId) {
+                try {
+                    const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${trackedId}`);
+                    const data = await res.json();
+                    if (data.exito && data.pedido) {
+                        const estado = (data.pedido.ESTADO || "").toUpperCase();
+                        if (estado === 'ENTREGADO' || estado === 'CANCELADO') {
+                            trackingBox.style.display = "none"; localStorage.removeItem("fc_active_order_id");
+                            if (gpsPollingInterval) clearInterval(gpsPollingInterval);
+                        } else {
+                            trackingBox.style.display = "block";
+                            actualizarStepperPedidosYa(estado, trackedId);
+                            iniciarMonitoreoGpsRepartidor(1);
+                        }
+                    } else { trackingBox.style.display = "none"; }
+                } catch (e) { trackingBox.style.display = "none"; }
+            } else { trackingBox.style.display = "none"; }
+        }
+
+        function actualizarStepperPedidosYa(estado, idPed) {
+            const steps = ["step1","step2","step3","step4"].map(id => document.getElementById(id));
+            const fill = document.getElementById("orderStepProgressFill");
+            const badge = document.getElementById("clientTrackedStatus");
+            const estTime = document.getElementById("orderEstimatedTime");
+            steps.forEach(s => s.className = "order-step");
+            const configs = {
+                "PENDIENTE":  { active:0, width:"0%",   text:`● #${idPed}: RECIBIDO`,   bg:"rgba(255,179,71,0.12)", color:"var(--warning)", time:"El repartidor está revisando tu orden. Estimado: <strong>20-30 min</strong>" },
+                "PREPARANDO": { active:1, width:"33%",  text:`● #${idPed}: PREPARANDO`, bg:"rgba(167,139,250,0.1)", color:"var(--purple)",  time:"Preparando tus medicamentos. Estimado: <strong>15-20 min</strong>" },
+                "ACEPTADO":   { active:1, width:"33%",  text:`● #${idPed}: PREPARANDO`, bg:"rgba(167,139,250,0.1)", color:"var(--purple)",  time:"Preparando tus medicamentos. Estimado: <strong>15-20 min</strong>" },
+                "EN_CAMINO":  { active:2, width:"66%",  text:`● #${idPed}: EN CAMINO`,  bg:"rgba(0,212,170,0.1)",  color:"var(--primary)", time:"🛵 ¡El repartidor va hacia tu ubicación! Estimado: <strong>5-10 min</strong>" },
+                "EN CAMINO":  { active:2, width:"66%",  text:`● #${idPed}: EN CAMINO`,  bg:"rgba(0,212,170,0.1)",  color:"var(--primary)", time:"🛵 ¡El repartidor va hacia tu ubicación! Estimado: <strong>5-10 min</strong>" },
+                "ENTREGADO":  { active:3, width:"100%", text:`● #${idPed}: ENTREGADO`,  bg:"rgba(0,230,118,0.1)",  color:"var(--success)", time:"¡Tu pedido fue entregado exitosamente! Gracias por usar FarmaClick." },
+            };
+            const cfg = configs[estado] || configs["PENDIENTE"];
+            for (let i = 0; i <= cfg.active; i++) steps[i].className = i < cfg.active ? "order-step completed" : "order-step active";
+            fill.style.width = cfg.width;
+            badge.innerText = cfg.text;
+            badge.style.background = cfg.bg; badge.style.color = cfg.color;
+            badge.style.border = `1px solid ${cfg.color.replace(')',',0.2)').replace('var(','rgba(').replace('--primary','0,212,170').replace('--primary','0,212,170').replace('--warning','255,179,71').replace('--purple','167,139,250').replace('--success','0,230,118')}`;
+            estTime.innerHTML = cfg.time;
+        }
+
         function iniciarMonitoreoGpsRepartidor(idRepartidor, esManual = false) {
             if (gpsPollingInterval && !esManual) clearInterval(gpsPollingInterval);
             const statusEl = document.getElementById("liveGpsCoords");
             const mapContainer = document.getElementById("mapLinkContainer");
             const btn = document.getElementById("btnActualizarGpsClient");
-
-            if (esManual && btn) {
-                btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando...`;
-            }
-
+            if (esManual && btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando...`;
             const checkGps = async () => {
                 try {
                     const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion/${idRepartidor}`);
                     const data = await res.json();
                     if (data.exito && data.ubicacion) {
-                        const lat = data.ubicacion.LATITUD_ACTUAL;
-                        const lng = data.ubicacion.LONGITUD_ACTUAL;
+                        const lat = data.ubicacion.LATITUD_ACTUAL, lng = data.ubicacion.LONGITUD_ACTUAL;
                         const hora = new Date(data.ubicacion.FECHA_UBICACION).toLocaleTimeString();
-                        
+                        const badge = document.getElementById("clientTrackedStatus");
                         if (lat === 0 && lng === 0) {
-                            statusEl.innerHTML = `<span style="color: #ff4757; font-weight: 600;">🛑 Repartidor fuera de servicio (GPS Apagado)</span>`;
+                            statusEl.innerHTML = `<span style="color:var(--accent);">🛑 GPS Apagado</span>`;
                             if (mapContainer) mapContainer.innerHTML = "";
-                            const badge = document.getElementById("clientTrackedStatus");
-                            if (badge) { badge.className = "gps-info-badge"; badge.style.background = "#fee2e2"; badge.style.color = "#ef4444"; badge.innerText = "🔴 REPARTIDOR DESCONECTADO"; }
                         } else {
-                            statusEl.innerHTML = `Lat: <strong>${lat}</strong>, Lng: <strong>${lng}</strong> <span style="font-size: 0.8rem; color: #2ed573;">(Actualizado: ${hora})</span>`;
-                            const badge = document.getElementById("clientTrackedStatus");
-                            if (badge) { badge.className = "gps-info-badge"; badge.style.background = "#eafaf1"; badge.style.color = "#2ed573"; badge.innerText = "🟢 SEÑAL GPS ACTIVA"; }
-                            if (mapContainer) {
-                                mapContainer.innerHTML = `<a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color: #0984e3; text-decoration: none; font-size: 0.82rem; font-weight: 600;"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps ↗</a>`;
-                            }
+                            statusEl.innerHTML = `${lat.toFixed(5)}, ${lng.toFixed(5)} <span style="font-size:0.75rem;color:var(--text-dim);">(${hora})</span>`;
+                            if (mapContainer) mapContainer.innerHTML = `<a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--blue);text-decoration:none;font-size:0.8rem;font-weight:600;"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps ↗</a>`;
                         }
                     }
-                } catch (e) {
-                    statusEl.innerText = "Esperando señal de GPS del repartidor...";
-                } finally {
-                    if (esManual && btn) {
-                        btn.innerHTML = `<i class="fa-solid fa-check" style="color: #2ed573;"></i> ¡Actualizado!`;
-                        setTimeout(() => { btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar GPS`; }, 1200);
-                    }
-                }
+                } catch (e) { if(statusEl) statusEl.innerText = "Esperando señal..."; }
+                finally { if (esManual && btn) { btn.innerHTML = `<i class="fa-solid fa-check" style="color:var(--success);"></i> Actualizado!`; setTimeout(()=>{ btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar GPS`; },1200); } }
             };
-
             checkGps();
-            if (!esManual) {
-                gpsPollingInterval = setInterval(checkGps, 5000); // Polling cada 5 segundos
-            }
+            if (!esManual) gpsPollingInterval = setInterval(checkGps, 5000);
         }
 
         async function fetchBilleteraCliente() {
             try {
                 const res = await fetch(`${BACKEND_URL}/api/billetera/${currentUser.ID_USUARIO}`);
                 const data = await res.json();
-                if (data.exito) {
-                    document.getElementById("clientWalletBalance").innerText = parseFloat(data.saldo || 0).toFixed(2);
-                }
-            } catch (e) {}
+                if (data.exito) document.getElementById("clientWalletBalance").innerText = parseFloat(data.saldo||0).toFixed(2);
+            } catch(e) {}
         }
 
         async function recargarBilleteraPrompt() {
-            const monto = prompt("¿Cuánto deseas recargar en tu billetera? (Quetzales):", "50.00");
-            if (!monto || isNaN(monto) || parseFloat(monto) <= 0) return;
-
+            const monto = prompt("¿Cuánto deseas recargar? (Quetzales):","50.00");
+            if (!monto || isNaN(monto) || parseFloat(monto)<=0) return;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/billetera/recargar`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        idUsuario: currentUser.ID_USUARIO,
-                        monto: parseFloat(monto),
-                        descripcion: "Recarga web"
-                    })
+                    method:"POST", headers:{"Content-Type":"application/json"},
+                    body: JSON.stringify({ idUsuario: currentUser.ID_USUARIO, monto: parseFloat(monto), descripcion:"Recarga web" })
                 });
                 const data = await res.json();
-                if (res.ok && data.exito) {
-                    alert(`✅ Saldo recargado con éxito: Q ${data.saldoNuevo.toFixed(2)}`);
-                    fetchBilleteraCliente();
-                }
-            } catch (e) { alert(e.message); }
+                if (res.ok && data.exito) { alert(`✅ Saldo recargado: Q ${data.saldoNuevo.toFixed(2)}`); fetchBilleteraCliente(); }
+            } catch(e) { alert(e.message); }
         }
 
-        // Responder llamada entrante del Repartidor (Agora RTC)
         async function responderLlamadaCliente() {
             const idPed = localStorage.getItem("fc_active_order_id") || 41;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/agora/token`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idPedido: idPed, idUsuario: currentUser.ID_USUARIO, role: "publisher" })
-                });
+                const res = await fetch(`${BACKEND_URL}/api/agora/token`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ idPedido: idPed, idUsuario: currentUser.ID_USUARIO, role:"publisher" }) });
                 const data = await res.json();
-                alert(`📞 ¡LLAMADA CONECTADA CON EL REPARTIDOR!\nCanal: ${data.channelName || `pedido_${idPed}`}\n\n🎙️ Comunicación de voz establecida. Puedes hablar con el repartidor.`);
-            } catch (e) {
-                alert(`📞 Conectado con el Repartidor en canal de voz del Pedido #${idPed}.`);
-            } finally {
-                const banner = document.getElementById("incomingCallBannerClient");
-                if (banner) banner.style.setProperty("display", "none", "important");
-            }
+                alert(`📞 ¡Conectado con el Repartidor!\nCanal: ${data.channelName || `pedido_${idPed}`}`);
+            } catch(e) { alert(`📞 Conectado en canal de voz del Pedido #${idPed}.`); }
+            finally { const banner = document.getElementById("incomingCallBannerClient"); if(banner) banner.style.setProperty("display","none","important"); }
         }
 
         function rechazarLlamadaCliente() {
             const banner = document.getElementById("incomingCallBannerClient");
-            if (banner) banner.style.setProperty("display", "none", "important");
+            if(banner) banner.style.setProperty("display","none","important");
         }
 
-        // Consultar historial de pedidos del cliente en Oracle Cloud
         async function verMisPedidosCliente() {
             const activeId = localStorage.getItem("fc_active_order_id");
-            if (!activeId) {
-                alert("📦 No tienes ningún pedido en curso en este momento.");
-                return;
-            }
-
+            if (!activeId) { alert("📦 No tienes ningún pedido en curso."); return; }
             try {
                 const res = await fetch(`${BACKEND_URL}/api/cliente/pedido/${activeId}`);
                 const data = await res.json();
                 if (data.exito && data.pedido) {
                     const p = data.pedido;
-                    const msg = `📦 DETALLE DE TU PEDIDO EN ORACLE CLOUD:\n\n• Pedido: #${p.ID_PEDIDO}\n• Estado: ${p.ESTADO}\n• Total: Q ${parseFloat(p.TOTAL).toFixed(2)}\n• Dirección: ${p.DIRECCION_ENTREGA}\n• Método de Pago: ${p.METODO_PAGO}\n\n¿Deseas cerrar el seguimiento en pantalla?`;
                     if (p.ESTADO === 'ENTREGADO' || p.ESTADO === 'CANCELADO') {
-                        alert(`📦 DETALLE DE TU PEDIDO EN ORACLE CLOUD:\n\n• Pedido: #${p.ID_PEDIDO}\n• Estado: ${p.ESTADO}\n• Total: Q ${parseFloat(p.TOTAL).toFixed(2)}`);
+                        alert(`📦 Pedido #${p.ID_PEDIDO}\nEstado: ${p.ESTADO}\nTotal: Q ${parseFloat(p.TOTAL).toFixed(2)}`);
                         localStorage.removeItem("fc_active_order_id");
                         document.getElementById("clientTrackingBox").style.display = "none";
                     } else {
-                        if (confirm(msg)) {
-                            localStorage.removeItem("fc_active_order_id");
-                            document.getElementById("clientTrackingBox").style.display = "none";
-                        }
+                        const msg = `📦 Pedido #${p.ID_PEDIDO}\nEstado: ${p.ESTADO}\nTotal: Q ${parseFloat(p.TOTAL).toFixed(2)}\nDirección: ${p.DIRECCION_ENTREGA}\n\n¿Cerrar el seguimiento en pantalla?`;
+                        if (confirm(msg)) { localStorage.removeItem("fc_active_order_id"); document.getElementById("clientTrackingBox").style.display = "none"; }
                     }
                 } else {
                     localStorage.removeItem("fc_active_order_id");
                     document.getElementById("clientTrackingBox").style.display = "none";
-                    alert(`📦 Pedido #${activeId} no encontrado en base de datos. Se limpió el seguimiento.`);
+                    alert(`Pedido #${activeId} no encontrado. Se limpió el seguimiento.`);
                 }
-            } catch (e) {
-                alert(`📦 Pedido activo: #${activeId}`);
-            }
+            } catch(e) { alert(`Pedido activo: #${activeId}`); }
         }
 
-        // ============================================================
-        // FUNCIONES MODULO FARMACIA
-        // ============================================================
+        /* ─── FARMACIA ─── */
         async function cargarDatosFarmacia() {
             try {
                 const res = await fetch(`${BACKEND_URL}/api/cliente/productos`);
                 const data = await res.json();
                 if (data.exito && data.productos) {
                     document.getElementById("farmaciaStatTotal").innerText = data.productos.length;
-                    const stock = data.productos.reduce((acc, curr) => acc + (curr.STOCK || 0), 0);
-                    document.getElementById("farmaciaStatStock").innerText = stock;
-
+                    document.getElementById("farmaciaStatStock").innerText = data.productos.reduce((a,c)=>a+(c.STOCK||0),0);
                     const tbody = document.getElementById("farmaciaInventoryTable");
                     tbody.innerHTML = "";
                     data.productos.forEach(p => {
                         const tr = document.createElement("tr");
-                        tr.innerHTML = `
-                            <td>#${p.ID_PRODUCTO}</td>
-                            <td><strong>${p.PRODUCTO}</strong><br><small style="color: var(--text-muted);">${p.DESCRIPCION || ''}</small></td>
-                            <td><span style="background: #f1f2f6; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem;">${p.CATEGORIA}</span></td>
-                            <td><strong>Q ${parseFloat(p.PRECIO).toFixed(2)}</strong></td>
-                            <td><span style="font-weight: 700; color: ${p.STOCK > 5 ? '#2ed573' : '#ff4757'}">${p.STOCK} unid.</span></td>
-                            <td><span style="color: #2ed573; font-weight: 600; font-size: 0.8rem;">● DISPONIBLE</span></td>
-                        `;
+                        tr.innerHTML = `<td>#${p.ID_PRODUCTO}</td><td><strong>${p.PRODUCTO}</strong><br><small style="color:var(--text-dim);">${p.DESCRIPCION||''}</small></td>
+                            <td><span style="background:var(--bg-3);color:var(--text-muted);padding:3px 8px;border-radius:6px;font-size:0.78rem;border:1px solid var(--border);">${p.CATEGORIA}</span></td>
+                            <td><strong style="color:var(--text);">Q ${parseFloat(p.PRECIO).toFixed(2)}</strong></td>
+                            <td><span style="font-weight:700;color:${p.STOCK>5?'var(--success)':'var(--accent)'};">${p.STOCK} unid.</span></td>
+                            <td><span style="color:var(--success);font-weight:600;font-size:0.8rem;">● DISPONIBLE</span></td>`;
                         tbody.appendChild(tr);
                     });
                 }
-            } catch (e) {}
+            } catch(e) {}
         }
 
-        function toggleModalProducto(show) {
-            document.getElementById("modalNuevoProducto").style.display = show ? "flex" : "none";
-        }
+        function toggleModalProducto(show) { document.getElementById("modalNuevoProducto").style.display = show ? "flex" : "none"; }
 
         async function guardarProductoFarmacia() {
             const nombre = document.getElementById("prodNombre").value.trim();
@@ -1838,84 +1405,61 @@
             const precio = parseFloat(document.getElementById("prodPrecio").value);
             const stock = parseInt(document.getElementById("prodStock").value) || 10;
             const categoria = document.getElementById("prodCategoria").value;
-
-            if (!nombre || !precio) {
-                alert("Completa el nombre y precio");
-                return;
-            }
-
+            if (!nombre || !precio) { alert("Completa nombre y precio"); return; }
             try {
                 const res = await fetch(`${BACKEND_URL}/api/farmacia/producto`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idFarmacia: 1, nombre, descripcion, precio, stock, categoria })
+                    method:"POST", headers:{"Content-Type":"application/json"},
+                    body: JSON.stringify({ idFarmacia:1, nombre, descripcion, precio, stock, categoria })
                 });
                 const data = await res.json();
-                if (res.ok && data.exito) {
-                    alert(`✅ Producto guardado en Oracle Cloud (#${data.idProducto})`);
-                    toggleModalProducto(false);
-                    cargarDatosFarmacia();
-                } else {
-                    alert(`Error: ${data.error}`);
-                }
-            } catch (e) { alert(e.message); }
+                if (res.ok && data.exito) { alert(`✅ Producto guardado (#${data.idProducto})`); toggleModalProducto(false); cargarDatosFarmacia(); }
+                else { alert(`Error: ${data.error}`); }
+            } catch(e) { alert(e.message); }
         }
 
-        // Variable para rastreo continuo de GPS del repartidor
-        let riderGpsWatchId = null;
-
-        // ============================================================
-        // FUNCIONES MODULO REPARTIDOR (GPS & PEDIDOS)
-        // ============================================================
+        /* ─── REPARTIDOR ─── */
         async function cargarDatosRepartidor() {
-            // 1. Verificar si hay un pedido en curso guardado localmente o activo
             await verificarPedidoActivoRepartidor();
-
-            // 2. Cargar pedidos pendientes en radar
             const grid = document.getElementById("repartidorOrdersGrid");
-            grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 30px;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: #ff793f;"></i></div>`;
-
+            grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:2rem;color:var(--warning);"></i></div>`;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/repartidor/pedidos-disponibles`);
                 const data = await res.json();
                 if (data.exito && data.pedidos && data.pedidos.length > 0) {
                     grid.innerHTML = "";
-                    // ORDENAR AUTOMÁTICAMENTE DEL MÁS RECIENTE AL MÁS VIEJO
-                    const pedidosOrdenados = [...data.pedidos].sort((a, b) => b.ID_PEDIDO - a.ID_PEDIDO);
-
-                    pedidosOrdenados.forEach(p => {
+                    [...data.pedidos].sort((a,b)=>b.ID_PEDIDO-a.ID_PEDIDO).forEach(p => {
                         const card = document.createElement("div");
                         card.className = "order-card";
                         card.innerHTML = `
                             <div>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                    <h4>Pedido #${p.ID_PEDIDO}</h4>
-                                    <span style="background: #fff2e8; color: #ff793f; padding: 4px 10px; border-radius: 12px; font-weight: 700; font-size: 0.75rem;">${p.ESTADO}</span>
+                                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                                    <h4 style="font-size:1rem;font-weight:700;color:var(--text);">Pedido #${p.ID_PEDIDO}</h4>
+                                    <span style="background:rgba(255,179,71,0.12);color:var(--warning);border:1px solid rgba(255,179,71,0.2);padding:4px 10px;border-radius:12px;font-weight:700;font-size:0.73rem;">${p.ESTADO}</span>
                                 </div>
-                                <p style="font-size: 0.85rem; margin-bottom: 6px;"><i class="fa-solid fa-user"></i> <strong>Cliente:</strong> ${p.CLIENTE}</p>
-                                <p style="font-size: 0.85rem; margin-bottom: 6px;"><i class="fa-solid fa-location-dot"></i> <strong>Destino:</strong> ${p.DIRECCION_ENTREGA}</p>
-                                <p style="font-size: 0.85rem; margin-bottom: 6px;"><i class="fa-solid fa-money-bill-wave"></i> <strong>Total:</strong> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</p>
+                                <div style="display:flex;flex-direction:column;gap:6px;font-size:0.84rem;color:var(--text-muted);">
+                                    <span><i class="fa-solid fa-user" style="color:var(--primary);width:14px;"></i> ${p.CLIENTE}</span>
+                                    <span><i class="fa-solid fa-location-dot" style="color:var(--accent);width:14px;"></i> ${p.DIRECCION_ENTREGA}</span>
+                                    <span><i class="fa-solid fa-money-bill-wave" style="color:var(--success);width:14px;"></i> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</span>
+                                </div>
                             </div>
-                            <div style="margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 12px; display: flex; gap: 8px;">
+                            <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
                                 <button class="btn-action btn-accept" onclick="aceptarPedidoRepartidor(${p.ID_PEDIDO})">
                                     <i class="fa-solid fa-hand-holding-hand"></i> Aceptar Pedido
                                 </button>
-                            </div>
-                        `;
+                            </div>`;
                         grid.appendChild(card);
                     });
                 } else {
-                    grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; background: white; border-radius: 12px;"><i class="fa-solid fa-circle-check" style="font-size: 2.5rem; color: #2ed573;"></i><h3 style="margin-top: 10px;">Sin pedidos pendientes en radar</h3></div>`;
+                    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:50px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);">
+                        <i class="fa-solid fa-circle-check" style="font-size:2.5rem;color:var(--success);opacity:0.6;"></i>
+                        <h3 style="margin-top:12px;color:var(--text-muted);font-weight:600;">Sin pedidos pendientes en radar</h3></div>`;
                 }
-            } catch (e) { console.error(e); }
+            } catch(e) { console.error(e); }
         }
 
-        // Verifica si el repartidor tiene una entrega activa y la renderiza de forma fija
         async function verificarPedidoActivoRepartidor() {
             const container = document.getElementById("repartidorActiveOrderContainer");
             let pActivo = null;
-
-            // 1. Primero intentar consultar pedidos activos asignados al repartidor en Oracle Cloud
             try {
                 const res = await fetch(`${BACKEND_URL}/api/repartidor/pedidos-activos/1`);
                 const data = await res.json();
@@ -1923,9 +1467,7 @@
                     pActivo = data.pedidos[0];
                     localStorage.setItem("fc_rider_active_order_id", pActivo.ID_PEDIDO);
                 }
-            } catch (err) {}
-
-            // 2. Si no respondió o no trajo por endpoint nuevo, consultar por id guardado localmente (ej: 61)
+            } catch(err) {}
             if (!pActivo) {
                 const activeId = localStorage.getItem("fc_rider_active_order_id") || localStorage.getItem("fc_active_order_id");
                 if (activeId) {
@@ -1935,181 +1477,110 @@
                         if (data.exito && data.pedido) {
                             const p = data.pedido;
                             if (p.ESTADO !== 'ENTREGADO' && p.ESTADO !== 'CANCELADO') {
-                                pActivo = p;
-                                localStorage.setItem("fc_rider_active_order_id", p.ID_PEDIDO);
+                                pActivo = p; localStorage.setItem("fc_rider_active_order_id", p.ID_PEDIDO);
                             }
                         }
-                    } catch (e) {}
+                    } catch(e) {}
                 }
             }
-
-            // 3. Renderizar o limpiar según corresponda
-            if (pActivo) {
-                renderTarjetaEntregaActiva(pActivo);
-                iniciarGpsRealRepartidor();
-            } else {
-                container.style.display = "none";
-                localStorage.removeItem("fc_rider_active_order_id");
-                detenerGpsRepartidor();
-            }
+            if (pActivo) { renderTarjetaEntregaActiva(pActivo); iniciarGpsRealRepartidor(); }
+            else { container.style.display = "none"; localStorage.removeItem("fc_rider_active_order_id"); detenerGpsRepartidor(); }
         }
-
 
         function renderTarjetaEntregaActiva(p) {
             const container = document.getElementById("repartidorActiveOrderContainer");
             container.style.display = "block";
-            document.getElementById("riderActiveOrderTitle").innerText = `Pedido #${p.ID_PEDIDO} (${p.ESTADO})`;
-            document.getElementById("riderActiveBadge").innerText = `● ESTADO: ${p.ESTADO}`;
-
+            document.getElementById("riderActiveOrderTitle").innerText = `Pedido #${p.ID_PEDIDO} — ${p.ESTADO}`;
+            document.getElementById("riderActiveBadge").innerText = `● ${p.ESTADO}`;
             document.getElementById("riderActiveOrderDetails").innerHTML = `
-                <div><i class="fa-solid fa-user"></i> <strong>Cliente:</strong> ${p.CLIENTE || 'Cliente'}</div>
-                <div><i class="fa-solid fa-location-dot" style="color: #ff4757;"></i> <strong>Destino:</strong> ${p.DIRECCION_ENTREGA}</div>
-                <div><i class="fa-solid fa-money-bill-wave" style="color: #2ed573;"></i> <strong>Total a Cobrar:</strong> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</div>
-            `;
-
-            const actionsDiv = document.getElementById("riderActiveActions");
-            actionsDiv.innerHTML = `
-                <button class="btn-action btn-dispatch" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/despachar', ${p.ID_PEDIDO}, 'EN CAMINO')">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <span><i class="fa-solid fa-user" style="color:var(--primary);width:16px;"></i> <strong>Cliente:</strong> ${p.CLIENTE||'Cliente'}</span>
+                    <span><i class="fa-solid fa-location-dot" style="color:var(--accent);width:16px;"></i> <strong>Destino:</strong> ${p.DIRECCION_ENTREGA}</span>
+                    <span><i class="fa-solid fa-money-bill-wave" style="color:var(--success);width:16px;"></i> <strong>Total a Cobrar:</strong> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</span>
+                </div>`;
+            document.getElementById("riderActiveActions").innerHTML = `
+                <button class="btn-action btn-dispatch" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/despachar',${p.ID_PEDIDO},'EN CAMINO')">
                     <i class="fa-solid fa-motorcycle"></i> Despachar (En Camino)
                 </button>
-                <button class="btn-action btn-delivered" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/entregar-pedido', ${p.ID_PEDIDO}, 'ENTREGADO')">
-                    <i class="fa-solid fa-circle-check"></i> Marcar 'Entregado' (Apaga GPS)
-                </button>
-            `;
+                <button class="btn-action btn-delivered" onclick="cambiarEstadoRider('${BACKEND_URL}/api/repartidor/entregar-pedido',${p.ID_PEDIDO},'ENTREGADO')">
+                    <i class="fa-solid fa-circle-check"></i> Marcar Entregado
+                </button>`;
         }
 
         async function aceptarPedidoRepartidor(idPed) {
             try {
                 const res = await fetch(`${BACKEND_URL}/api/repartidor/aceptar-pedido`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    method:"POST", headers:{"Content-Type":"application/json"},
                     body: JSON.stringify({ idPedido: idPed, idRepartidor: 1 })
                 });
                 const data = await res.json();
                 if (res.ok && data.exito) {
                     localStorage.setItem("fc_rider_active_order_id", idPed);
-                    alert(`🛵 ¡Pedido #${idPed} aceptado!\nTu GPS satelital se ha activado para transmitir tu ubicación real al cliente.`);
+                    alert(`🛵 ¡Pedido #${idPed} aceptado! GPS activado.`);
                     await verificarPedidoActivoRepartidor();
                     await cargarDatosRepartidor();
-                } else {
-                    alert(`Error: ${data.error || 'No se pudo aceptar el pedido'}`);
-                }
-            } catch (e) { alert(e.message); }
+                } else { alert(`Error: ${data.error||'No se pudo aceptar'}`); }
+            } catch(e) { alert(e.message); }
         }
 
         async function cambiarEstadoRider(url, idPed, nombreEstado) {
             try {
-                const res = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idPedido: idPed, idRepartidor: 1 })
-                });
+                const res = await fetch(url, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ idPedido: idPed, idRepartidor: 1 }) });
                 const data = await res.json();
                 if (res.ok && data.exito) {
                     if (nombreEstado === 'ENTREGADO') {
                         localStorage.removeItem("fc_rider_active_order_id");
-                        detenerGpsRepartidor();
-                        await limpiarUbicacionGps(true);
-                        alert(`🎉 ¡ENTREGA COMPLETADA!\nPedido #${idPed} entregado con éxito.\nTu señal GPS se ha apagado en Oracle Cloud para proteger tu privacidad.`);
+                        detenerGpsRepartidor(); await limpiarUbicacionGps(true);
+                        alert(`🎉 ¡Entrega completada!\nPedido #${idPed} entregado. GPS apagado.`);
                         document.getElementById("repartidorActiveOrderContainer").style.display = "none";
                         cargarDatosRepartidor();
                     } else {
-                        alert(`📍 Pedido #${idPed} actualizado a: ${nombreEstado}`);
+                        alert(`📍 Pedido #${idPed} → ${nombreEstado}`);
                         await transmitirUbicacionGpsReal();
                         await verificarPedidoActivoRepartidor();
                     }
                 }
-            } catch (e) { alert(e.message); }
+            } catch(e) { alert(e.message); }
         }
 
-        // LECTURA DE GPS REAL DEL CELULAR DEL REPARTIDOR
         function iniciarGpsRealRepartidor() {
             if ("geolocation" in navigator) {
-                // Transmitir inmediatamente la primera posición
                 transmitirUbicacionGpsReal();
-
-                // Seguir transmitiendo cada 6 segundos mientras se mueve
-                if (!riderGpsWatchId) {
-                    riderGpsWatchId = setInterval(() => {
-                        transmitirUbicacionGpsReal();
-                    }, 6000);
-                }
-            } else {
-                document.getElementById("riderGpsStatusText").innerText = "Geolocalización no soportada en este navegador.";
-            }
+                if (!riderGpsWatchId) riderGpsWatchId = setInterval(transmitirUbicacionGpsReal, 6000);
+            } else { document.getElementById("riderGpsStatusText").innerText = "Geolocalización no soportada."; }
         }
 
-        function detenerGpsRepartidor() {
-            if (riderGpsWatchId) {
-                clearInterval(riderGpsWatchId);
-                riderGpsWatchId = null;
-            }
-        }
+        function detenerGpsRepartidor() { if (riderGpsWatchId) { clearInterval(riderGpsWatchId); riderGpsWatchId = null; } }
 
         async function transmitirUbicacionGpsReal() {
             if (!navigator.geolocation) return;
-
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    
-                    document.getElementById("riderGpsStatusText").innerText = "● Transmitiendo señal GPS en vivo";
-                    document.getElementById("riderGpsCoordsDisplay").innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-
-                    try {
-                        await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ idRepartidor: 1, latitud: lat, longitud: lng })
-                        });
-                    } catch (e) {
-                        console.error("Error enviando GPS al backend:", e);
-                    }
-                },
-                (error) => {
-                    document.getElementById("riderGpsStatusText").innerText = "⚠️ Activa el GPS y concede permiso de ubicación en tu celular.";
-                },
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const lat = position.coords.latitude, lng = position.coords.longitude;
+                document.getElementById("riderGpsStatusText").innerText = "● Transmitiendo en vivo";
+                document.getElementById("riderGpsCoordsDisplay").innerText = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+                try { await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ idRepartidor:1, latitud:lat, longitud:lng }) }); }
+                catch(e) { console.error(e); }
+            }, () => { document.getElementById("riderGpsStatusText").innerText = "⚠️ Activa el GPS y concede permiso."; }, { enableHighAccuracy:true, timeout:10000, maximumAge:0 });
         }
 
-        // Apagar / Limpiar GPS en Oracle Cloud (al entregar pedido)
-        async function limpiarUbicacionGps(silencioso = false) {
-            try {
-                await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idRepartidor: 1, latitud: 0, longitud: 0 })
-                });
-            } catch (e) { console.error(e); }
+        async function limpiarUbicacionGps() {
+            try { await fetch(`${BACKEND_URL}/api/repartidor/ubicacion`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ idRepartidor:1, latitud:0, longitud:0 }) }); }
+            catch(e) {}
         }
 
-        // Llamada de voz con Agora RTC desde el Repartidor hacia el Cliente
         async function iniciarLlamadaAgoraRider() {
             const activeId = localStorage.getItem("fc_rider_active_order_id") || 41;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/agora/token`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ idPedido: activeId, idUsuario: 1, role: "publisher" })
-                });
+                const res = await fetch(`${BACKEND_URL}/api/agora/token`, { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ idPedido: activeId, idUsuario: 1, role:"publisher" }) });
                 const data = await res.json();
-                alert(`📞 ¡CANAL DE LLAMADA AGORA RTC ACTIVO!\nCanal: ${data.channelName || `pedido_${activeId}`}\n\n🎙️ Conectando por voz con el Cliente del Pedido #${activeId}...`);
-            } catch (e) {
-                alert(`📞 Conectando con el Cliente en canal Agora RTC...`);
-            }
+                alert(`📞 Canal Agora activo: ${data.channelName||`pedido_${activeId}`}\n🎙️ Conectando con el Cliente...`);
+            } catch(e) { alert(`📞 Conectando con el Cliente del Pedido #${activeId}...`); }
         }
 
-        // AUTO-LOGIN SI EXISTE SESIÓN GUARDADA
+        // AUTO-LOGIN
         window.onload = () => {
             const saved = localStorage.getItem("fc_user");
-            if (saved) {
-                try {
-                    currentUser = JSON.parse(saved);
-                    aplicarExperienciaPorRol(currentUser);
-                } catch (e) {}
-            }
+            if (saved) { try { currentUser = JSON.parse(saved); aplicarExperienciaPorRol(currentUser); } catch(e) {} }
         };
     </script>
 </body>
