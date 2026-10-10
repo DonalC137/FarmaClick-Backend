@@ -1382,7 +1382,7 @@
             try {
                 const res = await fetch(`${BACKEND_URL}/api/farmacia/producto`, {
                     method:"POST", headers:{"Content-Type":"application/json"},
-                    body: JSON.stringify({ idFarmacia: fId, nombre, descripcion, precio, stock, categoria })
+                    body: JSON.stringify({ idUsuario: currentUser.ID_USUARIO, nombre, descripcion, precio, stock, categoria })
                 });
                 const data = await res.json();
                 if (res.ok && data.exito) { alert(`✅ Producto guardado (#${data.idProducto})`); toggleModalProducto(false); cargarDatosFarmacia(); }
@@ -1558,6 +1558,7 @@
     </script>
 </body>
 </html>
+
 
 
 

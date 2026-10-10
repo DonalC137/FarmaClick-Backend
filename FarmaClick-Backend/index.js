@@ -1,4 +1,4 @@
-﻿const path = require('path');
+const path = require('path');
 
 // 1. Asignar TNS_ADMIN al inicio para la carpeta wallet de Oracle Cloud
 const walletPath = path.resolve(__dirname, 'wallet');
@@ -121,9 +121,11 @@ app.get('/api/admin/usuarios', async (req, res) => {
     let conn;
     try {
         conn = await getDbConnection();
-        const r1 = await conn.execute(SELECT column_name FROM user_tab_columns WHERE table_name = 'FARMACIAS', [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
-        const r2 = await conn.execute(SELECT * FROM FARMACIAS, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
-        res.json({ exito: true, cols: r1.rows, data: r2.rows });
+        const result = await conn.execute(
+            `SELECT ID_USUARIO, NOMBRE, APELLIDO, CORREO, ID_ROL FROM USUARIOS ORDER BY ID_USUARIO ASC`,
+            [], { outFormat: oracledb.OUT_FORMAT_OBJECT }
+        );
+        res.json({ exito: true, usuarios: result.rows });
     } catch (err) {
         res.status(500).json({ exito: false, error: err.message });
     } finally {
@@ -193,11 +195,27 @@ app.post('/api/registro', async (req, res) => {
                 }
             },
             {
-                autoCommit: true
+                autoCommit: false
             }
         );
 
         const nuevoId = result.outBinds.id[0];
+
+        if (parseInt(idRol) === 3) {
+            await conn.execute(
+                `INSERT INTO FARMACIAS (NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
+                 VALUES (:nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')`,
+                {
+                    nom: nombre + ' ' + apellido,
+                    nit: 'USR' + nuevoId,
+                    tel: telefono || '00000000',
+                    dir: direccion || 'N/A'
+                },
+                { autoCommit: false }
+            );
+        }
+
+        await conn.commit();
 
         return res.json({
             exito: true,
@@ -206,6 +224,9 @@ app.post('/api/registro', async (req, res) => {
         });
 
     } catch (err) {
+        if (conn) {
+            try { await conn.rollback(); } catch(e) {}
+        }
         return res.status(500).json({
             exito: false,
             error: err.message
@@ -327,7 +348,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
     let conn;
     try {
         const {
-            finalIdFarmacia,
+            idUsuario,
             nombre,
             descripcion,
             precio,
@@ -335,34 +356,34 @@ app.post('/api/farmacia/producto', async (req, res) => {
             categoria
         } = req.body;
 
-        if (!idFarmacia || !nombre || !precio) {
+        if (!idUsuario || !nombre || !precio) {
             return res.status(400).json({
                 exito: false,
-                error: 'finalIdFarmacia, nombre y precio son obligatorios'
+                error: 'idUsuario, nombre y precio son obligatorios'
             });
         }
 
         conn = await getDbConnection();
-        try {
-            const check = await conn.execute(`SELECT ID_FARMACIA FROM FARMACIAS WHERE ID_FARMACIA = :id`, { id: idFarmacia });
-            if (!check.rows || check.rows.length === 0) {
-                const userQ = await conn.execute(`SELECT NOMBRE, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id`, { id: idFarmacia });
-                let fname = "Farmacia " + idFarmacia;
-                let ftel = "";
-                let fdir = "";
-                if (userQ.rows && userQ.rows.length > 0) {
-                    const r = userQ.rows[0];
-                    fname = r.NOMBRE || r[0] || fname;
-                    ftel = r.TELEFONO || r[1] || "";
-                    fdir = r.DIRECCION || r[2] || "";
-                }
-                await conn.execute(
-                    `INSERT INTO FARMACIAS (ID_FARMACIA, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:id, :nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA')`,
-                    { id: finalIdFarmacia, nom: fname, tel: ftel, dir: fdir },
-                    { autoCommit: true }
-                );
+
+        let realIdFarmacia;
+
+        if (parseInt(idUsuario) === 23) {
+            realIdFarmacia = 1;
+        } else {
+            const nitBusqueda = 'USR' + idUsuario;
+            const farmaciaRow = await conn.execute(
+                `SELECT ID_FARMACIA FROM FARMACIAS WHERE NIT = :nit`,
+                { nit: nitBusqueda },
+                { outFormat: oracledb.OUT_FORMAT_OBJECT }
+            );
+            if (!farmaciaRow.rows || farmaciaRow.rows.length === 0) {
+                return res.status(400).json({
+                    exito: false,
+                    error: 'Esta cuenta de farmacia no tiene una sucursal registrada. Por favor contacta al administrador.'
+                });
             }
-        } catch (e) { return res.status(500).json({ exito: false, error: "Error auto-creando farmacia: " + e.message }); }
+            realIdFarmacia = farmaciaRow.rows[0].ID_FARMACIA;
+        }
 
         const result = await conn.execute(
             `INSERT INTO PRODUCTOS (
@@ -375,7 +396,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
                 ESTADO
              )
              VALUES (
-                :finalfinalIdFarmacia,
+                :idFarmacia,
                 :nombre,
                 :descripcion,
                 :precio,
@@ -385,7 +406,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
              )
              RETURNING ID_PRODUCTO INTO :id`,
             {
-                finalIdFarmacia,
+                idFarmacia: realIdFarmacia,
                 nombre,
                 descripcion: descripcion || '',
                 precio: parseFloat(precio),
@@ -405,7 +426,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
 
         return res.json({
             exito: true,
-            mensaje: 'Producto guardado exitosamente en Oracle Cloud',
+            mensaje: 'Producto guardado exitosamente',
             idProducto: nuevoId
         });
 
