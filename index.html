@@ -759,7 +759,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon" style="background:rgba(255,83,112,0.12);color:var(--accent);"><i class="fa-solid fa-shop"></i></div>
-                    <div><h3 style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 2px;">Farmacia Central</h3><p style="font-size:0.8rem;color:var(--text-muted);">ID Sucursal: 1</p></div>
+                    <div><h3 id="farmaciaNombreDisplay" style="font-size:1rem;font-weight:700;color:var(--text);margin:0 0 2px;">Farmacia Central</h3><p id="farmaciaIdDisplay" style="font-size:0.8rem;color:var(--text-muted);">ID Sucursal: 1</p></div>
                 </div>
             </div>
             <div class="card">
@@ -954,7 +954,10 @@
                 roleBadge.className = "role-tag farmacia";
                 roleBadge.innerHTML = `<i class="fa-solid fa-shop"></i> Farmacia`;
                 heroBanner.className = "banner farmacia-bg";
-                document.getElementById("heroTitle").innerText = "Panel de Farmacia Central 🏪";
+                document.getElementById("heroTitle").innerText = "Panel de " + user.NOMBRE + " 🏪";
+                const fId = (user.CORREO === "farmacia@farmaclick.com") ? 1 : user.ID_USUARIO;
+                document.getElementById("farmaciaNombreDisplay").innerText = user.NOMBRE;
+                document.getElementById("farmaciaIdDisplay").innerText = "ID Sucursal: " + fId;
                 document.getElementById("heroSubtitle").innerText = "Control de existencias y alta de productos.";
                 document.getElementById("heroIcon").className = "fa-solid fa-hospital-user";
                 document.getElementById("moduloFarmacia").style.display = "block";
@@ -1375,10 +1378,11 @@
             const stock = parseInt(document.getElementById("prodStock").value) || 10;
             const categoria = document.getElementById("prodCategoria").value;
             if (!nombre || !precio) { alert("Completa nombre y precio"); return; }
+            const fId = (currentUser.CORREO === "farmacia@farmaclick.com") ? 1 : currentUser.ID_USUARIO;
             try {
                 const res = await fetch(`${BACKEND_URL}/api/farmacia/producto`, {
                     method:"POST", headers:{"Content-Type":"application/json"},
-                    body: JSON.stringify({ idFarmacia:1, nombre, descripcion, precio, stock, categoria })
+                    body: JSON.stringify({ idFarmacia: fId, nombre, descripcion, precio, stock, categoria })
                 });
                 const data = await res.json();
                 if (res.ok && data.exito) { alert(`✅ Producto guardado (#${data.idProducto})`); toggleModalProducto(false); cargarDatosFarmacia(); }
@@ -1554,4 +1558,5 @@
     </script>
 </body>
 </html>
+
 
