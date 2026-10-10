@@ -1667,132 +1667,10 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
                 else { alert('Error: ' + data.error); }
             } catch(e) { alert(e.message); }
         }
-            /* === DYNAMIC MODAL ARCHITECTURE === */
-        function openDynamicModal(title, fields, onSubmit) {
-            document.getElementById("dModalTitle").innerText = title;
-            const body = document.getElementById("dModalBody");
-            body.innerHTML = "";
-            const inputs = {};
-            fields.forEach(f => {
-                const wrapper = document.createElement("div");
-                wrapper.innerHTML = `<label style="font-size:0.8rem;color:var(--text-muted);margin-bottom:4px;display:block;">${f.label}</label>`;
-                const input = document.createElement("input");
-                input.type = f.type || "text";
-                input.value = f.value || "";
-                input.style.cssText = "width:100%;padding:10px;background:var(--bg-3);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:inherit;";
-                wrapper.appendChild(input);
-                body.appendChild(wrapper);
-                inputs[f.key] = input;
-            });
-            document.getElementById("dModalSubmit").onclick = () => {
-                const result = {};
-                for (let k in inputs) result[k] = inputs[k].value;
-                onSubmit(result);
-            };
-            document.getElementById("dynamicModal").style.display = "flex";
         }
-        function closeDynamicModal() { document.getElementById("dynamicModal").style.display = "none"; }
-
-        /* === REWRITE EDIT FUNCTIONS === */
-        async function editarUsuario(id, n, a, c, t, d) {
-            openDynamicModal(`Editar Usuario #${id}`, [
-                { key: 'nombre', label: 'Nombre', value: n },
-                { key: 'apellido', label: 'Apellido', value: a },
-                { key: 'correo', label: 'Correo (Login)', value: c },
-                { key: 'telefono', label: 'Teléfono', value: t },
-                { key: 'direccion', label: 'Dirección', value: d }
-            ], async (data) => {
-                const btn = document.getElementById("dModalSubmit");
-                btn.innerText = "Guardando..."; btn.disabled = true;
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/admin/usuario/${id}`, {
-                        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-                    const result = await res.json();
-                    if (result.exito) { closeDynamicModal(); alert('Usuario actualizado exitosamente'); cargarUsuariosAdmin(); }
-                    else { alert('Error: ' + result.error); }
-                } catch(e) { alert(e.message); }
-                btn.innerText = "Guardar"; btn.disabled = false;
-            });
         }
-
-        async function editarProducto(id, pr, desc, pre, st) {
-            openDynamicModal(`Editar Producto #${id}`, [
-                { key: 'nombre', label: 'Nombre Producto', value: pr },
-                { key: 'descripcion', label: 'Descripción', value: desc },
-                { key: 'precio', label: 'Precio (Q)', type: 'number', value: pre },
-                { key: 'stock', label: 'Stock (Unidades)', type: 'number', value: st }
-            ], async (data) => {
-                const btn = document.getElementById("dModalSubmit");
-                btn.innerText = "Guardando..."; btn.disabled = true;
-                try {
-                    const res = await fetch(`${BACKEND_URL}/api/farmacia/producto/${id}`, {
-                        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(data)
-                    });
-                    const result = await res.json();
-                    if (result.exito) { closeDynamicModal(); alert('Producto actualizado exitosamente'); cargarDatosFarmacia(); }
-                    else { alert('Error: ' + result.error); }
-                } catch(e) { alert(e.message); }
-                btn.innerText = "Guardar"; btn.disabled = false;
-            });
-        }
-
-        /* === AGORA WEBRTC LOGIC === */
-        let agoraClient = null;
-        let localAudioTrack = null;
-        let isAgoraMuted = false;
-
-        async function initAgoraClient() {
-            if (!agoraClient) {
-                agoraClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-                agoraClient.on("user-published", async (user, mediaType) => {
-                    await agoraClient.subscribe(user, mediaType);
-                    if (mediaType === "audio") {
-                        user.audioTrack.play();
-                        document.getElementById("agoraCallStatus").innerText = "Llamada conectada en curso";
-                    }
-                });
-                agoraClient.on("user-left", () => {
-                    document.getElementById("agoraCallStatus").innerText = "El usuario abandonó la llamada.";
-                    setTimeout(leaveAgoraCall, 2000);
-                });
-            }
-        }
-
-        async function joinAgoraCall(appId, channel, token, uid) {
-            try {
-                await initAgoraClient();
-                document.getElementById("agoraCallUI").style.display = "block";
-                document.getElementById("agoraCallStatus").innerText = "Conectando al canal...";
-                await agoraClient.join(appId, channel, token, uid);
-                localAudioTrack = await AgoraRTC.createMicrophoneAudioTrack();
-                await agoraClient.publish([localAudioTrack]);
-                document.getElementById("agoraCallStatus").innerText = "Esperando al otro usuario...";
-            } catch (error) {
-                console.error("Agora join failed:", error);
-                alert("No se pudo establecer la llamada de audio. Verifica permisos de micrófono.");
-                leaveAgoraCall();
-            }
-        }
-
-        async function leaveAgoraCall() {
-            if (localAudioTrack) { localAudioTrack.stop(); localAudioTrack.close(); localAudioTrack = null; }
-            if (agoraClient) { await agoraClient.leave(); }
-            document.getElementById("agoraCallUI").style.display = "none";
-        }
-
-        function toggleAgoraMute() {
-            if (localAudioTrack) {
-                isAgoraMuted = !isAgoraMuted;
-                localAudioTrack.setMuted(isAgoraMuted);
-                const btn = document.getElementById("btnAgoraMute");
-                if (isAgoraMuted) { btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i>'; btn.style.background = "var(--accent)"; btn.style.color = "white"; }
-                else { btn.innerHTML = '<i class="fa-solid fa-microphone"></i>'; btn.style.background = "var(--bg-3)"; btn.style.color = "var(--text)"; }
-            }
-        }
-            /* === DYNAMIC MODAL ARCHITECTURE === */
+    
+        /* === DYNAMIC MODAL ARCHITECTURE === */
         function openDynamicModal(title, fields, onSubmit) {
             document.getElementById("dModalTitle").innerText = title;
             const body = document.getElementById("dModalBody");
@@ -1920,6 +1798,8 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
     </script>
 </body>
 </html>
+
+
 
 
 
