@@ -1,4 +1,4 @@
-const path = require('path');
+﻿const path = require('path');
 
 // 1. Asignar TNS_ADMIN al inicio para la carpeta wallet de Oracle Cloud
 const walletPath = path.resolve(__dirname, 'wallet');
@@ -1543,6 +1543,74 @@ app.get('/api/test-db', async (req, res) => {
 // INICIALIZAR SERVIDOR
 // ============================================================
 
+
+// Editar Usuario (Admin)
+app.put('/api/admin/usuario/:id', async (req, res) => {
+    let conn;
+    try {
+        const { nombre, apellido, correo, telefono, direccion } = req.body;
+        conn = await getDbConnection();
+        await conn.execute(
+            UPDATE USUARIOS SET NOMBRE = :nombre, APELLIDO = :apellido, CORREO = :correo, TELEFONO = :telefono, DIRECCION = :direccion WHERE ID_USUARIO = :id,
+            { nombre, apellido, correo, telefono, direccion, id: req.params.id },
+            { autoCommit: true }
+        );
+        res.json({ exito: true });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) { try { await conn.close(); } catch(err){} }
+    }
+});
+
+// Eliminar Usuario (Admin)
+app.delete('/api/admin/usuario/:id', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        await conn.execute(DELETE FROM FARMACIAS WHERE ID_USUARIO = :id, { id: req.params.id }, { autoCommit: true });
+        await conn.execute(DELETE FROM USUARIOS WHERE ID_USUARIO = :id, { id: req.params.id }, { autoCommit: true });
+        res.json({ exito: true });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) { try { await conn.close(); } catch(err){} }
+    }
+});
+
+// Editar Producto (Farmacia)
+app.put('/api/farmacia/producto/:id', async (req, res) => {
+    let conn;
+    try {
+        const { nombre, descripcion, precio, stock } = req.body;
+        conn = await getDbConnection();
+        await conn.execute(
+            UPDATE PRODUCTOS SET NOMBRE = :nombre, DESCRIPCION = :descripcion, PRECIO = :precio, STOCK = :stock WHERE ID_PRODUCTO = :id,
+            { nombre, descripcion, precio, stock, id: req.params.id },
+            { autoCommit: true }
+        );
+        res.json({ exito: true });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) { try { await conn.close(); } catch(err){} }
+    }
+});
+
+// Eliminar Producto (Farmacia)
+app.delete('/api/farmacia/producto/:id', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        await conn.execute(DELETE FROM PRODUCTOS WHERE ID_PRODUCTO = :id, { id: req.params.id }, { autoCommit: true });
+        res.json({ exito: true });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) { try { await conn.close(); } catch(err){} }
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(
@@ -1552,6 +1620,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
