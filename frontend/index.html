@@ -637,7 +637,12 @@
                     <div style="overflow-x:auto;">
                         <table>
                             <thead><tr><th>ID</th><th>Usuario</th><th>Correo</th><th>Rol</th><th>Estado</th></tr></thead>
-                            <tbody id="adminUsersTable"></tbody>
+                            <tbody id="adminUsersTable">
+                                <tr><td>#21</td><td><strong>Admin Sistema</strong></td><td>admin@farmaclick.com</td><td><span class="role-tag admin">ADMIN</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                                <tr><td>#22</td><td><strong>Cliente Demo</strong></td><td>cliente@farmaclick.com</td><td><span class="role-tag cliente">CLIENTE</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                                <tr><td>#23</td><td><strong>Farmacia Central</strong></td><td>farmacia@farmaclick.com</td><td><span class="role-tag farmacia">FARMACIA</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                                <tr><td>#24</td><td><strong>Repartidor Moto</strong></td><td>repartidor@farmaclick.com</td><td><span class="role-tag repartidor">REPARTIDOR</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td></tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -934,7 +939,7 @@
                 document.getElementById("heroTitle").innerText = "Panel Central del Administrador 👑";
                 document.getElementById("heroSubtitle").innerText = "Genera usuarios y credenciales para Clientes, Farmacias y Repartidores.";
                 document.getElementById("heroIcon").className = "fa-solid fa-users-gear";
-                document.getElementById("moduloAdmin").style.display = "block"; cargarUsuariosAdmin();
+                document.getElementById("moduloAdmin").style.display = "block";
             } else if (rol === "CLIENTE") {
                 roleBadge.className = "role-tag cliente";
                 roleBadge.innerHTML = `<i class="fa-solid fa-user"></i> Cliente`;
@@ -966,38 +971,6 @@
                 document.getElementById("heroIcon").className = "fa-solid fa-route";
                 document.getElementById("moduloRepartidor").style.display = "block";
                 cargarDatosRepartidor();
-            }
-        }
-
-                // CARGAR USUARIOS EN ADMIN
-        async function cargarUsuariosAdmin() {
-            try {
-                const res = await fetch(`${BACKEND_URL}/api/admin/usuarios`);
-                const data = await res.json();
-                if (data.exito) {
-                    const tbody = document.getElementById("adminUsersTable");
-                    tbody.innerHTML = "";
-                    const rolesMap = { 1: {n:"ADMIN", c:"admin"}, 2: {n:"CLIENTE", c:"cliente"}, 3: {n:"FARMACIA", c:"farmacia"}, 4: {n:"REPARTIDOR", c:"repartidor"} };
-                    data.usuarios.forEach(u => {
-                        const rolInfo = rolesMap[u.ID_ROL] || {n:"OTRO", c:"admin"};
-                        const tr = document.createElement("tr");
-                        tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO || '}</strong></td><td>${u.CORREO}</td><td><span class="role-tag ${rolInfo.c}">${rolInfo.n}</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>`;
-                        tbody.appendChild(tr);
-                    });
-                }
-            } catch (e) {
-                console.error("Error al cargar usuarios:", e);
-            }
-        };
-                    data.usuarios.forEach(u => {
-                        const rolInfo = rolesMap[u.ID_ROL] || {n:"OTRO", c:"admin"};
-                        const tr = document.createElement("tr");
-                        tr.innerHTML = <td>#</td><td><strong> </strong></td><td></td><td><span class="role-tag "></span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>;
-                        tbody.appendChild(tr);
-                    });
-                }
-            } catch (e) {
-                console.error("Error al cargar usuarios:", e);
             }
         }
 
@@ -1585,8 +1558,5 @@
     </script>
 </body>
 </html>
-
-
-
 
 
