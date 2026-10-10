@@ -336,9 +336,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
                     { autoCommit: true }
                 );
             }
-        } catch (e) {
-            console.error("Error auto-creando farmacia:", e);
-        }
+        } catch (e) { return res.status(500).json({ exito: false, error: "Error auto-creando farmacia: " + e.message }); }
 
         const result = await conn.execute(
             `INSERT INTO PRODUCTOS (
@@ -1452,6 +1450,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
