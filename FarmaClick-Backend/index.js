@@ -121,11 +121,9 @@ app.get('/api/admin/usuarios', async (req, res) => {
     let conn;
     try {
         conn = await getDbConnection();
-        const result = await conn.execute(
-            SELECT ID_USUARIO, NOMBRE, APELLIDO, CORREO, ID_ROL FROM USUARIOS ORDER BY ID_USUARIO ASC,
-            [], { outFormat: oracledb.OUT_FORMAT_OBJECT }
-        );
-        res.json({ exito: true, usuarios: result.rows });
+        const r1 = await conn.execute(SELECT column_name FROM user_tab_columns WHERE table_name = 'FARMACIAS', [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        const r2 = await conn.execute(SELECT * FROM FARMACIAS, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        res.json({ exito: true, cols: r1.rows, data: r2.rows });
     } catch (err) {
         res.status(500).json({ exito: false, error: err.message });
     } finally {
@@ -1479,6 +1477,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
