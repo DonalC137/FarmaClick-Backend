@@ -1613,9 +1613,30 @@
             const saved = localStorage.getItem("fc_user");
             if (saved) { try { currentUser = JSON.parse(saved); aplicarExperienciaPorRol(currentUser); } catch(e) {} }
         };
+            async function eliminarUsuario(id) {
+            if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
+            try {
+                const res = await fetch(`/api/admin/usuario/`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.exito) { alert('Usuario eliminado'); cargarUsuariosAdmin(); }
+                else { alert('Error: ' + data.error); }
+            } catch(e) { alert(e.message); }
+        }
+        
+        async function eliminarProducto(id) {
+            if (!confirm('¿Estás seguro de eliminar este producto?')) return;
+            try {
+                const res = await fetch(`/api/farmacia/producto/`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.exito) { alert('Producto eliminado'); cargarDatosFarmacia(); }
+                else { alert('Error: ' + data.error); }
+            } catch(e) { alert(e.message); }
+        }
     </script>
 </body>
 </html>
+
+
 
 
 
