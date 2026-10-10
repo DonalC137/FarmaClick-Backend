@@ -1,4 +1,4 @@
-﻿const path = require('path');
+const path = require('path');
 
 // 1. Asignar TNS_ADMIN al inicio para la carpeta wallet de Oracle Cloud
 const walletPath = path.resolve(__dirname, 'wallet');
@@ -219,6 +219,7 @@ app.post('/api/registro', async (req, res) => {
                 `INSERT INTO FARMACIAS (ID_USUARIO, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
                  VALUES (:idUsr, :nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')`,
                 {
+                    idUsr: nuevoId,
                     nom: nombre + ' ' + apellido,
                     nit: 'USR' + nuevoId,
                     tel: telefono || '00000000',
@@ -409,6 +410,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
                      VALUES (:idUsr, :nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')
                      RETURNING ID_FARMACIA INTO :newFId`,
                     {
+                        idUsr: idUsuario,
                         nom: fNom.trim(),
                         nit: nitBusqueda,
                         tel: fTel,
