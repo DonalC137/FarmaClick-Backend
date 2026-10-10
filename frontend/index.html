@@ -1322,6 +1322,24 @@
                         } catch(e) {}
                     }
                 finally { if (esManual && btn) { btn.innerHTML = `<i class="fa-solid fa-check" style="color:var(--success);"></i> Actualizado!`; setTimeout(()=>{ btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar GPS`; },1200); } }
+
+                    const activePed = localStorage.getItem("fc_active_order_id");
+                    if (activePed) {
+                        try {
+                            const callRes = await fetch(`/api/agora/estado/`);
+                            const callData = await callRes.json();
+                            const banner = document.getElementById("incomingCallBannerClient");
+                            if (callData.llamando) {
+                                if (banner && banner.style.display === "none") {
+                                    banner.style.setProperty("display", "flex", "important");
+                                }
+                            } else {
+                                if (banner && banner.style.display !== "none") {
+                                    banner.style.setProperty("display", "none", "important");
+                                }
+                            }
+                        } catch(e) {}
+                    }
             };
             checkGps();
             if (!esManual) gpsPollingInterval = setInterval(checkGps, 5000);
@@ -1608,6 +1626,7 @@
     </script>
 </body>
 </html>
+
 
 
 
