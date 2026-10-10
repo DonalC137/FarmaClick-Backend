@@ -121,7 +121,7 @@ app.get('/api/admin/delete-test', async (req, res) => {
     let conn;
     try {
         conn = await getDbConnection();
-        await conn.execute(DELETE FROM PRODUCTOS WHERE ID_PRODUCTO = 47, [], { autoCommit: true });
+        await conn.execute("DELETE FROM PRODUCTOS WHERE ID_PRODUCTO = 47", [], { autoCommit: true });
         res.json({ exito: true, mensaje: 'Producto 47 eliminado' });
     } catch (e) {
         res.status(500).json({ error: e.message });
@@ -1535,6 +1535,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
