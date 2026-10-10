@@ -1484,10 +1484,7 @@ app.post('/api/agora/token', async (req, res) => {
             privilegeExpiredTs
         );
 
-        return res.json({
-            token,
-            channelName
-        });
+        return res.json({ token, channelName, appId });
 
     } catch (err) {
         console.error('Error al generar token:', err);
@@ -1620,6 +1617,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
