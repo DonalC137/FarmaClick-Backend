@@ -376,7 +376,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
                 ESTADO
              )
              VALUES (
-                :idFarmacia,
+                :finalIdFarmacia,
                 :nombre,
                 :descripcion,
                 :precio,
@@ -498,7 +498,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
              )
              VALUES (
                 :idCliente,
-                :idFarmacia,
+                :finalIdFarmacia,
                 :direccionEntrega,
                 :metodoPago,
                 'PENDIENTE',
@@ -1477,6 +1477,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
