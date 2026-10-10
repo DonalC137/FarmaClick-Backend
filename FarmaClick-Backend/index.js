@@ -328,7 +328,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
     let conn;
     try {
         const {
-            idFarmacia,
+            finalIdFarmacia,
             nombre,
             descripcion,
             precio,
@@ -339,7 +339,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
         if (!idFarmacia || !nombre || !precio) {
             return res.status(400).json({
                 exito: false,
-                error: 'idFarmacia, nombre y precio son obligatorios'
+                error: 'finalIdFarmacia, nombre y precio son obligatorios'
             });
         }
 
@@ -359,7 +359,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
                 }
                 await conn.execute(
                     `INSERT INTO FARMACIAS (ID_FARMACIA, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:id, :nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA')`,
-                    { id: idFarmacia, nom: fname, tel: ftel, dir: fdir },
+                    { id: finalIdFarmacia, nom: fname, tel: ftel, dir: fdir },
                     { autoCommit: true }
                 );
             }
@@ -376,7 +376,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
                 ESTADO
              )
              VALUES (
-                :finalIdFarmacia,
+                :finalfinalIdFarmacia,
                 :nombre,
                 :descripcion,
                 :precio,
@@ -386,7 +386,7 @@ app.post('/api/farmacia/producto', async (req, res) => {
              )
              RETURNING ID_PRODUCTO INTO :id`,
             {
-                idFarmacia,
+                finalIdFarmacia,
                 nombre,
                 descripcion: descripcion || '',
                 precio: parseFloat(precio),
@@ -432,7 +432,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
     try {
         const {
             idCliente,
-            idFarmacia,
+            finalIdFarmacia,
             direccionEntrega,
             metodoPago,
             latitudEntrega,
@@ -498,7 +498,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
              )
              VALUES (
                 :idCliente,
-                :finalIdFarmacia,
+                :finalfinalIdFarmacia,
                 :direccionEntrega,
                 :metodoPago,
                 'PENDIENTE',
@@ -509,7 +509,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
              RETURNING ID_PEDIDO INTO :id`,
             {
                 idCliente,
-                idFarmacia,
+                finalIdFarmacia,
                 direccionEntrega,
                 metodoPago,
                 latitudEntrega: lat,
@@ -1477,6 +1477,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
