@@ -1,4 +1,4 @@
-const path = require('path');
+﻿const path = require('path');
 
 // 1. Asignar TNS_ADMIN al inicio para la carpeta wallet de Oracle Cloud
 const walletPath = path.resolve(__dirname, 'wallet');
@@ -117,6 +117,19 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Registrar nuevo usuario
+app.get('/api/admin/delete-test', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        await conn.execute(DELETE FROM PRODUCTOS WHERE ID_PRODUCTO = 47, [], { autoCommit: true });
+        res.json({ exito: true, mensaje: 'Producto 47 eliminado' });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    } finally {
+        if (conn) await conn.close();
+    }
+});
+
 app.get('/api/admin/usuarios', async (req, res) => {
     let conn;
     try {
@@ -1522,6 +1535,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
