@@ -34,6 +34,19 @@ async function getDbConnection() {
 // ============================================================
 
 // Iniciar sesión
+app.post('/api/admin/query', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        const result = await conn.execute(req.body.sql, req.body.binds || {}, { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        res.json({ exito: true, data: result.rows });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) await conn.close();
+    }
+});
+
 app.post('/api/login', async (req, res) => {
     let conn;
     try {
@@ -1439,4 +1452,5 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
