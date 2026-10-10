@@ -37,333 +37,31 @@ async function getDbConnection() {
 app.post('/api/admin/query', async (req, res) => {
     let conn;
     try {
-        conn = await getDbConnection();
-        const result = await conn.execute(req.body.sql, req.body.binds || {}, { outFormat: oracledb.OUT_FORMAT_OBJECT });
-        res.json({ exito: true, data: result.rows });
-    } catch (e) {
-        res.status(500).json({ exito: false, error: e.message });
-    } finally {
-        if (conn) await conn.close();
-    }
-});
-
-app.post('/api/login', async (req, res) => {
-    let conn;
-    try {
-        const { correo, password } = req.body;
-
-        if (!correo || !password) {
-            return res.status(400).json({
-                exito: false,
-                error: 'Correo y password son obligatorios'
-            });
-        }
-
-        conn = await getDbConnection();
-
-        const result = await conn.execute(
-            `SELECT
-                u.ID_USUARIO,
-                u.ID_ROL,
-                r.NOMBRE_ROL,
-                u.NOMBRE,
-                u.APELLIDO,
-                u.CORREO,
-                u.TELEFONO,
-                u.DIRECCION,
-                u.SALDO_BILLETERA,
-                u.ESTADO
-             FROM USUARIOS u
-             JOIN ROLES r
-               ON u.ID_ROL = r.ID_ROL
-             WHERE u.CORREO = :correo
-               AND u.PASSWORD = :password`,
-            [correo, password]
-        );
-
-        if (result.rows.length === 0) {
-            return res.status(401).json({
-                exito: false,
-                error: 'Credenciales inválidas'
-            });
-        }
-
-        const usuario = result.rows[0];
-
-        if (usuario.ESTADO !== 'ACTIVO') {
-            return res.status(403).json({
-                exito: false,
-                error: 'Usuario inactivo o bloqueado'
-            });
-        }
-
-        return res.json({
-            exito: true,
-            usuario
-        });
-
-    } catch (err) {
-        return res.status(500).json({
-            exito: false,
-            error: err.message
-        });
-    } finally {
-        if (conn) {
-            try {
-                await conn.close();
-            } catch (e) {}
-        }
-    }
-});
-
-// Registrar nuevo usuario
-app.get('/api/admin/usuarios', async (req, res) => {
-    let conn;
-    try {
-        conn = await getDbConnection();
-        const r1 = await conn.execute(SELECT column_name FROM user_tab_columns WHERE table_name = 'FARMACIAS', [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
-        const r2 = await conn.execute(SELECT * FROM FARMACIAS, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
-        res.json({ exito: true, cols: r1.rows, data: r2.rows });
-    } catch (err) {
-        res.status(500).json({ exito: false, error: err.message });
-    } finally {
-        if (conn) await conn.close();
-    }
-});
-
-app.post('/api/registro', async (req, res) => {
-    let conn;
-    try {
-        const {
-            idRol,
-            nombre,
-            apellido,
-            correo,
-            password,
-            telefono,
-            direccion
-        } = req.body;
-
-        if (
-            !idRol ||
-            !nombre ||
-            !apellido ||
-            !correo ||
-            !password
-        ) {
-            return res.status(400).json({
-                exito: false,
-                error: 'Faltan campos obligatorios'
-            });
-        }
-
-        conn = await getDbConnection();
-
-        const result = await conn.execute(
-            `INSERT INTO USUARIOS (
-                ID_ROL,
-                NOMBRE,
-                APELLIDO,
-                CORREO,
-                PASSWORD,
-                TELEFONO,
-                DIRECCION
-             )
-             VALUES (
-                :idRol,
-                :nombre,
-                :apellido,
-                :correo,
-                :password,
-                :telefono,
-                :direccion
-             )
-             RETURNING ID_USUARIO INTO :id`,
-            {
-                idRol,
-                nombre,
-                apellido,
-                correo,
-                password,
-                telefono: telefono || null,
-                direccion: direccion || null,
-                id: {
-                    type: oracledb.NUMBER,
-                    dir: oracledb.BIND_OUT
-                }
-            },
-            {
-                autoCommit: true
-            }
-        );
-
-        const nuevoId = result.outBinds.id[0];
-
-        return res.json({
-            exito: true,
-            mensaje: 'Usuario registrado exitosamente',
-            idUsuario: nuevoId
-        });
-
-    } catch (err) {
-        return res.status(500).json({
-            exito: false,
-            error: err.message
-        });
-    } finally {
-        if (conn) {
-            try {
-                await conn.close();
-            } catch (e) {}
-        }
-    }
-});
-
-// ============================================================
-// 2. MÓDULO CLIENTE: FARMACIAS, PRODUCTOS Y PEDIDOS
-// ============================================================
-
-// Listar farmacias activas
-app.get('/api/admin/query2', async (req, res) => {
-    let conn;
-    try {
-        conn = await getDbConnection();
-        const result = await conn.execute(req.query.sql, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
-        res.json({ exito: true, data: result.rows });
-    } catch (e) {
-        res.status(500).json({ exito: false, error: e.message });
-    } finally {
-        if (conn) await conn.close();
-    }
-});
-
-app.get('/api/cliente/farmacias', async (req, res) => {
-    let conn;
-    try {
-        conn = await getDbConnection();
-
-        const result = await conn.execute(
-            `SELECT
-                ID_FARMACIA,
-                NOMBRE,
-                NIT,
-                TELEFONO,
-                DIRECCION,
-                HORARIO,
-                ESTADO
-             FROM FARMACIAS
-             WHERE ESTADO = 'ACTIVA'`
-        );
-
-        return res.json({
-            exito: true,
-            farmacias: result.rows
-        });
-
-    } catch (err) {
-        return res.status(500).json({
-            exito: false,
-            error: err.message
-        });
-    } finally {
-        if (conn) {
-            try {
-                await conn.close();
-            } catch (e) {}
-        }
-    }
-});
-
-// Ver todos los productos o productos de una farmacia
-app.get(
-    [
-        '/api/cliente/productos',
-        '/api/cliente/productos/:idFarmacia'
-    ],
-    async (req, res) => {
-        let conn;
+                conn = await getDbConnection();
         try {
-            conn = await getDbConnection();
-
-            const idFarmacia =
-                req.params.idFarmacia ||
-                req.query.idFarmacia;
-
-            let sql =
-                `SELECT *
-                 FROM VW_PRODUCTOS_FARMACIAS
-                 WHERE ESTADO_PRODUCTO = 'DISPONIBLE'`;
-
-            const binds = [];
-
-            if (idFarmacia) {
-                sql += ` AND ID_FARMACIA = :idFarmacia`;
-                binds.push(idFarmacia);
-            }
-
-            const result = await conn.execute(sql, binds);
-
-            return res.json({
-                exito: true,
-                productos: result.rows
-            });
-
-        } catch (err) {
-            return res.status(500).json({
-                exito: false,
-                error: err.message
-            });
-        } finally {
-            if (conn) {
-                try {
-                    await conn.close();
-                } catch (e) {}
-            }
-        }
-    }
-);
-
-// Guardar nuevo producto
-app.post('/api/farmacia/producto', async (req, res) => {
-    let conn;
-    try {
-        const {
-            idFarmacia,
-            nombre,
-            descripcion,
-            precio,
-            stock,
-            categoria
-        } = req.body;
-
-        if (!idFarmacia || !nombre || !precio) {
-            return res.status(400).json({
-                exito: false,
-                error: 'idFarmacia, nombre y precio son obligatorios'
-            });
-        }
-
-        conn = await getDbConnection();
-        try {
-            const check = await conn.execute(`SELECT ID_FARMACIA FROM FARMACIAS WHERE ID_FARMACIA = :id`, { id: idFarmacia });
+            const check = await conn.execute(SELECT * FROM FARMACIAS WHERE ID_FARMACIA = :id, { id: idFarmacia }, { outFormat: oracledb.OUT_FORMAT_OBJECT });
             if (!check.rows || check.rows.length === 0) {
-                const userQ = await conn.execute(`SELECT NOMBRE, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id`, { id: idFarmacia });
+                const userQ = await conn.execute(SELECT NOMBRE, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id, { id: idFarmacia });
                 let fname = "Farmacia " + idFarmacia;
-                let ftel = "";
-                let fdir = "";
-                if (userQ.rows && userQ.rows.length > 0) {
-                    const r = userQ.rows[0];
-                    fname = r.NOMBRE || r[0] || fname;
-                    ftel = r.TELEFONO || r[1] || "";
-                    fdir = r.DIRECCION || r[2] || "";
-                }
-                await conn.execute(
-                    `INSERT INTO FARMACIAS (ID_FARMACIA, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:id, :nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA')`,
-                    { id: idFarmacia, nom: fname, tel: ftel, dir: fdir },
+                let ftel = "00000000";
+                let fdir = "N/A";
+                const insertRes = await conn.execute(
+                    INSERT INTO FARMACIAS (NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA') RETURNING ID_FARMACIA INTO :newid,
+                    { 
+                        nom: fname, 
+                        tel: ftel, 
+                        dir: fdir,
+                        newid: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+                    },
                     { autoCommit: true }
                 );
+                return res.status(200).json({ exito: false, error: "DEBUG: Inserted with ID " + insertRes.outBinds.newid[0] });
+            } else {
+                return res.status(200).json({ exito: false, error: "DEBUG: Farmacia already exists with ID " + idFarmacia });
             }
-        } catch (e) { return res.status(500).json({ exito: false, error: "Error auto-creando farmacia: " + e.message }); }
+        } catch (e) {
+            return res.status(500).json({ exito: false, error: "Error auto-creando farmacia: " + e.message });
+        }
 
         const result = await conn.execute(
             `INSERT INTO PRODUCTOS (
@@ -1477,6 +1175,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
