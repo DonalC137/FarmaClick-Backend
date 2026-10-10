@@ -290,8 +290,7 @@ app.get(
                 req.query.idFarmacia;
 
             let sql =
-                `SELECT *
-                 FROM VW_PRODUCTOS_FARMACIAS
+                `SELECT VW.*, F.NIT AS FARMACIA_NIT FROM VW_PRODUCTOS_FARMACIAS VW JOIN FARMACIAS F ON VW.ID_FARMACIA = F.ID_FARMACIA
                  WHERE ESTADO_PRODUCTO = 'DISPONIBLE'`;
 
             const binds = [];
@@ -1477,6 +1476,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
