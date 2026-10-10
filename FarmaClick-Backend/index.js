@@ -1376,6 +1376,7 @@ app.post('/api/agora/llamar', async (req, res) => {
 
         const pedido = result.rows[0];
         const channelName = `pedido_${idPedido}`;
+        llamadasActivas[idPedido] = Date.now() + 20000;
         const privilegeExpiredTs = Math.floor(Date.now() / 1000) + 3600;
 
         const token = RtcTokenBuilder.buildTokenWithUid(
@@ -1416,6 +1417,19 @@ app.post('/api/agora/llamar', async (req, res) => {
     }
 });
 
+// Mapa de llamadas activas
+const llamadasActivas = {};
+
+app.get('/api/agora/estado/:idPedido', (req, res) => {
+    const id = req.params.idPedido;
+    const expiracion = llamadasActivas[id];
+    if (expiracion && Date.now() < expiracion) {
+        res.json({ llamando: true });
+    } else {
+        res.json({ llamando: false });
+    }
+});
+
 app.post('/api/agora/token', async (req, res) => {
     let connection;
     try {
@@ -1453,6 +1467,7 @@ app.post('/api/agora/token', async (req, res) => {
         const appId = process.env.AGORA_APP_ID;
         const appCertificate = process.env.AGORA_APP_CERTIFICATE;
         const channelName = `pedido_${idPedido}`;
+        llamadasActivas[idPedido] = Date.now() + 20000;
         const privilegeExpiredTs = Math.floor(Date.now() / 1000) + 3600;
 
         const agoraRole =

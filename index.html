@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1304,6 +1304,23 @@
                         }
                     }
                 } catch (e) { if(statusEl) statusEl.innerText = "Esperando señal..."; }
+                    const activePed = localStorage.getItem("fc_active_order_id");
+                    if (activePed) {
+                        try {
+                            const callRes = await fetch(`${BACKEND_URL}/api/agora/estado/${activePed}`);
+                            const callData = await callRes.json();
+                            const banner = document.getElementById("incomingCallBannerClient");
+                            if (callData.llamando) {
+                                if (banner && banner.style.display === "none") {
+                                    banner.style.setProperty("display", "flex", "important");
+                                }
+                            } else {
+                                if (banner && banner.style.display !== "none") {
+                                    banner.style.setProperty("display", "none", "important");
+                                }
+                            }
+                        } catch(e) {}
+                    }
                 finally { if (esManual && btn) { btn.innerHTML = `<i class="fa-solid fa-check" style="color:var(--success);"></i> Actualizado!`; setTimeout(()=>{ btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar GPS`; },1200); } }
             };
             checkGps();
@@ -1591,6 +1608,9 @@
     </script>
 </body>
 </html>
+
+
+
 
 
 
