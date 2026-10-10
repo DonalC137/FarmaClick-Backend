@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1414,7 +1414,7 @@
             try {
                 const res = await fetch(`${BACKEND_URL}/api/farmacia/producto`, {
                     method:"POST", headers:{"Content-Type":"application/json"},
-                    body: JSON.stringify({ idUsuario: currentUser.ID_USUARIO, nombre, descripcion, precio, stock, categoria })
+                    body: JSON.stringify({ idFarmacia: (currentUser.CORREO === "farmacia@farmaclick.com" ? 1 : currentUser.ID_USUARIO), idUsuario: currentUser.ID_USUARIO, nombre, descripcion, precio, stock, categoria })
                 });
                 const data = await res.json();
                 if (res.ok && data.exito) { alert(`✅ Producto guardado (#${data.idProducto})`); toggleModalProducto(false); cargarDatosFarmacia(); }
@@ -1590,6 +1590,7 @@
     </script>
 </body>
 </html>
+
 
 
 
