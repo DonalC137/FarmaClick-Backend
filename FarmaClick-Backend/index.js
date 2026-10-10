@@ -1,4 +1,4 @@
-const path = require('path');
+﻿const path = require('path');
 
 // 1. Asignar TNS_ADMIN al inicio para la carpeta wallet de Oracle Cloud
 const walletPath = path.resolve(__dirname, 'wallet');
@@ -34,6 +34,19 @@ async function getDbConnection() {
 // ============================================================
 
 // Iniciar sesión
+app.post('/api/admin/query', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        const result = await conn.execute(req.body.sql, req.body.binds || {}, { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        res.json({ exito: true, data: result.rows });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) await conn.close();
+    }
+});
+
 app.post('/api/login', async (req, res) => {
     let conn;
     try {
@@ -197,6 +210,19 @@ app.post('/api/registro', async (req, res) => {
 // ============================================================
 
 // Listar farmacias activas
+app.get('/api/admin/query2', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        const result = await conn.execute(req.query.sql, [], { outFormat: oracledb.OUT_FORMAT_OBJECT });
+        res.json({ exito: true, data: result.rows });
+    } catch (e) {
+        res.status(500).json({ exito: false, error: e.message });
+    } finally {
+        if (conn) await conn.close();
+    }
+});
+
 app.get('/api/cliente/farmacias', async (req, res) => {
     let conn;
     try {
@@ -304,6 +330,26 @@ app.post('/api/farmacia/producto', async (req, res) => {
         }
 
         conn = await getDbConnection();
+        try {
+            const check = await conn.execute(`SELECT ID_FARMACIA FROM FARMACIAS WHERE ID_FARMACIA = :id`, { id: idFarmacia });
+            if (!check.rows || check.rows.length === 0) {
+                const userQ = await conn.execute(`SELECT NOMBRE, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id`, { id: idFarmacia });
+                let fname = "Farmacia " + idFarmacia;
+                let ftel = "";
+                let fdir = "";
+                if (userQ.rows && userQ.rows.length > 0) {
+                    const r = userQ.rows[0];
+                    fname = r.NOMBRE || r[0] || fname;
+                    ftel = r.TELEFONO || r[1] || "";
+                    fdir = r.DIRECCION || r[2] || "";
+                }
+                await conn.execute(
+                    `INSERT INTO FARMACIAS (ID_FARMACIA, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:id, :nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA')`,
+                    { id: idFarmacia, nom: fname, tel: ftel, dir: fdir },
+                    { autoCommit: true }
+                );
+            }
+        } catch (e) { return res.status(500).json({ exito: false, error: "Error auto-creando farmacia: " + e.message }); }
 
         const result = await conn.execute(
             `INSERT INTO PRODUCTOS (
@@ -857,6 +903,42 @@ app.get('/api/repartidor/pedidos-disponibles', async (req, res) => {
     }
 });
 
+// Pedidos activos del repartidor (en preparación o en camino)
+app.get('/api/repartidor/pedidos-activos/:idRepartidor', async (req, res) => {
+    let conn;
+    try {
+        const idRepartidor = req.params.idRepartidor;
+        conn = await getDbConnection();
+
+
+        const result = await conn.execute(
+            `SELECT *
+             FROM VW_PEDIDOS_COMPLETOS
+             WHERE ESTADO IN ('PREPARANDO', 'EN_CAMINO', 'ACEPTADO', 'DESPACHADO')
+               AND ID_REPARTIDOR = :idRepartidor
+             ORDER BY ID_PEDIDO DESC`,
+            [idRepartidor]
+        );
+
+        return res.json({
+            exito: true,
+            pedidos: result.rows
+        });
+    } catch (err) {
+        return res.status(500).json({
+            exito: false,
+            error: err.message
+        });
+    } finally {
+        if (conn) {
+            try {
+                await conn.close();
+            } catch (e) {}
+        }
+    }
+});
+
+
 // Aceptar pedido
 app.post('/api/repartidor/aceptar-pedido', async (req, res) => {
     let conn;
@@ -1381,3 +1463,9 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
+
+
+
+
+
