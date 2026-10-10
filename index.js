@@ -305,25 +305,26 @@ app.post('/api/farmacia/producto', async (req, res) => {
 
         conn = await getDbConnection();
         try {
-            const check = await conn.execute(SELECT ID_FARMACIA FROM FARMACIAS WHERE ID_FARMACIA = :id, { id: idFarmacia });
-            if (check.rows.length === 0) {
-                const userQ = await conn.execute(SELECT NOMBRE, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id, { id: idFarmacia });
-                let fname = 'Farmacia ' + idFarmacia;
-                let ftel = '';
-                let fdir = '';
-                if (userQ.rows.length > 0) {
-                    fname = userQ.rows[0][0] || fname;
-                    ftel = userQ.rows[0][1] || '';
-                    fdir = userQ.rows[0][2] || '';
+            const check = await conn.execute(`SELECT ID_FARMACIA FROM FARMACIAS WHERE ID_FARMACIA = :id`, { id: idFarmacia });
+            if (!check.rows || check.rows.length === 0) {
+                const userQ = await conn.execute(`SELECT NOMBRE, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id`, { id: idFarmacia });
+                let fname = "Farmacia " + idFarmacia;
+                let ftel = "";
+                let fdir = "";
+                if (userQ.rows && userQ.rows.length > 0) {
+                    const r = userQ.rows[0];
+                    fname = r.NOMBRE || r[0] || fname;
+                    ftel = r.TELEFONO || r[1] || "";
+                    fdir = r.DIRECCION || r[2] || "";
                 }
                 await conn.execute(
-                    INSERT INTO FARMACIAS (ID_FARMACIA, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:id, :nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA'),
+                    `INSERT INTO FARMACIAS (ID_FARMACIA, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO) VALUES (:id, :nom, 'CF', :tel, :dir, '08:00-20:00', 'ACTIVA')`,
                     { id: idFarmacia, nom: fname, tel: ftel, dir: fdir },
                     { autoCommit: true }
                 );
             }
         } catch (e) {
-            console.error('Error auto-creando farmacia:', e);
+            console.error("Error auto-creando farmacia:", e);
         }
 
         const result = await conn.execute(
