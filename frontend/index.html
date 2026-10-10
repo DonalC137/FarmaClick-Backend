@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1501,6 +1501,7 @@
                 <div style="display:flex;flex-direction:column;gap:8px;">
                     <span><i class="fa-solid fa-user" style="color:var(--primary);width:16px;"></i> <strong>Cliente:</strong> ${p.CLIENTE||'Cliente'}</span>
                     <span><i class="fa-solid fa-location-dot" style="color:var(--accent);width:16px;"></i> <strong>Destino:</strong> ${p.DIRECCION_ENTREGA}</span>
+                      ${p.LATITUD_ENTREGA && p.LONGITUD_ENTREGA ? `<a href="https://www.google.com/maps/dir/?api=1&destination=${p.LATITUD_ENTREGA},${p.LONGITUD_ENTREGA}" target="_blank" style="color:var(--primary);text-decoration:none;font-weight:bold;margin-top:4px;display:inline-block;"><i class="fa-solid fa-map-location-dot"></i> Abrir en Google Maps (Ubicación del Cliente)</a>` : ''}
                     <span><i class="fa-solid fa-money-bill-wave" style="color:var(--success);width:16px;"></i> <strong>Total a Cobrar:</strong> Q ${parseFloat(p.TOTAL).toFixed(2)} (${p.METODO_PAGO})</span>
                 </div>`;
             document.getElementById("riderActiveActions").innerHTML = `

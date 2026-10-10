@@ -492,7 +492,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
     try {
         const {
             idCliente,
-            finalIdFarmacia,
+            idFarmacia,
             direccionEntrega,
             metodoPago,
             latitudEntrega,
@@ -558,7 +558,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
              )
              VALUES (
                 :idCliente,
-                :finalfinalIdFarmacia,
+                :idFarmacia,
                 :direccionEntrega,
                 :metodoPago,
                 'PENDIENTE',
@@ -569,7 +569,7 @@ app.post('/api/cliente/pedido', async (req, res) => {
              RETURNING ID_PEDIDO INTO :id`,
             {
                 idCliente,
-                finalIdFarmacia,
+                idFarmacia,
                 direccionEntrega,
                 metodoPago,
                 latitudEntrega: lat,
