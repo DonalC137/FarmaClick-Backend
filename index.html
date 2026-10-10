@@ -972,7 +972,7 @@
                 // CARGAR USUARIOS EN ADMIN
         async function cargarUsuariosAdmin() {
             try {
-                const res = await fetch(${BACKEND_URL}/api/admin/usuarios);
+                const res = await fetch(`${BACKEND_URL}/api/admin/usuarios`);
                 const data = await res.json();
                 if (data.exito) {
                     const tbody = document.getElementById("adminUsersTable");
@@ -1574,6 +1574,7 @@
     </script>
 </body>
 </html>
+
 
 
 
