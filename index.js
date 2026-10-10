@@ -216,8 +216,8 @@ app.post('/api/registro', async (req, res) => {
 
         if (parseInt(idRol) === 3) {
             await conn.execute(
-                `INSERT INTO FARMACIAS (NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
-                 VALUES (:nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')`,
+                `INSERT INTO FARMACIAS (ID_USUARIO, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
+                 VALUES (:idUsr, :nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')`,
                 {
                     nom: nombre + ' ' + apellido,
                     nit: 'USR' + nuevoId,
@@ -405,8 +405,8 @@ app.post('/api/farmacia/producto', async (req, res) => {
                     fDir = u.DIRECCION || 'Zona 1';
                 }
                 const insFarm = await conn.execute(
-                    `INSERT INTO FARMACIAS (NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
-                     VALUES (:nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')
+                    `INSERT INTO FARMACIAS (ID_USUARIO, NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
+                     VALUES (:idUsr, :nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')
                      RETURNING ID_FARMACIA INTO :newFId`,
                     {
                         nom: fNom.trim(),
@@ -1535,6 +1535,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
