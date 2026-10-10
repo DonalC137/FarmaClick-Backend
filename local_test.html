@@ -1031,10 +1031,7 @@
                         const tr = document.createElement("tr");
                         const rolClass = roleClasses[u.ID_ROL] || "cliente";
                         const rolNombre = roleNames[u.ID_ROL] || "USUARIO";
-tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO || ''}</strong></td><td>${u.CORREO}</td><td><span class="role-tag ${rolClass}">${rolNombre}</span></td><td>
-    <button onclick="editarUsuario(${u.ID_USUARIO}, '${u.NOMBRE}', '${u.APELLIDO}', '${u.CORREO}', '${u.TELEFONO}', '${u.DIRECCION}')" style="background:var(--blue);color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;margin-right:5px;"><i class="fa-solid fa-pen"></i></button>
-    <button onclick="eliminarUsuario(${u.ID_USUARIO})" style="background:var(--accent);color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;"><i class="fa-solid fa-trash"></i></button>
-</td>`;
+                        tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO || ''}</strong></td><td>${u.CORREO}</td><td><span class="role-tag ${rolClass}">${rolNombre}</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>`;
                         tbody.appendChild(tr);
                     });
                 }
@@ -1289,29 +1286,29 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
             const statusEl = document.getElementById("liveGpsCoords");
             const mapContainer = document.getElementById("mapLinkContainer");
             const btn = document.getElementById("btnActualizarGpsClient");
-            if (esManual && btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Consultando...`;
-                                    const checkGps = async () => {
+            if (esManual && btn) btn.innerHTML = <i class="fa-solid fa-spinner fa-spin"></i> Consultando...;
+            const checkGps = async () => {
                 try {
-                    const res = await fetch(`${BACKEND_URL}/api/repartidor/ubicacion/${idRepartidor}`);
+                    const res = await fetch(`/api/repartidor/ubicacion/`);
                     const data = await res.json();
                     if (data.exito && data.ubicacion) {
                         const lat = data.ubicacion.LATITUD_ACTUAL, lng = data.ubicacion.LONGITUD_ACTUAL;
                         const hora = new Date(data.ubicacion.FECHA_UBICACION).toLocaleTimeString();
                         const badge = document.getElementById("clientTrackedStatus");
                         if (lat === 0 && lng === 0) {
-                            statusEl.innerHTML = `<span style="color:var(--accent);">🔴 GPS Apagado</span>`;
+                            statusEl.innerHTML = <span style="color:var(--accent);">🔴 GPS Apagado</span>;
                             if (mapContainer) mapContainer.innerHTML = "";
                         } else {
-                            statusEl.innerHTML = `${lat.toFixed(5)}, ${lng.toFixed(5)} <span style="font-size:0.75rem;color:var(--text-dim);">(${hora})</span>`;
-                            if (mapContainer) mapContainer.innerHTML = `<a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color:var(--blue);text-decoration:none;font-size:0.8rem;font-weight:600;"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps ↗</a>`;
+                            statusEl.innerHTML = ${lat.toFixed(5)},  <span style="font-size:0.75rem;color:var(--text-dim);">()</span>;
+                            if (mapContainer) mapContainer.innerHTML = <a href="https://www.google.com/maps?q=," target="_blank" style="color:var(--blue);text-decoration:none;font-size:0.8rem;font-weight:600;"><i class="fa-solid fa-map-location-dot"></i> Ver en Google Maps ↗</a>;
                         }
                     }
                 } catch (e) { 
                     if(statusEl) statusEl.innerText = "Esperando señal..."; 
                 } finally { 
                     if (esManual && btn) { 
-                        btn.innerHTML = `<i class="fa-solid fa-check" style="color:var(--success);"></i> Actualizado!`; 
-                        setTimeout(()=>{ btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar GPS`; },1200); 
+                        btn.innerHTML = <i class="fa-solid fa-check" style="color:var(--success);"></i> Actualizado!; 
+                        setTimeout(()=>{ btn.innerHTML = <i class="fa-solid fa-rotate"></i> Actualizar GPS; },1200); 
                     } 
                 }
 
@@ -1319,7 +1316,7 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
                 const activePed = localStorage.getItem("fc_active_order_id");
                 if (activePed) {
                     try {
-                        const callRes = await fetch(`${BACKEND_URL}/api/agora/estado/${activePed}`);
+                        const callRes = await fetch(`/api/agora/estado/`);
                         const callData = await callRes.json();
                         const banner = document.getElementById("incomingCallBannerClient");
                         if (callData.llamando) {
@@ -1422,10 +1419,7 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
                             <td><span style="background:var(--bg-3);color:var(--text-muted);padding:3px 8px;border-radius:6px;font-size:0.78rem;border:1px solid var(--border);">${p.CATEGORIA}</span></td>
                             <td><strong style="color:var(--text);">Q ${parseFloat(p.PRECIO).toFixed(2)}</strong></td>
                             <td><span style="font-weight:700;color:${p.STOCK>5?'var(--success)':'var(--accent)'};">${p.STOCK} unid.</span></td>
-                            <td>
-    <button onclick="editarProducto(${p.ID_PRODUCTO}, '', '', ${p.PRECIO}, ${p.STOCK})" style="background:var(--blue);color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;margin-right:5px;" title="Editar"><i class="fa-solid fa-pen"></i></button>
-    <button onclick="eliminarProducto(${p.ID_PRODUCTO})" style="background:var(--accent);color:white;border:none;padding:5px 10px;border-radius:4px;cursor:pointer;" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-</td>`;
+                            <td><span style="color:var(--success);font-weight:600;font-size:0.8rem;">● DISPONIBLE</span></td>`;
                         tbody.appendChild(tr);
                     });
                 }
@@ -1622,7 +1616,7 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
             async function eliminarUsuario(id) {
             if (!confirm('¿Estás seguro de eliminar este usuario?')) return;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/admin/usuario/${id}`, { method: 'DELETE' });
+                const res = await fetch(`/api/admin/usuario/`, { method: 'DELETE' });
                 const data = await res.json();
                 if (data.exito) { alert('Usuario eliminado'); cargarUsuariosAdmin(); }
                 else { alert('Error: ' + data.error); }
@@ -1632,7 +1626,7 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
         async function eliminarProducto(id) {
             if (!confirm('¿Estás seguro de eliminar este producto?')) return;
             try {
-                const res = await fetch(`${BACKEND_URL}/api/farmacia/producto/${id}`, { method: 'DELETE' });
+                const res = await fetch(`/api/farmacia/producto/`, { method: 'DELETE' });
                 const data = await res.json();
                 if (data.exito) { alert('Producto eliminado'); cargarDatosFarmacia(); }
                 else { alert('Error: ' + data.error); }
@@ -1646,7 +1640,7 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
             const direccion = prompt('Dirección:', d) || d;
             
             try {
-                const res = await fetch(`${BACKEND_URL}/api/admin/usuario/${id}`, {
+                const res = await fetch(`/api/admin/usuario/`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nombre, apellido, correo, telefono, direccion })
@@ -1664,7 +1658,7 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
             const stock = prompt('Stock:', st) || st;
             
             try {
-                const res = await fetch(`${BACKEND_URL}/api/farmacia/producto/${id}`, {
+                const res = await fetch(`/api/farmacia/producto/`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ nombre, descripcion, precio, stock })
@@ -1677,14 +1671,6 @@ tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO ||
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
 
 
 
