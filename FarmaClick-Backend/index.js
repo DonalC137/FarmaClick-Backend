@@ -377,12 +377,37 @@ app.post('/api/farmacia/producto', async (req, res) => {
                 { outFormat: oracledb.OUT_FORMAT_OBJECT }
             );
             if (!farmaciaRow.rows || farmaciaRow.rows.length === 0) {
-                return res.status(400).json({
-                    exito: false,
-                    error: 'Esta cuenta de farmacia no tiene una sucursal registrada. Por favor contacta al administrador.'
-                });
+                const uData = await conn.execute(
+                    `SELECT NOMBRE, APELLIDO, TELEFONO, DIRECCION FROM USUARIOS WHERE ID_USUARIO = :id`,
+                    { id: idUsuario },
+                    { outFormat: oracledb.OUT_FORMAT_OBJECT }
+                );
+                let fNom = 'Farmacia ' + idUsuario;
+                let fTel = '00000000';
+                let fDir = 'Zona 1';
+                if (uData.rows && uData.rows.length > 0) {
+                    const u = uData.rows[0];
+                    fNom = (u.NOMBRE || 'Farmacia') + ' ' + (u.APELLIDO || '');
+                    fTel = u.TELEFONO || '00000000';
+                    fDir = u.DIRECCION || 'Zona 1';
+                }
+                const insFarm = await conn.execute(
+                    `INSERT INTO FARMACIAS (NOMBRE, NIT, TELEFONO, DIRECCION, HORARIO, ESTADO)
+                     VALUES (:nom, :nit, :tel, :dir, '08:00-20:00', 'ACTIVA')
+                     RETURNING ID_FARMACIA INTO :newFId`,
+                    {
+                        nom: fNom.trim(),
+                        nit: nitBusqueda,
+                        tel: fTel,
+                        dir: fDir,
+                        newFId: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+                    },
+                    { autoCommit: true }
+                );
+                realIdFarmacia = insFarm.outBinds.newFId[0];
+            } else {
+                realIdFarmacia = farmaciaRow.rows[0].ID_FARMACIA;
             }
-            realIdFarmacia = farmaciaRow.rows[0].ID_FARMACIA;
         }
 
         const result = await conn.execute(

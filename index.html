@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -940,6 +940,7 @@
                 document.getElementById("heroSubtitle").innerText = "Genera usuarios y credenciales para Clientes, Farmacias y Repartidores.";
                 document.getElementById("heroIcon").className = "fa-solid fa-users-gear";
                 document.getElementById("moduloAdmin").style.display = "block";
+                cargarUsuariosAdmin();
             } else if (rol === "CLIENTE") {
                 roleBadge.className = "role-tag cliente";
                 roleBadge.innerHTML = `<i class="fa-solid fa-user"></i> Cliente`;
@@ -1012,8 +1013,31 @@
                     tr.innerHTML = `<td>#${data.idUsuario}</td><td><strong>${nombre} ${apellido}</strong></td><td>${correo}</td><td><span class="role-tag ${roleClasses[idRol]}">${roleNames[idRol]}</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>`;
                     document.getElementById("adminUsersTable").appendChild(tr);
                     ["adminNewNombre","adminNewApellido","adminNewCorreo","adminNewPass"].forEach(id => document.getElementById(id).value = "");
+                    cargarUsuariosAdmin();
                 } else { alert(`❌ Error: ${data.error}`); }
             } catch (err) { alert(`⚠️ ${err.message}`); }
+        }
+
+        async function cargarUsuariosAdmin() {
+            try {
+                const res = await fetch(`${BACKEND_URL}/api/admin/usuarios`);
+                const data = await res.json();
+                if (data.exito && data.usuarios) {
+                    const tbody = document.getElementById("adminUsersTable");
+                    tbody.innerHTML = "";
+                    const roleNames = {1:"ADMINISTRADOR",2:"CLIENTE",3:"FARMACIA",4:"REPARTIDOR"};
+                    const roleClasses = {1:"admin",2:"cliente",3:"farmacia",4:"repartidor"};
+                    data.usuarios.forEach(u => {
+                        const tr = document.createElement("tr");
+                        const rolClass = roleClasses[u.ID_ROL] || "cliente";
+                        const rolNombre = roleNames[u.ID_ROL] || "USUARIO";
+                        tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO || ''}</strong></td><td>${u.CORREO}</td><td><span class="role-tag ${rolClass}">${rolNombre}</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>`;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {
+                console.error("Error al cargar usuarios de admin:", e);
+            }
         }
 
         /* ─── CLIENTE ─── */
@@ -1352,11 +1376,19 @@
                 const res = await fetch(`${BACKEND_URL}/api/cliente/productos`);
                 const data = await res.json();
                 if (data.exito && data.productos) {
-                    document.getElementById("farmaciaStatTotal").innerText = data.productos.length;
-                    document.getElementById("farmaciaStatStock").innerText = data.productos.reduce((a,c)=>a+(c.STOCK||0),0);
+                    const esCentral = (currentUser.CORREO === "farmacia@farmaclick.com");
+                    const misProductos = data.productos.filter(p => {
+                        if (esCentral) {
+                            return p.ID_FARMACIA === 1 || !p.FARMACIA_NIT;
+                        } else {
+                            return p.FARMACIA_NIT === ("USR" + currentUser.ID_USUARIO);
+                        }
+                    });
+                    document.getElementById("farmaciaStatTotal").innerText = misProductos.length;
+                    document.getElementById("farmaciaStatStock").innerText = misProductos.reduce((a,c)=>a+(c.STOCK||0),0);
                     const tbody = document.getElementById("farmaciaInventoryTable");
                     tbody.innerHTML = "";
-                    data.productos.forEach(p => {
+                    misProductos.forEach(p => {
                         const tr = document.createElement("tr");
                         tr.innerHTML = `<td>#${p.ID_PRODUCTO}</td><td><strong>${p.PRODUCTO}</strong><br><small style="color:var(--text-dim);">${p.DESCRIPCION||''}</small></td>
                             <td><span style="background:var(--bg-3);color:var(--text-muted);padding:3px 8px;border-radius:6px;font-size:0.78rem;border:1px solid var(--border);">${p.CATEGORIA}</span></td>
