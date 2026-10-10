@@ -1632,9 +1632,46 @@
                 else { alert('Error: ' + data.error); }
             } catch(e) { alert(e.message); }
         }
+            async function editarUsuario(id, n, a, c, t, d) {
+            const nombre = prompt('Nombre:', n) || n;
+            const apellido = prompt('Apellido:', a) || a;
+            const correo = prompt('Correo:', c) || c;
+            const telefono = prompt('Teléfono:', t) || t;
+            const direccion = prompt('Dirección:', d) || d;
+            
+            try {
+                const res = await fetch(`/api/admin/usuario/`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, apellido, correo, telefono, direccion })
+                });
+                const data = await res.json();
+                if (data.exito) { alert('Usuario actualizado'); cargarUsuariosAdmin(); }
+                else { alert('Error: ' + data.error); }
+            } catch(e) { alert(e.message); }
+        }
+
+        async function editarProducto(id, pr, desc, pre, st) {
+            const nombre = prompt('Nombre Producto:', pr) || pr;
+            const descripcion = prompt('Descripción:', desc) || desc;
+            const precio = prompt('Precio:', pre) || pre;
+            const stock = prompt('Stock:', st) || st;
+            
+            try {
+                const res = await fetch(`/api/farmacia/producto/`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, descripcion, precio, stock })
+                });
+                const data = await res.json();
+                if (data.exito) { alert('Producto actualizado'); cargarDatosFarmacia(); }
+                else { alert('Error: ' + data.error); }
+            } catch(e) { alert(e.message); }
+        }
     </script>
 </body>
 </html>
+
 
 
 
