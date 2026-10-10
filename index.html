@@ -981,6 +981,17 @@
                     data.usuarios.forEach(u => {
                         const rolInfo = rolesMap[u.ID_ROL] || {n:"OTRO", c:"admin"};
                         const tr = document.createElement("tr");
+                        tr.innerHTML = `<td>#${u.ID_USUARIO}</td><td><strong>${u.NOMBRE} ${u.APELLIDO || '}</strong></td><td>${u.CORREO}</td><td><span class="role-tag ${rolInfo.c}">${rolInfo.n}</span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>`;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (e) {
+                console.error("Error al cargar usuarios:", e);
+            }
+        };
+                    data.usuarios.forEach(u => {
+                        const rolInfo = rolesMap[u.ID_ROL] || {n:"OTRO", c:"admin"};
+                        const tr = document.createElement("tr");
                         tr.innerHTML = <td>#</td><td><strong> </strong></td><td></td><td><span class="role-tag "></span></td><td><span style="color:var(--success);font-weight:600;">● ACTIVO</span></td>;
                         tbody.appendChild(tr);
                     });
@@ -1574,6 +1585,7 @@
     </script>
 </body>
 </html>
+
 
 
 
