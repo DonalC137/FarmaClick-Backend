@@ -1551,7 +1551,7 @@ app.put('/api/admin/usuario/:id', async (req, res) => {
         const { nombre, apellido, correo, telefono, direccion } = req.body;
         conn = await getDbConnection();
         await conn.execute(
-            UPDATE USUARIOS SET NOMBRE = :nombre, APELLIDO = :apellido, CORREO = :correo, TELEFONO = :telefono, DIRECCION = :direccion WHERE ID_USUARIO = :id,
+            `UPDATE USUARIOS SET NOMBRE = :nombre, APELLIDO = :apellido, CORREO = :correo, TELEFONO = :telefono, DIRECCION = :direccion WHERE ID_USUARIO = :id`,
             { nombre, apellido, correo, telefono, direccion, id: req.params.id },
             { autoCommit: true }
         );
@@ -1568,8 +1568,8 @@ app.delete('/api/admin/usuario/:id', async (req, res) => {
     let conn;
     try {
         conn = await getDbConnection();
-        await conn.execute(DELETE FROM FARMACIAS WHERE ID_USUARIO = :id, { id: req.params.id }, { autoCommit: true });
-        await conn.execute(DELETE FROM USUARIOS WHERE ID_USUARIO = :id, { id: req.params.id }, { autoCommit: true });
+        await conn.execute(`DELETE FROM FARMACIAS WHERE ID_USUARIO = :id`, { id: req.params.id }, { autoCommit: true });
+        await conn.execute(`DELETE FROM USUARIOS WHERE ID_USUARIO = :id`, { id: req.params.id }, { autoCommit: true });
         res.json({ exito: true });
     } catch (e) {
         res.status(500).json({ exito: false, error: e.message });
@@ -1585,7 +1585,7 @@ app.put('/api/farmacia/producto/:id', async (req, res) => {
         const { nombre, descripcion, precio, stock } = req.body;
         conn = await getDbConnection();
         await conn.execute(
-            UPDATE PRODUCTOS SET NOMBRE = :nombre, DESCRIPCION = :descripcion, PRECIO = :precio, STOCK = :stock WHERE ID_PRODUCTO = :id,
+            `UPDATE PRODUCTOS SET NOMBRE = :nombre, DESCRIPCION = :descripcion, PRECIO = :precio, STOCK = :stock WHERE ID_PRODUCTO = :id`,
             { nombre, descripcion, precio, stock, id: req.params.id },
             { autoCommit: true }
         );
@@ -1602,7 +1602,7 @@ app.delete('/api/farmacia/producto/:id', async (req, res) => {
     let conn;
     try {
         conn = await getDbConnection();
-        await conn.execute(DELETE FROM PRODUCTOS WHERE ID_PRODUCTO = :id, { id: req.params.id }, { autoCommit: true });
+        await conn.execute(`DELETE FROM PRODUCTOS WHERE ID_PRODUCTO = :id`, { id: req.params.id }, { autoCommit: true });
         res.json({ exito: true });
     } catch (e) {
         res.status(500).json({ exito: false, error: e.message });
@@ -1620,6 +1620,8 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
+
 
 
 
