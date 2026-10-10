@@ -1,4 +1,4 @@
-const path = require('path');
+﻿const path = require('path');
 
 // 1. Asignar TNS_ADMIN al inicio para la carpeta wallet de Oracle Cloud
 const walletPath = path.resolve(__dirname, 'wallet');
@@ -1417,3 +1417,4 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
