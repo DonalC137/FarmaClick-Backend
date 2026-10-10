@@ -117,6 +117,22 @@ app.post('/api/login', async (req, res) => {
 });
 
 // Registrar nuevo usuario
+app.get('/api/admin/usuarios', async (req, res) => {
+    let conn;
+    try {
+        conn = await getDbConnection();
+        const result = await conn.execute(
+            SELECT ID_USUARIO, NOMBRE, APELLIDO, CORREO, ID_ROL FROM USUARIOS ORDER BY ID_USUARIO ASC,
+            [], { outFormat: oracledb.OUT_FORMAT_OBJECT }
+        );
+        res.json({ exito: true, usuarios: result.rows });
+    } catch (err) {
+        res.status(500).json({ exito: false, error: err.message });
+    } finally {
+        if (conn) await conn.close();
+    }
+});
+
 app.post('/api/registro', async (req, res) => {
     let conn;
     try {
@@ -1463,6 +1479,7 @@ app.listen(
         console.log(`Servidor FarmaClick ejecutándose correctamente en el puerto ${PORT}`);
     }
 );
+
 
 
 
